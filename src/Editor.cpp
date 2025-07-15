@@ -22,17 +22,17 @@ setActiveBlock(getBlockFromRenderID(drabs.rids[index]));    // sets the active b
 */
 }
 
-void ApplyCamera(Camera cam, RenderDetails rds) { _ApplyCamera(cam, rds.shader, rds.size); }
+void ApplyCamera(Camera cam, RenderDetails rds) { _ApplyCamera(cam, rds.shader); }
 
 void ClearCamera(RenderDetails rds)
 {
-for (int i = 0; i < rds.size; i++)
+for (int i = 0; i < rds.rid.size(); i++)
     {
     SetUniformM4(rds.shader[i], "view", getM4ID());
     }
 }
 
-void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.shader, rds.size); }
+void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.shader); }
 
 #pragma endregion
 
@@ -54,7 +54,7 @@ if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu
     if(prevuid != -1)
         {
         // printf("\nFolding %d", prevuid);
-        clearMenu(&ui, &ui_rp, prevuid);
+        clearMenu(ui, ui_rp, prevuid);
         }
 
     // printf("\nUnfolding %d", ui_id);
@@ -68,9 +68,9 @@ if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu
     for (int i = 2; i <= bi.nosp; i++)
         {
         RenderInformation ri;
-        ri.ssi = (SpriteSheetInfo){ bi.spfp, bi.nosp, i };
-        unsigned int menentry = addToMenu(&ui, &ui_rp, ui_id, UI_TYPE_BUTTON, ri);
-        assignButtonAction(&ui, menentry, UI_TRIGGER_PRESS, &changeBlock);
+        ri.ssi = { bi.spfp, bi.nosp, (unsigned int)i };
+        unsigned int menentry = addToMenu(ui, ui_rp, ui_id, UI_TYPE_BUTTON, ri);
+        assignButtonAction(ui, menentry, UI_TRIGGER_PRESS, &changeBlock);
         }
 
     prevuid = ui_id;
@@ -99,19 +99,18 @@ for (int i = 0; i < nblk; i++)
     vec2 position = {topright.x, topright.y - (i * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
     BlockInfo bi = getBlockInfo(menuDetails[i]);
     RenderInformation ri;
-    ri.ssi = (SpriteSheetInfo){ bi.spfp, bi.nosp, bi.spr };
-    unsigned int entry = createUIElement(&ui, &ui_rp, position, 25.0f, UI_TYPE_BUTTON, ri);
-    assignButtonAction(&ui, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
+    ri.ssi = { bi.spfp, bi.nosp, bi.spr };
+    unsigned int entry = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_BUTTON, ri);
+    assignButtonAction(ui, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
     if(ri.ssi.nosp > 1 && getBlockFromFilePath(bi.spfp) != BLOCK_IMMOVABLE_BLOCK)   // if there is more than one sprite and the block isn't the immovable type
         {
         RenderInformation tri;
-        tri.meni = (GUI_MENU){(Array){NULL, NULL}, entry};
-        unsigned int menhead = createUIElement(&ui, &ui_rp, position, 25.0f, UI_TYPE_MENU, tri);
-        assignButtonAction(&ui, menhead, UI_TRIGGER_HOVER, &unfoldBlockOptions);
+        tri.meni = {{NULL, NULL}, entry};
+        unsigned int menhead = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_MENU, tri);
+        assignButtonAction(ui, menhead, UI_TRIGGER_HOVER, &unfoldBlockOptions);
         RenderInformation ntri = getUIRenderInformation(ui, menhead);
 
         printf("\nCreating the Menu");
-        OutputArray(ntri.meni.ui_ids);
         }
     }
 }

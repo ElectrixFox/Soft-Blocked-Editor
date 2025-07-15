@@ -95,16 +95,13 @@ return rp;
 
 int CreateBasicSquare(RenderPacket& rp, vec2 position, float scale, vec4 incol)
 {
-vec2 scle = (vec2){scale, scale};
+vec2 scle = {scale, scale};
 
 unsigned int trsid = AddTransformation(rp.tds, position, scle, 0.0f);   // creates the transform
 unsigned int rid = CreatePlainSquareRenderable(rp.rds);   // creates the render element
 unsigned int prog = rp.rds.shader[getRenderDetailsIDIndex(rp.rds, rid)];  // finds the program
 
-if(incol == NULL)   // if there is no colour set a default one
-    SetUniform4f(prog, "colour", (vec4){1.0f, 0.0f, 0.0f, 1.0f});  // setting the colour
-else
-    SetUniform4f(prog, "colour", incol);  // setting the colour
+SetUniform4f(prog, "colour", incol);  // setting the colour
 
 int index = AddDrawable(rp.drabs, trsid, rid);    // adds the drawable
 

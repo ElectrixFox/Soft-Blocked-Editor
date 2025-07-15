@@ -31,7 +31,7 @@ double x, y;
 int wid, hig;
 glfwGetCursorPos(window, &x, &y);
 glfwGetWindowSize(window, &wid, &hig);
-vec2 point = GetMousePositionRelative((vec2){(float)x, (float)y}, wid, hig);
+vec2 point = GetMousePositionRelative({(float)x, (float)y}, wid, hig);
 
 return point;
 }
@@ -73,27 +73,20 @@ else
     }
 }
 
-int* _getPressedArea(vec2* poses, int size, vec2 curpos, float range)
+std::vector<int> _getPressedArea(std::vector<vec2> poses, vec2 curpos, float range)
 {
-int* indices = (int*)malloc(2 * sizeof(int));
-int top = 1;
+std::vector<int> indices;
 
-for (int i = 0; i < size; i++)
+for (int i = 0; i < poses.size(); i++)
     if(abs(poses[i].x - curpos.x) < range && abs(poses[i].y - curpos.y) < range)
-        {
-        indices[top] = i;
-        ExpandByOne(&indices, top, sizeof(int));
-        top++;
-        }
-
-indices[0] = top - 1;   // setting the size of the array
+        indices.push_back(i);
 
 return indices;
 }
 
-int* getPressedArea(vec2* poses, int size, float range)
+std::vector<int> getPressedArea(std::vector<vec2> poses, float range)
 {
-return _getPressedArea(poses, size, getCursorPosition(), range);
+return _getPressedArea(poses, getCursorPosition(), range);
 }
 
 GLFWwindow* getWindow()

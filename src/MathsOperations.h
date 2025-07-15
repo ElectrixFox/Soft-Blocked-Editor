@@ -24,6 +24,7 @@ struct vec4
         default: break;
         }
         }
+    
     };
 typedef struct m4 { vec4 mat[4]; } m4;
 

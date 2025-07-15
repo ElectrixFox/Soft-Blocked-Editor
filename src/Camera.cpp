@@ -2,7 +2,7 @@
 
 Camera CreateCamera(vec2 pos, vec2 scale, int* scrwid, int* srchig)
 {
-return (Camera){0, pos, scale, scrwid, srchig};
+return {0, pos, scale, scrwid, srchig};
 }
 
 vec2 GetCursorPositionRelative(Camera cam) { return addVec2(getCursorPosition(), ScalarMultVec2(cam.poscomponent, -1)); }
@@ -11,7 +11,7 @@ m4 getCameraMatrix(Camera cam)
 {
 //  the camera matrix is effectively a projection matrix with a position component
 return 
-    (m4){
+    {
         1.0f, 0.0f, 0.0f, (float)cam.poscomponent.x,
         0.0f, 1.0f, 0.0f, (float)cam.poscomponent.y,
         0.0f, 0.0f, 1.0f, 0.0f,
@@ -36,29 +36,29 @@ else
 return 1;
 }
 
-void _ApplyProjection(Camera cam, unsigned int* progs, unsigned int size)
+void _ApplyProjection(Camera cam, std::vector<unsigned int> progs)
 {
 m4 proj = getProjectionMatrix(cam);
 
-for (int i = 0; i < size; i++)
+for (int i = 0; i < progs.size(); i++)
     SetUniformM4(progs[i], "projection", proj); // setting the projection matrix
 }
 
-void _ApplyCamera(Camera cam, unsigned int* progs, unsigned int size)
+void _ApplyCamera(Camera cam, std::vector<unsigned int> progs)
 {
 m4 view = getCameraMatrix(cam);
 
-for (int i = 0; i < size; i++)
+for (int i = 0; i < progs.size(); i++)
     {
     SetUniformM4(progs[i], "view", view);
     }
 }
 
-void _ApplyStaticCamera(Camera cam, unsigned int* progs, unsigned int size)
+void _ApplyStaticCamera(Camera cam, std::vector<unsigned int> progs)
 {
 m4 view = getCameraMatrix(cam);
 
-for (int i = 0; i < size; i++)
+for (int i = 0; i < progs.size(); i++)
     {
     SetUniformM4(progs[i], "view", view);
     }

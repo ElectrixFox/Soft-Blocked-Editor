@@ -2,6 +2,7 @@
 #include "MathsOperations.h"
 #include "InputManager.h"
 #include "Rendering/Shader.h"
+#include <vector>
 
 struct Camera
     {
@@ -52,7 +53,7 @@ int MoveCamera(Camera& cam);
  * @param progs The array of shader programs
  * @param size The number of programs
  */
-void _ApplyProjection(Camera cam, unsigned int* progs, unsigned int size);
+void _ApplyProjection(Camera cam, std::vector<unsigned int> progs);
 
 /**
  * Applies the view matrix to the program
@@ -61,7 +62,7 @@ void _ApplyProjection(Camera cam, unsigned int* progs, unsigned int size);
  * @param progs The shader programs
  * @param size The number of programs
  */
-void _ApplyCamera(Camera cam, unsigned int* progs, unsigned int size);
+void _ApplyCamera(Camera cam, std::vector<unsigned int> progs);
 
 /**
  * Applies a matrix to keep the given programs static on the screen with relation to the camera
@@ -70,4 +71,4 @@ void _ApplyCamera(Camera cam, unsigned int* progs, unsigned int size);
  * @param progs The shader programs
  * @param size The number of programs
  */
-void _ApplyStaticCamera(Camera cam, unsigned int* progs, unsigned int size);
+void _ApplyStaticCamera(Camera cam, std::vector<unsigned int> progs);

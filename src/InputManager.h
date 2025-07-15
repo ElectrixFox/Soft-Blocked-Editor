@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <vector>
 
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
@@ -47,7 +48,7 @@ int isHeldDown(int key);
  * 
  * @warning The first element is the size of the array and should be accounted for
  */
-int* _getPressedArea(vec2* poses, int size, vec2 curpos, float range);
+std::vector<int> _getPressedArea(std::vector<vec2> poses, vec2 curpos, float range);
 
 /**
  * Gets the indices in the area which has the cursor in it
@@ -60,7 +61,7 @@ int* _getPressedArea(vec2* poses, int size, vec2 curpos, float range);
  * 
  * @warning The first element is the size of the array and should be accounted for
  */
-int* getPressedArea(vec2* poses, int size, float range);
+std::vector<int> getPressedArea(std::vector<vec2> poses, float range);
 
 /**
  * Gets the input window

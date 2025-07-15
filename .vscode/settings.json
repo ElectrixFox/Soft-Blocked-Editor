@@ -32,7 +32,8 @@
         "systemui.h": "c",
         "level.h": "c",
         "array": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "vector": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
 }
