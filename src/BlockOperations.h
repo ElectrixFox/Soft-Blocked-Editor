@@ -31,7 +31,7 @@ void InitialiseBlockManager();
  * 
  * @returns The render ID for the new block
  */
-unsigned int _PlaceBlockCustom(RenderPacket* rp, BlockInfo block, vec2 position, float theta);
+unsigned int _PlaceBlockCustom(RenderPacket& rp, BlockInfo block, vec2 position, float theta);
 
 /**
  * Creates a block at the position with default scale (25x25)
@@ -43,7 +43,7 @@ unsigned int _PlaceBlockCustom(RenderPacket* rp, BlockInfo block, vec2 position,
  * 
  * @returns The render ID for the new block
  */
-unsigned int PlaceBlock(RenderPacket* rp, BLOCK block, vec2 position);
+unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position);
 
 /**
  * Removes a block at the position
@@ -52,16 +52,16 @@ unsigned int PlaceBlock(RenderPacket* rp, BLOCK block, vec2 position);
  * @param tds The transform table
  * @param rid The render ID of the block to remove
  */
-void RemoveBlock(RenderPacket* rp, unsigned int rid);
+void RemoveBlock(RenderPacket& rp, unsigned int rid);
 
 /**
  * Rotates a given block by theta degrees
  * 
- * @param rp A pointer to the render packet
+ * @param rp A reference to the render packet
  * @param rid The render ID for the block to rotate
  * @param theta The angle (in radians) to rotate the block by
  */
-void RotateBlock(RenderPacket* rp, unsigned int rid, float theta);
+void RotateBlock(RenderPacket& rp, unsigned int rid, float theta);
 
 /**
  * Gets the type of the immovable block
@@ -76,16 +76,16 @@ void RotateBlock(RenderPacket* rp, unsigned int rid, float theta);
  */
 BLOCK_IM_STATE getImmovableType(const int w, const int h, const int** grid, vec2 pos, float* angle);
 
-unsigned int PlaceImmovableBlock(RenderPacket* rp, BlockInfo block, vec2 position);
+unsigned int PlaceImmovableBlock(RenderPacket& rp, BlockInfo block, vec2 position);
 
 /**
  * Updates the immovable blocks in the grid
  * 
- * @param rp A pointer to the render packet
+ * @param rp A reference to the render packet
  * @param w The width of the grid
  * @param h The height of the grid
  * @param grid The actual grid
  */
-unsigned int UpdateImmovableBlocks(RenderPacket* rp, const int w, const int h, const int** grid);
+unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, const int** grid);
 
 #endif

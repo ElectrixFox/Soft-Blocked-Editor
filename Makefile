@@ -1,6 +1,6 @@
-CXX = gcc
+CXX = g++
 CXXFLAGS = -g -Wall -I.
-CXXIGNORE = -Wno-missing-braces -Wno-format	-Wno-incompatible-pointer-types
+CXXIGNORE = -Wno-missing-braces -Wno-format
 CXXFLAGS += $(CXXIGNORE)
 APPNAME = main
 LIBS = -L./lib
@@ -12,10 +12,10 @@ else
 	LIBS += -lm -lGL -lGLEW -lglfw3dll -ldl
 endif
 
-SRCFILES := $(wildcard src/*.c) main.c $(wildcard src/Rendering/*.c)
-OBJS := $(addprefix obj/, $(patsubst %.c, %.o, $(SRCFILES)))
+SRCFILES := $(wildcard src/*.cpp) main.cpp $(wildcard src/Rendering/*.cpp)
+OBJS := $(addprefix obj/, $(patsubst %.cpp, %.o, $(SRCFILES)))
 
-obj/%.o: %.c
+obj/%.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c -o $(addprefix obj/, $(notdir $@)) $^
 
 all: $(OBJS)

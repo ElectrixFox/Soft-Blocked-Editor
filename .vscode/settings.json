@@ -30,7 +30,9 @@
         "inputmanager.h": "c",
         "glu.h": "c",
         "systemui.h": "c",
-        "level.h": "c"
+        "level.h": "c",
+        "array": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve"
 }

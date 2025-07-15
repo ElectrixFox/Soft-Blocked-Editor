@@ -159,7 +159,7 @@ for (float y = maxy; miny <= y; y -= (float)grid_size)
 *grid = tgrid;
 }
 
-void DrawLevel(RenderPacket* rp, int w, int h, const int** grid)
+void DrawLevel(RenderPacket& rp, int w, int h, const int** grid)
 {
 for (int y = h; 0 < y; y--)
     {

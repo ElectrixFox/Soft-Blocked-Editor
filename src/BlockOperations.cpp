@@ -2,24 +2,6 @@
 
 #pragma region Block Manager
 
-void InitialiseBlockManager()
-{
-BlockManager bm;
-const int noblk = getBlockCount();  // gets the number of blocks
-const int nimstates = 6;    // the number of states for the immovable block
-
-RenderDetails rds;
-
-// doing all of the standard blocks
-for (int i = 0; i < noblk; i++)
-    {
-    BlockInfo bi = getBlockInfo(i);
-    unsigned int rid = CreateSpriteRenderable(&rds, bi.spfp, bi.nosp, bi.spr); // creates the sprite renderable
-    bm.block[i] = (BLOCK)i;
-    bm.rids[i] = rid;
-    }
-
-}
 
 #pragma endregion
 
@@ -33,7 +15,7 @@ static vec2 snapOperation(vec2 pos)
 return (vec2){roundf(pos.x / grid_size) * grid_size, roundf(pos.y / grid_size) * grid_size};    // snap it to the nearest grid spot
 }
 
-unsigned int _PlaceBlockCustom(RenderPacket* rp, BlockInfo block, vec2 position, float theta)
+unsigned int _PlaceBlockCustom(RenderPacket& rp, BlockInfo block, vec2 position, float theta)
 {
 const BlockInfo bi = block; // renaming
 unsigned int sprite = bi.spr;
@@ -45,53 +27,33 @@ if(getBlockFromFilePath(bi.spfp) == BLOCK_IMMOVABLE_BLOCK)
 
 position = snap_to_grid ? snapOperation(position) : position;   // do the snap operation if should snap to grid and if not don't
 
-unsigned int rd = CreateSpriteRenderable(&rp->rds, bi.spfp, nosprites, sprite);
-unsigned int td = AddTransformation(&rp->tds, position, (vec2){25.0f, 25.0f}, theta);
+unsigned int rd = CreateSpriteRenderable(rp.rds, bi.spfp, nosprites, sprite);
+unsigned int td = AddTransformation(rp.tds, position, (vec2){25.0f, 25.0f}, theta);
 
-
-// setBlockSprite(&bltype, sprite);
 AssignBlock(rd, bltype);
-AddDrawable(&rp->drabs, td, rd);
+AddDrawable(rp.drabs, td, rd);
 
 return rd;
 }
 
+unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position) { return _PlaceBlockCustom(rp, getBlockInfo(getBlockType(block)), position, 0.0f); }
 
-/*
-unsigned int PlaceBlock(RenderDetails* rds, TransformationDetails* tds, Drawables* drabs, BLOCK block, vec2 position)
+void RemoveBlock(RenderPacket& rp, unsigned int rid)
 {
-BlockInfo bi = getBlockInfo(block);
-unsigned int sprite = bi.spr;    // To-Do: write some function to find the sprite from the enum
-unsigned int nosprites = bi.nosp; // To-Do: write some function to find the number of sprites in the sheet
-
-unsigned int rd = CreateSpriteRenderable(rds, bi.spfp, nosprites, sprite);
-unsigned int td = AddTransformation(tds, position, (vec2){25.0f, 25.0f});
-
-AddDrawable(drabs, td, rd);
-AssignBlock(rd, block);
-
-return rd;
-}
-*/
-
-unsigned int PlaceBlock(RenderPacket* rp, BLOCK block, vec2 position) { return _PlaceBlockCustom(rp, getBlockInfo(getBlockType(block)), position, 0.0f); }
-
-void RemoveBlock(RenderPacket* rp, unsigned int rid)
-{
-int index = findDrawablesRenderable(rp->drabs, rid); // finding the ID
+int index = findDrawablesRenderable(rp.drabs, rid); // finding the ID
 if(index == -1)
     return; // if the index isn't found just quit
 
-RemoveDrawable(&rp->drabs, &rp->rds, &rp->tds, rp->drabs.trsids[index]); // remove the drawable
+RemoveDrawable(rp.drabs, rp.rds, rp.tds, rp.drabs.trsids[index]); // remove the drawable
 UnassignBlock(rid);
 }
 
-void RotateBlock(RenderPacket* rp, unsigned int rid, float theta)
+void RotateBlock(RenderPacket& rp, unsigned int rid, float theta)
 {
 
 }
 
-unsigned int PlaceImmovableBlock(RenderPacket* rp, BlockInfo block, vec2 position)
+unsigned int PlaceImmovableBlock(RenderPacket& rp, BlockInfo block, vec2 position)
 {
 return 0;
 }
@@ -220,7 +182,7 @@ int** scope;
 if(grid[y][x] != imblk)
     {
     printf("\nError: Trying to find type for non-immovable");
-    return -1;
+    return (BLOCK_IM_STATE)-1;
     }
 
 getScope(w, h, grid, pos, 3, &scope);   // gets the scope
@@ -235,7 +197,7 @@ switch (lnecnt)
         return BLOCK_IM_STATE_ALONE;
         break;
     case 1: // if it is 1 then it is an end line
-        getLineLayout(3, scope, layout);   // getting the layout to test if it is a corner or a full line
+        getLineLayout(3, (const int**)scope, layout);   // getting the layout to test if it is a corner or a full line
         if(layout[0])   // if there is a block above
             *angle = 0 * M_PI / 180;
         else if(layout[1])  // if there is a block to the right
@@ -247,7 +209,7 @@ switch (lnecnt)
         return BLOCK_IM_STATE_LINE_END;
         break;
     case 2: // if it is 2 then it is either a corner or a full line
-        getLineLayout(3, scope, layout);   // getting the layout to test if it is a corner or a full line
+        getLineLayout(3, (const int**)scope, layout);   // getting the layout to test if it is a corner or a full line
         if((layout[0] && layout[2]) || (layout[1] && layout[3]))  // a full line
             {
             if(layout[1])   // if there is a block to the left or right rotate
@@ -284,7 +246,7 @@ switch (lnecnt)
 
         break;
     case 3: // if it is 3 then it is a three intersection
-        getLineLayout(3, scope, layout);    // gets the layout
+        getLineLayout(3, (const int**)scope, layout);    // gets the layout
         if(layout[0] && layout[3] && layout[2]) // if there is up-down-left 
             *angle = 0 * M_PI / 180;
         else if(layout[0] && layout[1] && layout[2])    // if there is up-down-right
@@ -349,10 +311,10 @@ for (int i = 0; i < tds.size; i++)
 return -1;
 }
 
-unsigned int UpdateImmovableBlocks(RenderPacket* rp, const int w, const int h, const int** grid)
+unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, const int** grid)
 {
 printf("\n\n\nImmovables update");
-vec2 minpos = getMinimumPosition(rp->tds);
+vec2 minpos = getMinimumPosition(rp.tds);
 for (int i = 0; i < h; i++)
     {
     for (int j = 0; j < w; j++)
@@ -360,15 +322,15 @@ for (int i = 0; i < h; i++)
         if(grid[i][j] == (int)BLOCK_IMMOVABLE_BLOCK + 1) // if there is an immovable block there
             {
             float theta = 0.0f;
-            BLOCK_IM_STATE imstate = getImmovableType(w, h, grid, (vec2){j, i}, &theta);
+            BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, (vec2){j, i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
-            int trsid = getBlockAtPosition(rp->tds, posi);
+            int trsid = getBlockAtPosition(rp.tds, posi);
             if(trsid != -1)
                 {
-                unsigned int rid = rp->drabs.rids[findDrawablesTransform(rp->drabs, trsid)];
+                unsigned int rid = rp.drabs.rids[findDrawablesTransform(rp.drabs, trsid)];
                 RemoveBlock(rp, rid);
                 rid = _PlaceBlockCustom(rp, getImmovableBlock(imstate), posi, theta);   // getting the new render ID
-                trsid = rp->drabs.trsids[findDrawablesRenderable(rp->drabs, rid)];
+                trsid = rp.drabs.trsids[findDrawablesRenderable(rp.drabs, rid)];
                 }
             
             }

@@ -9,7 +9,22 @@ typedef struct vec3 { float x, y, z; } vec3;
 
 typedef struct mat3 { vec3 mat[3]; } mat3;
 
-typedef float vec4[4];
+struct vec4
+    {
+    float x, y, z, w;
+
+    float operator[](int i)
+        {
+        switch (i)
+        {
+        case 0: return x;
+        case 1: return y;
+        case 2: return z;
+        case 3: return w;
+        default: break;
+        }
+        }
+    };
 typedef struct m4 { vec4 mat[4]; } m4;
 
 # define M_PI          3.141592653589793238462643383279502884L
@@ -80,16 +95,6 @@ void ExpandByOne(void** arr, const unsigned int size, unsigned int elesize);
  * @warning Remember to pass the array as a pointer not just an array
  */
 void ShrinkArrayByOne(void** arr, const unsigned int size, unsigned int elesize);
-
-/**
- * Finds the next free ID slot starting from 0
- * 
- * @param arr The array
- * @param size The size of the array
- * 
- * @returns The lowest ID which is not used
- */
-int findNextIDAvailable(unsigned int* arr, int size);
 
 /**
  * Multiplies a vec2 by a scalar

@@ -48,9 +48,9 @@ void getLevel(const RenderPacket rp, int* w, int* h, int*** grid);
 /**
  * Draws the level to the screen
  * 
- * @param rp A pointer to the render packet
+ * @param rp A reference to the render packet
  * @param w The width of the grid
  * @param h The height of the grid
  * @param grid The actual grid (a 2D array of integers)
  */
-void DrawLevel(RenderPacket* rp, int w, int h, const int** grid);
+void DrawLevel(RenderPacket& rp, int w, int h, const int** grid);

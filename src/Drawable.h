@@ -3,9 +3,8 @@
 #include "Transformation.h"
 
 struct Drawables {
-    unsigned int* trsids;
-    unsigned int* rids;
-    unsigned int size;
+    std::vector<unsigned int> trsids;
+    std::vector<unsigned int> rids;
 };
 typedef struct Drawables Drawables;
 
@@ -14,13 +13,13 @@ Drawables InitialiseDrawables();
 /**
  * Adds an entry to the drawables links
  * 
- * @param drabs A pointer to the drawables table
+ * @param drabs A referance to the drawables table
  * @param trid The transform ID to add
  * @param rid The render ID to add
  * 
  * @returns The index that the record was added at
  */
-int AddDrawable(Drawables* drabs, unsigned int trid, unsigned int rid);
+int AddDrawable(Drawables& drabs, unsigned int trid, unsigned int rid);
 
 /**
  * Finds the index of the given transform ID in the drawables table
@@ -53,9 +52,9 @@ int findDrawablesRenderable(Drawables drabs, unsigned int rid);
  */
 unsigned int* getRenderIDsFromTransformIDs(Drawables drabs, unsigned int* trids, unsigned int size);
 
-void RemoveDrawable(Drawables* drabs, RenderDetails* rds, TransformationDetails* tds, unsigned int trid);
+void RemoveDrawable(Drawables& drabs, RenderDetails& rds, TransformationDetails& tds, unsigned int trid);
 
-void UpdateImmovables(TransformationDetails* tds, Drawables* drabs);
+void UpdateImmovables(TransformationDetails& tds, Drawables& drabs);
 
 void DrawDrawables(const RenderDetails rds, const TransformationDetails tds, const Drawables drabs);
 
@@ -79,14 +78,14 @@ RenderPacket InitialiseRenderPacket();
 /**
  * Creates a basic square at the given position with the given colour and scale
  * 
- * @param rp A pointer to the render packet
+ * @param rp A reference to the render packet
  * @param position The position to create the square at
  * @param scale The scale factor at which the square should be scaled
  * @param incol The colour to set the square (can be NULL as has a default value)
  * 
  * @returns The index of the renderable in the drawables
  */
-int CreateBasicSquare(RenderPacket* rp, vec2 position, float scale, vec4 incol);
+int CreateBasicSquare(RenderPacket& rp, vec2 position, float scale, vec4 incol);
 
 /**
  * Draws all of the items in the render packet

@@ -17,6 +17,8 @@
 #include "src/Editor.h"
 #include "src/SystemUI.h"
 
+using namespace std;
+
 int gwid = 1280, ghig = 720;
 
 void on_window_resize(GLFWwindow* window, int width, int height)
@@ -71,8 +73,8 @@ BuildSelectBar();
     OutputLevel(grid, w, h);
     if(w != 0 && h != 0)
         {
-        DrawLevel(&block_rp, w, h, grid);
-        UpdateImmovableBlocks(&block_rp, w, h, grid);
+        DrawLevel(block_rp, w, h, grid);
+        UpdateImmovableBlocks(block_rp, w, h, grid);
         }
     }
 
@@ -125,13 +127,13 @@ while(!glfwWindowShouldClose(window))   // main loop
         if(!PressedArea(block_rp.tds, cpos, 50.0f) && !PressedArea(ui_rp.tds, ncpos, 50.0f))
             {
             printf("\nPlacing block");
-            unsigned int rid = _PlaceBlockCustom(&block_rp, getActiveBlock(), cpos, 0.0f);
+            unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
             if(getBlockFromRenderID(rid) == BLOCK_IMMOVABLE_BLOCK)
                 {
                 int** grid;
                 int w, h;
                 getLevel(block_rp, &w, &h, &grid);
-                UpdateImmovableBlocks(&block_rp, w, h, grid);
+                UpdateImmovableBlocks(block_rp, w, h, grid);
                 }
             }
         }
@@ -147,19 +149,19 @@ while(!glfwWindowShouldClose(window))   // main loop
 
             if(getBlockFromRenderID(trid) == BLOCK_IMMOVABLE_BLOCK) check = 1;
 
-            RemoveBlock(&block_rp, trid);
+            RemoveBlock(block_rp, trid);
 
             if(check == 1)
                 {
                 int** grid;
                 int w, h;
                 getLevel(block_rp, &w, &h, &grid);
-                UpdateImmovableBlocks(&block_rp, w, h, grid);
+                UpdateImmovableBlocks(block_rp, w, h, grid);
                 }
             }
         }
 
-    MoveCamera(&cam);
+    MoveCamera(cam);
     ApplyCamera(cam, block_rp.rds);
     ApplyProjection(cam, block_rp.rds);
     ApplyProjection(cam, ui_rp.rds);

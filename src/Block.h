@@ -2,6 +2,8 @@
 #include "MathsOperations.h"
 #include "Rendering/SpriteShapes.h"
 #include <stddef.h>
+#include <iostream>
+#include <vector>
 
 #pragma region Block Object
 
@@ -33,9 +35,8 @@ typedef struct BlockInfo BlockInfo;
 
 struct BlockDetails
     {
-    unsigned int* rids;
-    BLOCK* blocks;
-    unsigned int size;
+    std::vector<unsigned int> rids;
+    std::vector<BLOCK> blocks;
     };
 typedef struct BlockDetails BlockDetails;
 
@@ -55,7 +56,7 @@ unsigned int getBlockSpriteCount(unsigned int block);
 
 void setBlockType(unsigned int* block, unsigned int type);
 
-unsigned int getBlockType(unsigned int block);
+BLOCK getBlockType(BLOCK block);
 
 
 /**

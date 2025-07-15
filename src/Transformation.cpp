@@ -4,14 +4,6 @@ TransformationDetails InitialiseTransformationDetails()
 {
 TransformationDetails tds;  // creating the details
 
-tds.size = 0;  // setting the size to 0
-
-// allocating a small bit of memory
-tds.trsid = malloc(1024 * sizeof(unsigned int));
-tds.pos = malloc(1024 * sizeof(vec2));
-tds.scale = malloc(1024 * sizeof(vec2));
-tds.angle = malloc(1024 * sizeof(float));
-
 return tds;
 }
 
@@ -27,85 +19,30 @@ for (int i = 0; i < tds.size; i++)  // simple linear search
 return -1;
 }
 
-static void increaseTransformations(TransformationDetails* tds)
+unsigned int AddTransformation(TransformationDetails& tds, vec2 pos, vec2 scale, float theta)
 {
-const unsigned int n = tds->size;
-
-/*
-ExpandByOne(&tds->trsid, n, sizeof(unsigned int));
-ExpandByOne(&tds->pos, n, sizeof(vec2));
-ExpandByOne(&tds->scale, n, sizeof(vec2));
-ExpandByOne(&tds->angle, n, sizeof(float));
-*/
-
-tds->size++;
-}
-
-unsigned int AddTransformation(TransformationDetails* tds, vec2 pos, vec2 scale, float theta)
-{
-// static unsigned int id = 0; // a static incrementing counter to set the new ID as
-const unsigned int n = tds->size;
-unsigned int id = findNextIDAvailable(tds->trsid, tds->size);
-
-// make all the arrays bigger by one to accomodate for the new element
-/*
-ExpandByOne(&tds->trsid, n, sizeof(unsigned int));
-ExpandByOne(&tds->pos, n, sizeof(vec2));
-ExpandByOne(&tds->scale, n, sizeof(vec2));
-ExpandByOne(&tds->angle, n, sizeof(float));
-*/
-
-increaseTransformations(tds);
-
+unsigned int id = findNextIDAvailable(tds.trsid);
 
 // setting all the new details
-tds->trsid[n] = id;
-tds->pos[n] = pos;
-tds->scale[n] = scale;
-tds->angle[n] = theta;
+tds.trsid.push_back(id);
+tds.pos.push_back(pos);
+tds.scale.push_back(scale);
+tds.angle.push_back(theta);
 
-// tds->size++;    // increase the number of transforms
-
-return tds->trsid[n];
+return id;
 }
 
-void RemoveTransformation(TransformationDetails *tds, unsigned int tid)
+void RemoveTransformation(TransformationDetails& tds, unsigned int tid)
 {
-int index = getTransformationIDIndex(*tds, tid); // finding the ID
-const unsigned int n = tds->size;
+int index = getTransformationIDIndex(tds, tid); // finding the ID
 
-if(index == -1)
-    return; // if the index isn't found just quit
+if(index == -1) return; // if the index isn't found just quit
 
-if(index == tds->size - 1) goto end;   // hehe the naughty goto
-
-// getting temporary stuff
-unsigned int tmpid = tds->trsid[index];
-vec2 tpos = tds->pos[index];
-vec2 tscale = tds->scale[index];
-float tangle = tds->angle[index];
-
-// setting the to delete to the end values
-tds->trsid[index] = tds->trsid[tds->size - 1];
-tds->pos[index] = tds->pos[tds->size - 1];
-tds->scale[index] = tds->scale[tds->size - 1];
-tds->angle[index] = tds->angle[tds->size - 1];
-
-// setting the end to the thing to delete
-tds->trsid[tds->size - 1] = tmpid;
-tds->pos[tds->size - 1] = tpos;
-tds->scale[tds->size - 1] = tscale;
-tds->angle[tds->size - 1] = tangle;
-
-ShrinkArrayByOne(&tds->trsid, n, sizeof(unsigned int));
-ShrinkArrayByOne(&tds->pos, n, sizeof(vec2));
-ShrinkArrayByOne(&tds->scale, n, sizeof(vec2));
-ShrinkArrayByOne(&tds->angle, n, sizeof(float));
-
-end:
-tds->size--;    // decrease the size so it is effectively not there
-
-// To-Do: Could add in a sort here to sort by ID in order to realign the table
+tds.trsid.erase(tds.trsid.begin() + index);
+tds.pos.erase(tds.pos.begin() + index);
+tds.scale.erase(tds.scale.begin() + index);
+tds.trsid.erase(tds.trsid.begin() + index);
+tds.angle.erase(tds.angle.begin() + index);
 }
 
 void setPosition(TransformationDetails tds, unsigned int trsid, vec2 newpos)

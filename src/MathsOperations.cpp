@@ -75,44 +75,6 @@ for (int i = 0; i < size; i++)
 return min;
 }
 
-static unsigned int findArrMax(unsigned int* arr, int size)
-{
-unsigned int max = arr[0];
-for (int i = 0; i < size; i++)
-    if(arr[i] > max)
-        max = arr[i];
-return max;
-}
-
-static int isInArr(unsigned int* arr, int size, unsigned int tofind)
-{
-for (int i = 0; i < size; i++)
-    if(arr[i] == tofind)
-        return 1;
-return 0;
-}
-
-int findNextIDAvailable(unsigned int* arr, int size)
-{
-int nid = -1;
-
-for (int i = 0; i <= size; i++)
-    {
-    if(!isInArr(arr, size, i))
-        {
-        nid = i;
-        break;
-        }
-    }
-
-if(nid == -1)
-    {
-    printf("Error: Cannot find a new ID");
-    exit(1);
-    }
-return nid;
-}
-
 vec2 ScalarMultVec2(vec2 v, float a) { return (vec2){a * v.x, a * v.y}; }
 
 vec3 ScalarMultVec3(vec3 v, float a) { return (vec3){a * v.x, a * v.y, a * v.x}; }

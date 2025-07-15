@@ -43,7 +43,7 @@ m4 getProjectionMatrix(Camera cam);
  * 
  * @returns 1 if the camera has been moved otherwise 0
  */
-int MoveCamera(Camera* cam);
+int MoveCamera(Camera& cam);
 
 /**
  * Sets all of the projection uniforms

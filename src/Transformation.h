@@ -1,12 +1,15 @@
 #pragma once
 #include "src/MathsOperations.h"
+#include "src/Utils.hpp"
+#include <iostream>
+#include <vector>
 
 struct TransformationDetails
     {
-    unsigned int* trsid;
-    vec2* pos;
-    vec2* scale;
-    float* angle;
+    std::vector<unsigned int> trsid;
+    std::vector<vec2> pos;
+    std::vector<vec2> scale;
+    std::vector<float> angle;
     unsigned int size;
     };
 typedef struct TransformationDetails TransformationDetails;
@@ -34,22 +37,22 @@ int getTransformationIDIndex(TransformationDetails tds, unsigned int trsid);
 /**
  * Adds a transformation to the details
  * 
- * @param tds A pointer to the details
+ * @param tds A reference to the details
  * @param pos The new position to add
  * @param scale The new scale to add
  * @param theta The angle (in degrees) to rotate
  * 
  * @returns The ID of the newly added transformation
  */
-unsigned int AddTransformation(TransformationDetails* tds, vec2 pos, vec2 scale, float theta);
+unsigned int AddTransformation(TransformationDetails& tds, vec2 pos, vec2 scale, float theta);
 
 /**
  * Removes a transformation from the details
  * 
- * @param tds A pointer to the details
+ * @param tds A reference to the details
  * @param tid The ID of the object to remove
  */
-void RemoveTransformation(TransformationDetails* tds, unsigned int tid);
+void RemoveTransformation(TransformationDetails& tds, unsigned int tid);
 
 #pragma region Functions
 
