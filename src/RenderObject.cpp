@@ -57,10 +57,10 @@ static unsigned int _CreateRenderable(RenderDetails& rd, unsigned int shape, con
 unsigned int vao, vbo, ibo, prog, tex = 0;
 
 viBundle vbund = GetShapeVertices(shape);   // the bundle containing the vertices and count
-float* vertices = vbund.vi.vertices;
+float* vertices = vbund.vi;
 
 viBundle ibund = GetShapeIndices(shape);    // the bundle containing the indices and count
-unsigned int* indices = ibund.vi.indices;
+unsigned int* indices = ibund.vi;
 
 vao = CreateVAO();  // creating the vao
 ibo = CreateIBO(indices, ibund.n); // creating the ibo
@@ -95,10 +95,10 @@ unsigned int shape = 0;
 GeneralInitialise(&shape, nosp, spr, SQUARE);
 
 viBundle vbund = GetShapeVertices(shape);   // the bundle containing the vertices and count
-float* vertices = vbund.vi.vertices;
+float* vertices = vbund.vi;
 
 viBundle ibund = GetShapeIndices(shape);    // the bundle containing the indices and count
-unsigned int* indices = ibund.vi.indices;
+unsigned int* indices = ibund.vi;
 
 // creating the shader
 prog = CreateShader(vsfp, fsfp);    // creates the shader object

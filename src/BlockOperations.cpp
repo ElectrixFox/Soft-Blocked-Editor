@@ -12,7 +12,7 @@ extern const int grid_size;
 
 static vec2 snapOperation(vec2 pos)
 {
-return (vec2){roundf(pos.x / grid_size) * grid_size, roundf(pos.y / grid_size) * grid_size};    // snap it to the nearest grid spot
+return {roundf(pos.x / grid_size) * grid_size, roundf(pos.y / grid_size) * grid_size};    // snap it to the nearest grid spot
 }
 
 unsigned int _PlaceBlockCustom(RenderPacket& rp, BlockInfo block, vec2 position, float theta)
@@ -28,7 +28,7 @@ if(getBlockFromFilePath(bi.spfp) == BLOCK_IMMOVABLE_BLOCK)
 position = snap_to_grid ? snapOperation(position) : position;   // do the snap operation if should snap to grid and if not don't
 
 unsigned int rd = CreateSpriteRenderable(rp.rds, bi.spfp, nosprites, sprite);
-unsigned int td = AddTransformation(rp.tds, position, (vec2){25.0f, 25.0f}, theta);
+unsigned int td = AddTransformation(rp.tds, position, {25.0f, 25.0f}, theta);
 
 AssignBlock(rd, bltype);
 AddDrawable(rp.drabs, td, rd);
@@ -273,7 +273,7 @@ static vec2 getMinimumPosition(TransformationDetails tds)
 float minx = 0, maxx = 0, miny = 0, maxy = 0;
 
 if(tds.size == 0)   // stop if there are no transforms
-    return (vec2){-1.0f, -1.0f};
+    return {-1.0f, -1.0f};
 
 for (int i = 0; i < tds.size; i++)  // find the first deletable
     {
@@ -300,7 +300,7 @@ for (int i = 0; i < tds.size; i++)
         maxy = tds.pos[i].y;
     }
 
-return (vec2){minx, miny};
+return {minx, miny};
 }
 
 int getBlockAtPosition(TransformationDetails tds, vec2 pos)
@@ -322,7 +322,7 @@ for (int i = 0; i < h; i++)
         if(grid[i][j] == (int)BLOCK_IMMOVABLE_BLOCK + 1) // if there is an immovable block there
             {
             float theta = 0.0f;
-            BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, (vec2){j, i}, &theta);
+            BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, {(float)j, (float)i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
             int trsid = getBlockAtPosition(rp.tds, posi);
             if(trsid != -1)

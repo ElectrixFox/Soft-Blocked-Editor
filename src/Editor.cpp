@@ -5,8 +5,10 @@ static BlockInfo cblock = {"res/sprites/player_spritesheet.png", 2, 1};
 const int snap_to_grid = 1;
 const int grid_size = 50;
 
+/*
 extern UI_Table ui;
 extern RenderPacket ui_rp;
+*/
 
 #pragma region Main
 
@@ -38,6 +40,7 @@ void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.
 
 #pragma region EditorUI
 
+/*
 static void changeBlock(int ui_id)
 {
 RenderInformation ri = getUIRenderInformation(ui, ui_id);   // getting the render information
@@ -114,5 +117,6 @@ for (int i = 0; i < nblk; i++)
         }
     }
 }
+*/
 
 #pragma endregion

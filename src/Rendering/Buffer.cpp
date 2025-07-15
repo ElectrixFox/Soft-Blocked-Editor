@@ -32,25 +32,14 @@ glBindVertexArray(vao); // bind the array to be used
 return vao;
 }
 
-void AddToVertexLayout(VAOLayout* layout, unsigned int size)
-{
-void* nptr = malloc(sizeof(unsigned int*) * (*layout).number); // allocating the new memory
-nptr = realloc((*layout).sizes, sizeof(unsigned int) * ((*layout).number + 1));  // making the array bigger
-(*layout).sizes = nptr;    // setting the old array to the new bigger one
-(*layout).sizes[(*layout).number] = size; // setting the new size element
-(*layout).number++;    // increase the number of elements in the whole layout
-}
+void AddToVertexLayout(VAOLayout& layout, unsigned int size) { layout.sizes.push_back(size); }
 
 VAOLayout CreateVertexLayout(unsigned int sizes[], unsigned int bufflen, unsigned int n)
 {
 VAOLayout layout;
-layout.sizes = (unsigned int*)malloc(n * sizeof(unsigned int)); // allocating the size
-for(int i = 0; i < n; i++)
-    {
-    layout.sizes[i] = sizes[i];
-    }
+for (int i = 0; i < n; i++)
+    layout.sizes.push_back(sizes[i]);
 layout.bufflen = bufflen;
-layout.number = n;
 
 return layout;
 }
@@ -58,7 +47,7 @@ return layout;
 void InitialiseVertexLayout(VAOLayout layout)
 {
 unsigned int stride = 0;
-for(int i = 0; i < layout.number; i++)
+for(int i = 0; i < layout.sizes.size(); i++)
     {
     glVertexAttribPointer(i, layout.sizes[i], GL_FLOAT, GL_FALSE, layout.bufflen * sizeof(float), (void*)(stride * sizeof(float))); // adding the pointer
     glEnableVertexAttribArray(i);   // attributing the data.

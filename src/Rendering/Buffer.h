@@ -2,6 +2,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "SpriteShapes.h"
+#include <vector>
 
 void BindVAO(unsigned int vao);
 
@@ -26,8 +27,7 @@ unsigned int CreateVAO();
 // To-Do: optimise this so the number and buffer length are both stored in one variable
 typedef struct VAOLayout
     {
-    unsigned int* sizes;
-    unsigned int number;
+    std::vector<unsigned int> sizes;
     unsigned int bufflen;
     } VAOLayout;
 

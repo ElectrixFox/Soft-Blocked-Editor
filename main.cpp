@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <pthread.h>
 
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
@@ -15,7 +14,7 @@
 #include "src/InputManager.h"
 #include "src/Drawable.h"
 #include "src/Editor.h"
-#include "src/SystemUI.h"
+// #include "src/SystemUI.h"
 
 using namespace std;
 
@@ -28,8 +27,10 @@ ghig = height;
 printf("\n%dx%d", gwid, ghig);
 }
 
+/*
 UI_Table ui;
 RenderPacket ui_rp;
+*/
 InputManager inpman;
 
 int main()
@@ -54,33 +55,35 @@ glewInit();
 glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-Camera cam = CreateCamera((vec2){0, 0}, (vec2){gwid, ghig}, &gwid, &ghig);
+Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
+/*
 ui = InitialiseUI();
 ui_rp = InitialiseRenderPacket();
+*/
 InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
 
 InitialiseBlockDetails();
 
-BuildSelectBar();
+// BuildSelectBar();
 
     {
     int** grid;
     int w, h;
     ReadLevel("res/levels/level3.txt", &w, &h, &grid);
     
-    OutputLevel(grid, w, h);
+    OutputLevel((const int**)grid, w, h);
     if(w != 0 && h != 0)
         {
-        DrawLevel(block_rp, w, h, grid);
-        UpdateImmovableBlocks(block_rp, w, h, grid);
+        DrawLevel(block_rp, w, h, (const int**)grid);
+        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
-    checkUI(ui, ui_rp);
+    // checkUI(ui, ui_rp);
 
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     
@@ -93,7 +96,7 @@ while(!glfwWindowShouldClose(window))   // main loop
         int w, h;
         printf("\nSaving");
         getLevel(block_rp, &w, &h, &grid);
-        WriteLevel("res/levels/level3.txt", w, h, grid);
+        WriteLevel("res/levels/level3.txt", w, h, (const int**)grid);
         }
 
     if(isPressedSingle(GLFW_KEY_TAB))
@@ -101,10 +104,10 @@ while(!glfwWindowShouldClose(window))   // main loop
         int** grid;
         int w, h;
         OutputRenderPacketDetails(block_rp);
-        OutputRenderPacketDetails(ui_rp);
+        // OutputRenderPacketDetails(ui_rp);
 
         getLevel(block_rp, &w, &h, &grid);
-        OutputLevel(grid, w, h);
+        OutputLevel((const int**)grid, w, h);
         }
     else if(isPressed(GLFW_KEY_0))
         {
@@ -124,7 +127,7 @@ while(!glfwWindowShouldClose(window))   // main loop
         cpos.x = 5 * roundf(cpos.x / 5);
         cpos.y = 5 * roundf(cpos.y / 5);
 
-        if(!PressedArea(block_rp.tds, cpos, 50.0f) && !PressedArea(ui_rp.tds, ncpos, 50.0f))
+        if(!PressedArea(block_rp.tds, cpos, 50.0f)) // && !PressedArea(ui_rp.tds, ncpos, 50.0f))
             {
             printf("\nPlacing block");
             unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
@@ -133,7 +136,7 @@ while(!glfwWindowShouldClose(window))   // main loop
                 int** grid;
                 int w, h;
                 getLevel(block_rp, &w, &h, &grid);
-                UpdateImmovableBlocks(block_rp, w, h, grid);
+                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
                 }
             }
         }
@@ -156,7 +159,7 @@ while(!glfwWindowShouldClose(window))   // main loop
                 int** grid;
                 int w, h;
                 getLevel(block_rp, &w, &h, &grid);
-                UpdateImmovableBlocks(block_rp, w, h, grid);
+                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
                 }
             }
         }
@@ -164,14 +167,14 @@ while(!glfwWindowShouldClose(window))   // main loop
     MoveCamera(cam);
     ApplyCamera(cam, block_rp.rds);
     ApplyProjection(cam, block_rp.rds);
-    ApplyProjection(cam, ui_rp.rds);
+    // ApplyProjection(cam, ui_rp.rds);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
 
     DrawRenderPacket(block_rp);
-    ClearCamera(ui_rp.rds);
-    DrawRenderPacket(ui_rp);
+    // ClearCamera(ui_rp.rds);
+    // DrawRenderPacket(ui_rp);
     
     glfwSwapBuffers(window);
     glfwPollEvents();

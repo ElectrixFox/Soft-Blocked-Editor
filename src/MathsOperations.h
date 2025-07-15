@@ -24,9 +24,18 @@ struct vec4
         default: break;
         }
         }
-    
     };
-typedef struct m4 { vec4 mat[4]; } m4;
+
+
+struct m4
+    {
+    vec4 mat[4];
+
+    vec4 operator[](int i)
+        {
+        return mat[i];
+        }
+    };
 
 # define M_PI          3.141592653589793238462643383279502884L
 

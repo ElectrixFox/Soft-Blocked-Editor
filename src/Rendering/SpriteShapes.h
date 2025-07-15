@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <vector>
+#include <iostream>
 
 typedef enum SHAPE
     {
@@ -17,16 +19,12 @@ struct SpriteSheetInfo
     };
 typedef struct SpriteSheetInfo SpriteSheetInfo;
 
+template <typename T>
 struct viBundle
     {
-    union
-        {
-        unsigned int* indices;
-        float* vertices;
-        } vi;
+    T* vi;
     const unsigned int n;
     };
-typedef struct viBundle viBundle;
 
 
 /*
@@ -47,5 +45,5 @@ unsigned int GetNumberOfSprites(unsigned int shape);
 unsigned int GetActiveSprite(unsigned int shape);
 unsigned int GetActiveShape(unsigned int shape);
 
-viBundle GetShapeVertices(unsigned int shape);
-viBundle GetShapeIndices(unsigned int shape);
+viBundle<float> GetShapeVertices(unsigned int shape);
+viBundle<unsigned int> GetShapeIndices(unsigned int shape);

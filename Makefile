@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -Wall -I.
-CXXIGNORE = -Wno-missing-braces -Wno-format
+CXXIGNORE = -Wno-missing-braces -Wno-format -Wno-sign-compare
 CXXFLAGS += $(CXXIGNORE)
 APPNAME = main
 LIBS = -L./lib
