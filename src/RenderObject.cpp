@@ -70,7 +70,7 @@ BindVBO(vbo);  // binding the vbo to the vao
 
 unsigned int ilay[1] = {3};
 VAOLayout layout = CreateVertexLayout(ilay, 5, 1);  // setting up the layout to receive
-AddToVertexLayout(&layout, 2);  // adding the texture coords to the layout
+AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
 InitialiseVertexLayout(layout); // initialising the layout to be used
 
 prog = CreateShader(vsfp, fsfp);    // creates the shader object
@@ -119,7 +119,7 @@ BindVBO(vbo);  // binding the vbo to the vao
 
 unsigned int ilay[1] = {3};
 VAOLayout layout = CreateVertexLayout(ilay, 5, 1);  // setting up the layout to receive
-AddToVertexLayout(&layout, 2);  // adding the texture coords to the layout
+AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
 InitialiseVertexLayout(layout); // initialising the layout to be used
 
 return AddRenderDetail(rd, vao, vbo, ibo, prog, tex);

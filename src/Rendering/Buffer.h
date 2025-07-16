@@ -45,5 +45,7 @@ void BindVBO(unsigned int vbo);
  * @returns The vertex array layout object
  */
 VAOLayout CreateVertexLayout(unsigned int sizes[], unsigned int bufflen, unsigned int n);
+
 void InitialiseVertexLayout(VAOLayout layout);
-void AddToVertexLayout(VAOLayout* layout, unsigned int size);
+
+void AddToVertexLayout(VAOLayout& layout, unsigned int size);

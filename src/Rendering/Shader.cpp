@@ -137,7 +137,7 @@ float** mat;
 memcpy(mat, matr.mat, sizeof(m4));
 BindShader(program);
 int uniloc = glGetUniformLocation(program, varname);
-glUniformMatrix4fv(uniloc, 1, GL_FALSE, &mat[0][0]);
+glUniformMatrix4fv(uniloc, 1, GL_FALSE, reinterpret_cast<const float*>(&matr.mat[0]));
 }
 
 void SetUniform1i(unsigned int program, const char* varname, unsigned int value)

@@ -6,7 +6,7 @@ Drawables drabs;
 return drabs;
 }
 
-int AddDrawable(Drawables& drabs, unsigned int trid, unsigned int rid)
+int AddDrawable(Drawables& drabs, const unsigned int trid, const unsigned int rid)
 {
 // setting all the new details
 drabs.rids.push_back(rid);

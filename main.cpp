@@ -62,12 +62,15 @@ ui_rp = InitialiseRenderPacket();
 */
 InitialiseInputManager(window);
 
-RenderPacket block_rp = InitialiseRenderPacket();
+RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
+unsigned int bsqr = CreateBasicSquare(block_rp, {1.0f, 1.0f}, 25.0f, {1.0f, 0.0f, 0.0f, 1.0f});
+
 // BuildSelectBar();
 
+    /*
     {
     int** grid;
     int w, h;
@@ -80,6 +83,7 @@ InitialiseBlockDetails();
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
+    */
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -90,6 +94,7 @@ while(!glfwWindowShouldClose(window))   // main loop
     if(isPressed(GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(window, 1);
     
+    /*
     if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
         {
         int** grid;
@@ -163,6 +168,7 @@ while(!glfwWindowShouldClose(window))   // main loop
                 }
             }
         }
+    */
 
     MoveCamera(cam);
     ApplyCamera(cam, block_rp.rds);

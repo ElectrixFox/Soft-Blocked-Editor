@@ -5,8 +5,8 @@
 struct Drawables {
     std::vector<unsigned int> trsids;
     std::vector<unsigned int> rids;
+    Drawables() : rids(), trsids() {}
 };
-typedef struct Drawables Drawables;
 
 Drawables InitialiseDrawables();
 
@@ -19,7 +19,7 @@ Drawables InitialiseDrawables();
  * 
  * @returns The index that the record was added at
  */
-int AddDrawable(Drawables& drabs, unsigned int trid, unsigned int rid);
+int AddDrawable(Drawables& drabs, const unsigned int trid, const unsigned int rid);
 
 /**
  * Finds the index of the given transform ID in the drawables table
@@ -70,8 +70,8 @@ struct RenderPacket
     Drawables drabs;
     RenderDetails rds;
     TransformationDetails tds;
+    RenderPacket() : drabs(), rds(), tds() {}
     };
-typedef struct RenderPacket RenderPacket;
 
 RenderPacket InitialiseRenderPacket();
 

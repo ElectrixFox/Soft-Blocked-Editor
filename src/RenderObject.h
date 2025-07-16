@@ -1,6 +1,6 @@
 #pragma once
 #include "Rendering/Buffer.h"
-#include "Utils.hpp"
+#include "Utils.h"
 #include <vector>
 #include <string>
 
@@ -70,7 +70,7 @@ unsigned int CreateSquareRenderable(RenderDetails& rd);
  * 
  * @returns The ID of the render object
  */
-unsigned int CreateSpriteRenderable(RenderDetails& rd, std::string spfp, unsigned int nosp, unsigned int spr);
+unsigned int CreateSpriteRenderable(RenderDetails& rd, const char* spfp, unsigned int nosp, unsigned int spr);
 
 /**
  * Just creates a standard coloured square
