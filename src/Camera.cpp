@@ -38,20 +38,18 @@ return 1;
 
 void _ApplyProjection(Camera cam, std::vector<unsigned int> progs)
 {
-m4 proj = getProjectionMatrix(cam);
+const m4 proj = getProjectionMatrix(cam);
 
-for (int i = 0; i < progs.size(); i++)
-    SetUniformM4(progs[i], "projection", proj); // setting the projection matrix
+for(unsigned int prog : progs)
+    SetUniformM4(prog, "projection", proj); // setting the projection matrix
 }
 
 void _ApplyCamera(Camera cam, std::vector<unsigned int> progs)
 {
 m4 view = getCameraMatrix(cam);
 
-for (int i = 0; i < progs.size(); i++)
-    {
-    SetUniformM4(progs[i], "view", view);
-    }
+for(unsigned int prog : progs)
+    SetUniformM4(prog, "view", view);
 }
 
 void _ApplyStaticCamera(Camera cam, std::vector<unsigned int> progs)

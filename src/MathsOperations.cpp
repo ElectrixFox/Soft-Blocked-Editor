@@ -27,9 +27,13 @@ for (int i = 0; i < n; i++)
 void OutputMat3(mat3 A)
 {
 for (int i = 0; i < 3; i++)
-    {
     printf("\n%.2f %.2f %.2f", A.mat[i].x, A.mat[i].y, A.mat[i].z);
-    }
+}
+
+void OutputMatrix(m4 matrix)
+{
+for (int i = 0; i < 4; i++)
+    printf("\n%.2f %.2f %.2f %.2f", matrix.mat[i].x, matrix.mat[i].y, matrix.mat[i].z, matrix.mat[i].w);
 }
 
 void ExpandArray(void** arr, unsigned int osize, unsigned int nsize, unsigned int elesize)
@@ -171,9 +175,7 @@ void generalisedMatrMult3(float m1[][3], float m2[][3], unsigned int n, unsigned
 transposeMatr3(m2, 3);  // transposing the matrix
 
 for (int i = 0; i < n; i++)
-    {
     generalisedDot(m1[i], m2[i], n);    // getting the entries
-    }
 }
 
 vec3 applyMatrix(mat3 matr, vec3 vec)
@@ -230,11 +232,11 @@ return (m4){
 m4 getProjection(unsigned int wid, unsigned int hig, unsigned int transformed)
 {
 return 
-    (m4){
-         2 / (float)wid, 0.0f, 0.0f, -(float)(transformed),
-         0.0f, 2 / (float)hig, 0.0f, -(float)(transformed),
-         0.0f, 0.0f, 1.0f, 0.0f,
-         0.0f, 0.0f, 0.0f, 1.0f
+    {
+    (float)2 / (float)wid, 0.0f, 0.0f, -(float)(transformed),
+    0.0f, (float)2 / (float)hig, 0.0f, -(float)(transformed),
+    0.0f, 0.0f, 1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f
     };
 }
 

@@ -66,7 +66,10 @@ RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
-unsigned int bsqr = CreateBasicSquare(block_rp, {1.0f, 1.0f}, 25.0f, {1.0f, 0.0f, 0.0f, 1.0f});
+// unsigned int bsqr = CreateBasicSquare(block_rp, {25.0f, 25.0f}, 25.0f, {1.0f, 0.0f, 0.0f, 1.0f});
+unsigned int sp_rid = CreateSpriteRenderable(block_rp.rds, "res/sprites/movable_spritesheet_short.png", 2, 1);
+unsigned int sp_tid = AddTransformation(block_rp.tds, {250.0f, 250.0f}, {25.0f, 25.0f}, 0.0f);
+AddDrawable(block_rp.drabs, sp_tid, sp_rid);
 
 // BuildSelectBar();
 

@@ -8,7 +8,7 @@
 unsigned int getActiveTexture(unsigned int texture);
 unsigned int getTexture(unsigned int texture);
 
-unsigned int CreateTexture(const char* path);
+extern "C" unsigned int CreateTexture(const char*);
 
 void BindTexture(unsigned int texture);
 

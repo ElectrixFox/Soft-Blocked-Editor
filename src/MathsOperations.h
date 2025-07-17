@@ -63,6 +63,8 @@ void OutputVecn(int n, const float* v);
  */
 void OutputMatn(int n, int m, const float** A);
 
+void OutputMatrix(m4 matrix);
+
 /**
  * Outputs a matn
  * 

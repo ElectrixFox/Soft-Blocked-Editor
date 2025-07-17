@@ -58,10 +58,13 @@ drabs.trsids.erase(drabs.trsids.begin() + index);
 void DrawDrawables(const RenderDetails rds, const TransformationDetails tds, const Drawables drabs)
 {
 // getting all we will need from the transformation objects first
-m4* models = (m4*)malloc(drabs.rids.size() * sizeof(m4));  // getting all of the transformation matrices
+std::vector<m4> models;
 
-for (int i = 0; i < drabs.rids.size(); i++)    // getting  the model matrices
-    models[i] = getTransformModelMatrix(tds, drabs.trsids[i]);
+for(unsigned int trid : drabs.trsids)
+    models.push_back(getTransformModelMatrix(tds, trid));
+
+for(m4 model : models)
+    OutputMatrix(model);
 
 for (int i = 0; i < drabs.rids.size(); i++)
     {

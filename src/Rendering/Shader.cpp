@@ -133,8 +133,6 @@ glUniform4f(uniloc, value[0], value[1], value[2], value[3]);
 
 void SetUniformM4(unsigned int program, const char* varname, m4 matr)
 {
-float** mat;
-memcpy(mat, matr.mat, sizeof(m4));
 BindShader(program);
 int uniloc = glGetUniformLocation(program, varname);
 glUniformMatrix4fv(uniloc, 1, GL_FALSE, reinterpret_cast<const float*>(&matr.mat[0]));
