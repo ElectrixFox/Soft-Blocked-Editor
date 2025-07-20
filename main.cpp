@@ -14,7 +14,7 @@
 #include "src/InputManager.h"
 #include "src/Drawable.h"
 #include "src/Editor.h"
-// #include "src/SystemUI.h"
+#include "src/SystemUI.h"
 
 using namespace std;
 
@@ -27,10 +27,8 @@ ghig = height;
 printf("\n%dx%d", gwid, ghig);
 }
 
-/*
 UI_Table ui;
 RenderPacket ui_rp;
-*/
 InputManager inpman;
 
 int main()
@@ -56,22 +54,15 @@ glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
-/*
 ui = InitialiseUI();
 ui_rp = InitialiseRenderPacket();
-*/
 InitialiseInputManager(window);
 
 RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
-// unsigned int bsqr = CreateBasicSquare(block_rp, {25.0f, 25.0f}, 25.0f, {1.0f, 0.0f, 0.0f, 1.0f});
-unsigned int sp_rid = CreateSpriteRenderable(block_rp.rds, "res/sprites/movable_spritesheet_short.png", 2, 1);
-unsigned int sp_tid = AddTransformation(block_rp.tds, {250.0f, 250.0f}, {25.0f, 25.0f}, 0.0f);
-AddDrawable(block_rp.drabs, sp_tid, sp_rid);
-
-// BuildSelectBar();
+BuildSelectBar();
 
     /*
     {

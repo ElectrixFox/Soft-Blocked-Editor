@@ -5,6 +5,9 @@ static BlockInfo cblock = {"res/sprites/player_spritesheet.png", 2, 1};
 const int snap_to_grid = 1;
 const int grid_size = 50;
 
+extern RenderPacket ui_rp;
+extern UI_Table ui;
+
 /*
 extern UI_Table ui;
 extern RenderPacket ui_rp;
@@ -40,7 +43,6 @@ void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.
 
 #pragma region EditorUI
 
-/*
 static void changeBlock(int ui_id)
 {
 RenderInformation ri = getUIRenderInformation(ui, ui_id);   // getting the render information
@@ -101,14 +103,14 @@ for (int i = 0; i < nblk; i++)
     {
     vec2 position = {topright.x, topright.y - (i * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
     BlockInfo bi = getBlockInfo(menuDetails[i]);
-    RenderInformation ri;
-    ri.ssi = { bi.spfp, bi.nosp, bi.spr };
+    SpriteSheetInfo ssi = (SpriteSheetInfo){ bi.spfp, bi.nosp, bi.spr };
+    const RenderInformation ri = RenderInformation(ssi);
     unsigned int entry = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_BUTTON, ri);
     assignButtonAction(ui, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
     if(ri.ssi.nosp > 1 && getBlockFromFilePath(bi.spfp) != BLOCK_IMMOVABLE_BLOCK)   // if there is more than one sprite and the block isn't the immovable type
         {
-        RenderInformation tri;
-        tri.meni = {{NULL, NULL}, entry};
+        GUI_MENU meni = GUI_MENU({NULL, NULL}, entry);
+        RenderInformation tri = RenderInformation(meni);
         unsigned int menhead = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_MENU, tri);
         assignButtonAction(ui, menhead, UI_TRIGGER_HOVER, &unfoldBlockOptions);
         RenderInformation ntri = getUIRenderInformation(ui, menhead);
@@ -117,6 +119,5 @@ for (int i = 0; i < nblk; i++)
         }
     }
 }
-*/
 
 #pragma endregion

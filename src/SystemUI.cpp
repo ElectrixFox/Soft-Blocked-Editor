@@ -132,6 +132,8 @@ return -1;
 
 unsigned int getUITransform(UI_Table ui, unsigned int ui_id) { return ui.trsid[findUIIDinTable(ui, ui_id)]; }
 
+RenderInformation getUIRenderInformation(UI_Table ui, unsigned int ui_id) { return ui.data[findUIIDinTable(ui, ui_id)]; }
+
 RenderInformation& _getUIRenderInformation(UI_Table& ui, unsigned int ui_id) { return ui.data[findUIIDinTable(ui, ui_id)]; }
 
 unsigned int addButton(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, RenderInformation rendinf)
@@ -179,7 +181,7 @@ if(index == -1)
 assignUITriggerAction(ui.actions[trigger], ui_id, action);
 }
 
-unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, const RenderInformation& rendinf)
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, RenderInformation rendinf)
 {
 static unsigned int ui_id = 0;
 const unsigned int n = ui.ui_id.size();
@@ -193,22 +195,30 @@ int ind = -1;
 switch (type)   // doing the appropriate thing for each type
     {
     case UI_TYPE_NULL:
+        {
         ui.data[n].rinf = (GUI_RENDER_INFO)0;
         ind = CreateBasicSquare(rp, pos, scale, {1.0f, 0.0f, 0.0f, 0.0f});  // creates the square
         break;
+        }
     case UI_TYPE_BUTTON:
+        {
         ui.data[n].ssi = rendinf.ssi;
         unsigned int rid = CreateSpriteRenderable(rp.rds, rendinf.ssi.spfp, rendinf.ssi.nosp, rendinf.ssi.spr);
         unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
         ind = AddDrawable(rp.drabs, trsid, rid);
         break;
+        }
     case UI_TYPE_MENU:
+        {
         ui.data[n].meni = rendinf.meni;    // set the menu data
         int tindex = findUIIDinTable(ui, rendinf.meni.men_head_ui_id);
         ind = findDrawablesTransform(rp.drabs, ui.trsid[tindex]);
         break;
+        }
     default:
+        {
         break;
+        }
     }
 
 unsigned int trsid = rp.drabs.trsids[ind]; // gets the transformation ID
@@ -255,14 +265,16 @@ switch (type)   // doing the appropriate thing for each type
         }
     case UI_TYPE_MENU:
         {
-        GUI_MENU& menu = _getUIRenderInformation(ui, ui_id).meni;
-        for(auto el_id : menu.ui_ids)
+        RenderInformation& menu = ui.data[findUIIDinTable(ui, ui_id)];
+        for(auto el_id : menu.meni.ui_ids)
             removeUIElementSingle(ui, rp, el_id);
-        removeUIElementSingle(ui, rp, menu.men_head_ui_id);    // removing the head element
+        removeUIElementSingle(ui, rp, menu.meni.men_head_ui_id);    // removing the head element
         break;
         }
     default:
+        {
         break;
+        }
     }
 
 }

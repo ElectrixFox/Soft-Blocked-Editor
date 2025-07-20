@@ -16,11 +16,24 @@ typedef enum
 
 typedef void (*ui_act_fun)(int);
 
-typedef struct
+struct GUI_MENU
     {
     std::vector<unsigned int> ui_ids;
     unsigned int men_head_ui_id;
-    } GUI_MENU;
+    
+    GUI_MENU(const GUI_MENU& meni) { this->ui_ids = meni.ui_ids; this->men_head_ui_id = meni.men_head_ui_id; }
+    GUI_MENU() {};
+    GUI_MENU(std::vector<unsigned int> ui_ids, unsigned int men_head_ui_id)
+        : ui_ids(ui_ids), men_head_ui_id(men_head_ui_id)
+        {
+        }
+    GUI_MENU operator=(const GUI_MENU meni)
+        {
+        this->ui_ids = meni.ui_ids;
+        this->men_head_ui_id = meni.men_head_ui_id;
+        }
+
+    };
 
 typedef enum
     {
@@ -42,8 +55,10 @@ union RenderInformation
 
     RenderInformation() { };
     ~RenderInformation() { };
-
-    RenderInformation(const RenderInformation& ri) { return; }
+    RenderInformation(const GUI_MENU men) { this->meni = men; };
+    RenderInformation(const SpriteSheetInfo _ssi) { this->ssi = _ssi; };
+    RenderInformation(const RenderInformation& ri) { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
+    RenderInformation& operator=(const RenderInformation& ri)  { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
     };
 typedef union RenderInformation RenderInformation;
 
@@ -144,7 +159,7 @@ void assignButtonAction(UI_Table& ui, unsigned int ui_id, GUI_ACTION_TRIGGER tri
  * 
  * @returns The ID of the new UI element
  */
-unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, RenderInformation& rendinf);
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, RenderInformation rendinf);
 
 /**
  * Removes the UI element with the given ID from the table
