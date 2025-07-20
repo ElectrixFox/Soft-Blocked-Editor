@@ -132,7 +132,11 @@ return -1;
 
 unsigned int getUITransform(UI_Table ui, unsigned int ui_id) { return ui.trsid[findUIIDinTable(ui, ui_id)]; }
 
-RenderInformation getUIRenderInformation(UI_Table ui, unsigned int ui_id) { return ui.data[findUIIDinTable(ui, ui_id)]; }
+RenderInformation getUIRenderInformation(UI_Table ui, unsigned int ui_id)
+{
+// ui.data[findUIIDinTable(ui, ui_id)];
+// return RenderInformation(ui.data[findUIIDinTable(ui, ui_id)]);
+}
 
 RenderInformation& _getUIRenderInformation(UI_Table& ui, unsigned int ui_id) { return ui.data[findUIIDinTable(ui, ui_id)]; }
 
@@ -304,7 +308,7 @@ int index = findUIIDinTable(ui, ui_id);    // getting the UI element in the UI t
 vec2 pos = getPosition(rp.tds, ui.trsid[index]); // getting the position
 vec2 scale = getScale(rp.tds, ui.trsid[index]); // getting the scale
 
-RenderInformation& ri = _getUIRenderInformation(ui, ui_id);  // getting the render information
+RenderInformation ri = reinterpret_cast<const RenderInformation&>(ui.data[findUIIDinTable(ui, ui_id)]);  // getting the render information
 int mensize = ri.meni.ui_ids.size();  // getting the size of the menu
 
 pos = {pos.x - ((mensize + 1) * 50.0f + padding), pos.y};   // getting the new position

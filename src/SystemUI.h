@@ -21,10 +21,14 @@ struct GUI_MENU
     std::vector<unsigned int> ui_ids;
     unsigned int men_head_ui_id;
     
-    GUI_MENU(const GUI_MENU& meni) { this->ui_ids = meni.ui_ids; this->men_head_ui_id = meni.men_head_ui_id; }
+    // GUI_MENU(const GUI_MENU& meni) { this->ui_ids = meni.ui_ids; this->men_head_ui_id = meni.men_head_ui_id; }
     GUI_MENU() {};
     GUI_MENU(std::vector<unsigned int> ui_ids, unsigned int men_head_ui_id)
         : ui_ids(ui_ids), men_head_ui_id(men_head_ui_id)
+        {
+        }
+    GUI_MENU(unsigned int men_head_ui_id)
+        : ui_ids(), men_head_ui_id(men_head_ui_id)
         {
         }
     GUI_MENU operator=(const GUI_MENU meni)
@@ -57,7 +61,7 @@ union RenderInformation
     ~RenderInformation() { };
     RenderInformation(const GUI_MENU men) { this->meni = men; };
     RenderInformation(const SpriteSheetInfo _ssi) { this->ssi = _ssi; };
-    RenderInformation(const RenderInformation& ri) { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
+    // RenderInformation(const RenderInformation& ri) { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
     RenderInformation& operator=(const RenderInformation& ri)  { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
     };
 typedef union RenderInformation RenderInformation;

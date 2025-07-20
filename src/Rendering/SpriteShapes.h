@@ -16,8 +16,12 @@ struct SpriteSheetInfo
     const char* spfp;
     unsigned int nosp;
     unsigned int spr;
+
+    SpriteSheetInfo() {}
+    SpriteSheetInfo(const char* nspfp, unsigned int nnosp, unsigned int nspr)
+        : spfp(nspfp), nosp(nnosp), spr(nspr)
+        { }
     };
-typedef struct SpriteSheetInfo SpriteSheetInfo;
 
 template <typename T>
 struct viBundle
