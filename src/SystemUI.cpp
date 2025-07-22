@@ -728,7 +728,8 @@ vec2 scale = getScale(rp.tds, table.trsid[index]);
 return pressedInRectangle(pos, scale);
 }
 
-void checkUI(UI_Element_Table<GUI_Button>& table, RenderPacket rp)
+template <typename T>
+static void _checkUI(UI_Element_Table<T>& table, RenderPacket rp)
 {
 GLFWwindow* window = getWindow();
 
@@ -763,5 +764,14 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     }
 }
 
+void UI_Manager::checkUI()
+{
+_checkUI(ui_btn_tab, ui_rp);
+}
+
+void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp)
+{
+
+}
 
 #endif

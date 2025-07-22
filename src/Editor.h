@@ -71,6 +71,7 @@ void ApplyProjection(Camera cam, RenderDetails rds);
 
 #pragma region EditorUI
 
+#define EDITOR_UI
 #ifdef EDITOR_UI
 
 /**

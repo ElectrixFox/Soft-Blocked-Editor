@@ -67,6 +67,8 @@ RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
+UI_Manager ui_man(ui_rp);
+
 vec2 topright = {1255.0f, 695.0f};
 const float padding = 10.0f;
 vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
@@ -82,6 +84,9 @@ position = {topright.x, topright.y - (1 * 50.0f + padding)}; // placing the item
 GUI_Menu men = createMenu(position, btn1id);
 unsigned int menid = addToElementTable(ui_men_tab, ui_bts_tab, ui_rp, position, men);
 assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
+
+ui_man.ui_btn_tab = ui_bts_tab;
+ui_man.ui_men_tab = ui_men_tab;
 
 // BuildSelectBar();
 
@@ -102,7 +107,7 @@ assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
-    checkUI(ui_bts_tab, ui_rp);
+    ui_man.checkUI();
 
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     

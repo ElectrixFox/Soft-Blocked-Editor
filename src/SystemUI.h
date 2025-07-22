@@ -288,6 +288,15 @@ struct UI_Element_Table
     UI_Trigger_Action_Table actions[UI_NO_TRIGGERS];  // array of all different actions, since indexed by action it should be easy to find the correct ones
     };
 
+struct UI_Manager
+    {
+    void checkUI();
+    UI_Manager(RenderPacket& in_ui_rp) : ui_rp(in_ui_rp) {}
+    
+    UI_Element_Table<GUI_Button> ui_btn_tab;
+    UI_Element_Table<GUI_Menu> ui_men_tab;
+    RenderPacket& ui_rp;
+    };
 
 GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr);
 
@@ -299,7 +308,7 @@ unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Eleme
 
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
 
-void checkUI(UI_Element_Table<GUI_Button>& table, RenderPacket rp);
+void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp);
 
 #endif
 
