@@ -297,6 +297,9 @@ GUI_Menu createMenu(vec2 pos, unsigned int head_id);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
 
+void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
+
+void checkUI(UI_Element_Table<GUI_Button>& table, RenderPacket rp);
 
 #endif
 

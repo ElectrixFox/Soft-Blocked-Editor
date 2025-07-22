@@ -27,6 +27,11 @@ ghig = height;
 printf("\n%dx%d", gwid, ghig);
 }
 
+void output(int i)
+{
+printf("\nPressed %d", i);
+}
+
 // UI_Table ui;
 RenderPacket ui_rp;
 InputManager inpman;
@@ -67,10 +72,16 @@ const float padding = 10.0f;
 vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
 
 UI_Element_Table<GUI_Button> ui_bts_tab;
+UI_Element_Table<GUI_Menu> ui_men_tab;
 GUI_Button btn = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 1);
 GUI_Button btn2 = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
-addToElementTable(ui_bts_tab, ui_rp, position, 25.0f, btn);
+unsigned int btn1id = addToElementTable(ui_bts_tab, ui_rp, position, 25.0f, btn);
 addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, btn2);
+
+position = {topright.x, topright.y - (1 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
+GUI_Menu men = createMenu(position, btn1id);
+unsigned int menid = addToElementTable(ui_men_tab, ui_bts_tab, ui_rp, position, men);
+assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
 
 // BuildSelectBar();
 
@@ -91,7 +102,7 @@ addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, bt
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
-    // checkUI(ui, ui_rp);
+    checkUI(ui_bts_tab, ui_rp);
 
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     

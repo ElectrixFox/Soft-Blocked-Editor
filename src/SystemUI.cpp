@@ -687,4 +687,81 @@ ui_id++;
 return ui_id - 1;
 }
 
+template<typename T>
+static int findUIInUITable(const UI_Element_Table<T>& table, unsigned int ui_id)
+{
+int index = -1;
+
+for (int i = 0; i < table.ui_id.size(); i++)    // loop through the table
+    if(table.ui_id[i] == ui_id) // if find the ID then set index equal to i
+        {
+        index = i;
+        break;
+        }
+
+if(index == -1) // if ID not found
+    {
+    printf("\nError: Could not find %d in the UI table", ui_id);
+    exit(1);
+    }
+
+return index;
+}
+
+void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
+{
+int index = findUIInUITable(table, ui_id);
+assignUITriggerAction(table.actions[trigger], ui_id, action);
+}
+
+static int pressedInRectangle(vec2 pos, vec2 scale)
+{
+vec2 cpos = getCursorPosition();
+return PointInSquare(cpos, pos, scale);
+}
+
+static int isCursorOnUIElement(UI_Element_Table<GUI_Button> table, RenderPacket rp, unsigned int ui_id)
+{
+int index = findUIInUITable(table, ui_id);
+vec2 pos = getPosition(rp.tds, table.trsid[index]);
+vec2 scale = getScale(rp.tds, table.trsid[index]);
+return pressedInRectangle(pos, scale);
+}
+
+void checkUI(UI_Element_Table<GUI_Button>& table, RenderPacket rp)
+{
+GLFWwindow* window = getWindow();
+
+for (int i = 0; i < table.ui_id.size(); i++)
+    {
+    int index = findUITriggerActionIDinTable(table.actions[UI_TRIGGER_HOVER], table.ui_id[i]);
+    if(index == -1) // if there is no hover action then skip
+        continue;
+    
+    if(isCursorOnUIElement(table, rp, table.ui_id[i]))
+        {
+        // printf("\nPerforming hover action for %d", ui.ui_id[i]);
+        table.actions[UI_TRIGGER_HOVER].action[index](table.ui_id[i]);
+        }
+    }
+
+
+if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+    for (int i = 0; i < table.ui_id.size(); i++)
+        {
+        int index = findUITriggerActionIDinTable(table.actions[UI_TRIGGER_PRESS], table.ui_id[i]);
+        if(index == -1) // if there is no hover action then skip
+            continue;
+        
+        if(isCursorOnUIElement(table, rp, table.ui_id[i]))
+            {
+            printf("\nPerforming action for %d", table.ui_id[i]);
+            table.actions[UI_TRIGGER_PRESS].action[index](table.ui_id[i]);
+            }
+        }
+    }
+}
+
+
 #endif
