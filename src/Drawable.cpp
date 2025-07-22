@@ -41,6 +41,17 @@ for (int i = 0; i < size; i++)
 return rids;
 }
 
+void UnassignDrawable(Drawables& drabs, unsigned int trid)
+{
+int index = findDrawablesTransform(drabs, trid); // finding the ID
+
+if(index == -1)
+    return; // if the index isn't found just quit
+
+drabs.rids.erase(drabs.rids.begin() + index);
+drabs.trsids.erase(drabs.trsids.begin() + index);
+}
+
 void RemoveDrawable(Drawables& drabs, RenderDetails& rds, TransformationDetails& tds, unsigned int trid)
 {
 int index = findDrawablesTransform(drabs, trid); // finding the ID

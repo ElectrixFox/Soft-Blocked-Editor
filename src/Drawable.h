@@ -52,6 +52,8 @@ int findDrawablesRenderable(Drawables drabs, unsigned int rid);
  */
 unsigned int* getRenderIDsFromTransformIDs(Drawables drabs, unsigned int* trids, unsigned int size);
 
+void UnassignDrawable(Drawables& drabs, unsigned int trid);
+
 void RemoveDrawable(Drawables& drabs, RenderDetails& rds, TransformationDetails& tds, unsigned int trid);
 
 void UpdateImmovables(TransformationDetails& tds, Drawables& drabs);

@@ -714,6 +714,12 @@ int index = findUIInUITable(table, ui_id);
 assignUITriggerAction(table.actions[trigger], ui_id, action);
 }
 
+void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
+{
+int index = findUIInUITable(table, ui_id);
+assignUITriggerAction(table.actions[trigger], ui_id, action);
+}
+
 static int pressedInRectangle(vec2 pos, vec2 scale)
 {
 vec2 cpos = getCursorPosition();
@@ -769,9 +775,18 @@ void UI_Manager::checkUI()
 _checkUI(ui_btn_tab, ui_rp);
 }
 
-void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp)
+void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id)
 {
+int index = findUIInUITable(men_tab, men_id);   // finds the menu head
+GUI_Menu men = men_tab.data[index]; // gets the menu
 
+for (unsigned int bt_id : men.ui_ids)
+    {
+    index = findUIInUITable(btn_tab, bt_id);    // finds the UI ID in the table
+    int ind2 = findDrawablesTransform(rp.drabs, btn_tab.trsid[index]);  // finding the index of the drawable record
+    RemoveRenderDetail(rp.rds, rp.drabs.rids[ind2]); // remove the render detail from the render details object
+    UnassignDrawable(rp.drabs, btn_tab.trsid[index]);   // removes the drawable
+    }
 }
 
 #endif

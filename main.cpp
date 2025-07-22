@@ -35,6 +35,8 @@ printf("\nPressed %d", i);
 // UI_Table ui;
 RenderPacket ui_rp;
 InputManager inpman;
+UI_Manager ui_man(ui_rp);
+
 
 int main()
 {
@@ -67,8 +69,6 @@ RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
-UI_Manager ui_man(ui_rp);
-
 vec2 topright = {1255.0f, 695.0f};
 const float padding = 10.0f;
 vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
@@ -83,10 +83,17 @@ addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, bt
 position = {topright.x, topright.y - (1 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
 GUI_Menu men = createMenu(position, btn1id);
 unsigned int menid = addToElementTable(ui_men_tab, ui_bts_tab, ui_rp, position, men);
+
 assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
+assignElementAction(ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &output);
 
 ui_man.ui_btn_tab = ui_bts_tab;
 ui_man.ui_men_tab = ui_men_tab;
+
+auto lambda = [](int id)
+    {
+    foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
+    };
 
 // BuildSelectBar();
 
