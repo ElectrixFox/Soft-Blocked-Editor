@@ -59,7 +59,7 @@ if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu
     if(prevuid != -1)
         {
         // printf("\nFolding %d", prevuid);
-        clearMenu(ui, ui_rp, prevuid);
+        clearMenu(&ui, &ui_rp, prevuid);
         }
 
     // printf("\nUnfolding %d", ui_id);
@@ -72,9 +72,10 @@ if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu
 
     for (int i = 2; i <= bi.nosp; i++)
         {
-        RenderInformation ri(SpriteSheetInfo(bi.spfp, bi.nosp, (unsigned int)i));
-        unsigned int menentry = addToMenu(ui, ui_rp, ui_id, UI_TYPE_BUTTON, ri);
-        assignButtonAction(ui, menentry, UI_TRIGGER_PRESS, &changeBlock);
+        RenderInformation* ri = (RenderInformation*)malloc(sizeof(RenderInformation));
+        ri->ssi = {bi.spfp, bi.nosp, (unsigned int)i};
+        unsigned int menentry = addToMenu(&ui, &ui_rp, ui_id, UI_TYPE_BUTTON, *ri);
+        assignButtonAction(&ui, menentry, UI_TRIGGER_PRESS, &changeBlock);
         }
 
     prevuid = ui_id;
@@ -102,14 +103,17 @@ for (int i = 0; i < nblk; i++)
     {
     vec2 position = {topright.x, topright.y - (i * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
     BlockInfo bi = getBlockInfo(menuDetails[i]);
-    const RenderInformation ri(SpriteSheetInfo(bi.spfp, bi.nosp, bi.spr));
-    unsigned int entry = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_BUTTON, ri);
-    assignButtonAction(ui, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
-    if(ri.ssi.nosp > 1 && getBlockFromFilePath(bi.spfp) != BLOCK_IMMOVABLE_BLOCK)   // if there is more than one sprite and the block isn't the immovable type
+    RenderInformation* ri = (RenderInformation*)malloc(sizeof(RenderInformation));
+    ri->ssi = {bi.spfp, bi.nosp, bi.spr};
+    unsigned int entry = createUIElement(&ui, &ui_rp, position, 25.0f, UI_TYPE_BUTTON, *ri);
+    assignButtonAction(&ui, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
+    if(ri->ssi.nosp > 1 && getBlockFromFilePath(bi.spfp) != BLOCK_IMMOVABLE_BLOCK)   // if there is more than one sprite and the block isn't the immovable type
         {
-        RenderInformation tri = RenderInformation(GUI_MENU(entry));
-        unsigned int menhead = createUIElement(ui, ui_rp, position, 25.0f, UI_TYPE_MENU, tri);
-        assignButtonAction(ui, menhead, UI_TRIGGER_HOVER, &unfoldBlockOptions);
+        GUI_MENU men = {{NULL}, entry};
+        RenderInformation* tri = (RenderInformation*)malloc(sizeof(RenderInformation));
+        tri->meni = men;
+        unsigned int menhead = createUIElement(&ui, &ui_rp, position, 25.0f, UI_TYPE_MENU, *tri);
+        assignButtonAction(&ui, menhead, UI_TRIGGER_HOVER, &unfoldBlockOptions);
         // RenderInformation ntri = getUIRenderInformation(ui, menhead);
 
         printf("\nCreating the Menu");
