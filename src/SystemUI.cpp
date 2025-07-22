@@ -4,10 +4,6 @@
 
 const int datsize = 256;
 
-#ifdef __cplusplus
-extern "C"{
-#endif 
-
 #pragma region Trigger Action Table
 
 /**
@@ -239,6 +235,46 @@ ui.trsid[n] = trsid;   // sets the new transformation ID
 return ui.ui_id[n];    // returning the new UI ID
 }
 
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, SpriteSheetInfo rendinf)
+{
+static unsigned int ui_id = ui.ui_id.size();
+const unsigned int n = ui.ui_id.size();
+
+ui.ui_id[n] = ui_id++;    // set and increase the ID
+
+int ind = -1;
+
+ui.data[n].ssi = rendinf;
+unsigned int rid = CreateSpriteRenderable(rp.rds, rendinf.spfp, rendinf.nosp, rendinf.spr);
+unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
+ind = AddDrawable(rp.drabs, trsid, rid);
+
+unsigned int trsid = rp.drabs.trsids[ind]; // gets the transformation ID
+ui.trsid[n] = trsid;   // sets the new transformation ID
+
+return ui.ui_id[n];    // returning the new UI ID
+}
+
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, GUI_MENU rendinf)
+{
+static unsigned int ui_id = ui.ui_id.size();
+const unsigned int n = ui.ui_id.size();
+
+ui.ui_id[n] = ui_id++;    // set and increase the ID
+
+int ind = -1;
+
+ui.data[n].meni = rendinf;    // set the menu data
+int tindex = findUIIDinTable(ui, rendinf.men_head_ui_id);
+ind = findDrawablesTransform(rp.drabs, ui.trsid[tindex]);
+
+
+unsigned int trsid = rp.drabs.trsids[ind]; // gets the transformation ID
+ui.trsid[n] = trsid;   // sets the new transformation ID
+
+return ui.ui_id[n];    // returning the new UI ID
+}
+
 static void removeUIElementSingle(UI_Table& ui, RenderPacket& rp, unsigned int ui_id)
 {
 int index = findUIIDinTable(ui, ui_id);
@@ -316,12 +352,30 @@ int index = findUIIDinTable(ui, ui_id);    // getting the UI element in the UI t
 vec2 pos = getPosition(rp.tds, ui.trsid[index]); // getting the position
 vec2 scale = getScale(rp.tds, ui.trsid[index]); // getting the scale
 
-RenderInformation ri = ui.data[findUIIDinTable(ui, ui_id)];  // getting the render information
+RenderInformation& ri = ui.data[findUIIDinTable(ui, ui_id)];  // getting the render information
 int mensize = ri.meni.ui_ids.size();  // getting the size of the menu
 
 pos = {pos.x - ((mensize + 1) * 50.0f + padding), pos.y};   // getting the new position
 
-unsigned int nui_id = createUIElement(ui, rp, pos, scale.x, type, rendinf); // creating the new element
+unsigned int nui_id = createUIElement(ui, rp, pos, scale.x, rendinf.ssi); // creating the new element
+ui.data[index].meni.ui_ids.push_back(nui_id);
+
+return nui_id;
+}
+
+unsigned int addToMenu(UI_Table& ui, RenderPacket& rp, unsigned int ui_id, SpriteSheetInfo rendinf)
+{
+const float padding = 10.0f;
+int index = findUIIDinTable(ui, ui_id);    // getting the UI element in the UI table
+vec2 pos = getPosition(rp.tds, ui.trsid[index]); // getting the position
+vec2 scale = getScale(rp.tds, ui.trsid[index]); // getting the scale
+
+RenderInformation& ri = ui.data[findUIIDinTable(ui, ui_id)];  // getting the render information
+int mensize = ri.meni.ui_ids.size();  // getting the size of the menu
+
+pos = {pos.x - ((mensize + 1) * 50.0f + padding), pos.y};   // getting the new position
+
+unsigned int nui_id = createUIElement(ui, rp, pos, scale.x, rendinf); // creating the new element
 ui.data[index].meni.ui_ids.push_back(nui_id);
 
 return nui_id;
@@ -418,10 +472,6 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 
 #pragma endregion
 
-#ifdef __cplusplus
-}
-#endif
-
 #endif
 
 #ifdef CPP_LIBRARY
@@ -433,7 +483,7 @@ table.ui_id.push_back(element.ui_id);
 table.trsid.push_back(element.trsid);
 }
 
-UI_Button::UI_Button(vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr)
+UI_Button::UI_Button(RenderPacket& rp, vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr)
 {
 unsigned int rid = CreateSpriteRenderable(rp.rds, spfp, nosp, spr);
 unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);

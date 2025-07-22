@@ -61,14 +61,22 @@ union RenderInformation
     GUI_RENDER_INFO rinf;   // an enum to say if it is a basic shape
     GUI_MENU meni;  // a container of UI IDs which holds the menu contents and the actual menu head
 
+    /*
     RenderInformation() { };
     ~RenderInformation() { };
     RenderInformation(const GUI_MENU men) { this->meni = men; };
     RenderInformation(const SpriteSheetInfo _ssi) { this->ssi = _ssi; };
-    // RenderInformation(const RenderInformation& ri) { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
-    RenderInformation& operator=(const RenderInformation& ri)  { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
+    RenderInformation(const RenderInformation&) = delete;
+    RenderInformation(RenderInformation&&) = delete;
+    */
+    /*
+    RenderInformation(const RenderInformation& ri)
+        : meni(ri.meni), rinf(ri.rinf), ssi(ri.ssi)
+        {
+        }
+    */
+    // RenderInformation& operator=(const RenderInformation& ri)  { this->meni = ri.meni; this->rinf = ri.rinf; this->ssi = ri.ssi; }
     };
-typedef union RenderInformation RenderInformation;
 
 #pragma region Trigger Action Table
 
@@ -169,6 +177,10 @@ void assignButtonAction(UI_Table& ui, unsigned int ui_id, GUI_ACTION_TRIGGER tri
  */
 unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, RenderInformation rendinf);
 
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, SpriteSheetInfo rendinf);
+
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, GUI_MENU rendinf);
+
 /**
  * Removes the UI element with the given ID from the table
  * 
@@ -191,6 +203,8 @@ void removeUIElement(UI_Table& ui, RenderPacket& rp, UI_ELEMENT_TYPE type, unsig
  * @returns The UI ID of the new element created
  */
 unsigned int addToMenu(UI_Table& ui, RenderPacket& rp, unsigned int ui_id, UI_ELEMENT_TYPE type, RenderInformation rendinf);
+
+unsigned int addToMenu(UI_Table& ui, RenderPacket& rp, unsigned int ui_id, SpriteSheetInfo rendinf);
 
 /**
  * Removes the given UI element from the menu
@@ -255,7 +269,7 @@ class UI_Element
 class UI_Button : public UI_Element
     {
     public:
-    UI_Button(vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr);
+        UI_Button(RenderPacket& rp, vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr);
     };
 
 struct UI_Element_Table
