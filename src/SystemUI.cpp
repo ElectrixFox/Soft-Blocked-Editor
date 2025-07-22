@@ -476,19 +476,215 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 
 #ifdef CPP_LIBRARY
 
-void addToElementTable(UI_Element_Table& table, UI_Element element)
+const int datsize = 256;
+
+#pragma region Trigger Action Table
+
+/**
+ * Initialises the UI triggers and allocates memory
+ * 
+ * @returns A new UI trigger table containing all of the actions
+ */
+static UI_Trigger_Action_Table InitialiseUITriggerActions();
+
+/**
+ * Adds a new action record to the table
+ * 
+ * @param ta A pointer to the trigger action table for a given trigger
+ */
+static void expandUITriggerActionTable(UI_Trigger_Action_Table& ta);
+
+/**
+ * Finds the UI ID within the trigger action table
+ * 
+ * @param ta The trigger action table
+ * @param ui_id The UI ID of the element to find
+ * 
+ * @returns The index of the UI ID in the action table if found, -1 if not
+ */
+static int findUITriggerActionIDinTable(UI_Trigger_Action_Table ta, unsigned int ui_id);
+
+/**
+ * Adds a trigger action to the trigger action table
+ * 
+ * @param ta Pointer to the trigger action table
+ * @param ui_id The ID of the UI element to add the action to
+ * @param action The action to add
+ */
+static void addUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id, ui_act_fun action);
+
+/**
+ * Removes a trigger action from the trigger action table
+ * 
+ * @param ta Pointer to the trigger action table
+ * @param ui_id The ID of the UI element to remove
+ */
+static void removeUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id);
+
+/**
+ * Sets a trigger action in the action table
+ * 
+ * @param ta Pointer to the trigger action table
+ * @param ui_id The ID of the UI element to add the action to
+ * @param action The action to add
+ */
+static void assignUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id, ui_act_fun action);
+
+static UI_Trigger_Action_Table InitialiseUITriggerActions()
 {
-table.elements.push_back(element);
-table.ui_id.push_back(element.ui_id);
-table.trsid.push_back(element.trsid);
+UI_Trigger_Action_Table ta;
+
+// initialising all of the memory
+return ta;
 }
 
-UI_Button::UI_Button(RenderPacket& rp, vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr)
+static void expandUITriggerActionTable(UI_Trigger_Action_Table& ta)
 {
-unsigned int rid = CreateSpriteRenderable(rp.rds, spfp, nosp, spr);
+}
+
+static int findUITriggerActionIDinTable(UI_Trigger_Action_Table ta, unsigned int ui_id)
+{
+for (int i = 0; i < ta.ui_id.size(); i++)   // simple linear search
+    if(ta.ui_id[i] == ui_id)
+        return i;
+return -1;
+}
+
+static void addUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id, ui_act_fun action)
+{
+expandUITriggerActionTable(ta);
+
+ta.ui_id.push_back(ui_id);
+ta.action.push_back(action);
+}
+
+static void removeUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id)
+{
+int index = findUITriggerActionIDinTable(ta, ui_id);
+
+if(index == -1)
+    return; // if the index isn't found just quit
+
+ta.ui_id.erase(ta.ui_id.begin() + index);
+ta.action.erase(ta.action.begin() + index);
+}
+
+static void assignUITriggerAction(UI_Trigger_Action_Table& ta, unsigned int ui_id, ui_act_fun action)
+{
+int index = findUITriggerActionIDinTable(ta, ui_id);
+
+if(index == -1)
+    {
+    addUITriggerAction(ta, ui_id, action);
+    }
+else
+    ta.action[index] = action;
+}
+
+#pragma endregion
+
+/*
+unsigned int createUIElement(UI_Table& ui, RenderPacket& rp, vec2 pos, float scale, UI_ELEMENT_TYPE type, RenderInformation rendinf)
+{
+static unsigned int ui_id = 0;
+const unsigned int n = ui.ui_id.size();
+
+expandUITable(ui);
+
+ui.ui_id[n] = ui_id++;    // set and increase the ID
+
+int ind = -1;
+
+switch (type)   // doing the appropriate thing for each type
+    {
+    case UI_TYPE_NULL:
+        {
+        ui.data[n].rinf = (GUI_RENDER_INFO)0;
+        ind = CreateBasicSquare(rp, pos, scale, {1.0f, 0.0f, 0.0f, 0.0f});  // creates the square
+        break;
+        }
+    case UI_TYPE_BUTTON:
+        {
+        ui.data[n].ssi = rendinf.ssi;
+        unsigned int rid = CreateSpriteRenderable(rp.rds, rendinf.ssi.spfp, rendinf.ssi.nosp, rendinf.ssi.spr);
+        unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
+        ind = AddDrawable(rp.drabs, trsid, rid);
+        break;
+        }
+    case UI_TYPE_MENU:
+        {
+        ui.data[n].meni = rendinf.meni;    // set the menu data
+        int tindex = findUIIDinTable(ui, rendinf.meni.men_head_ui_id);
+        ind = findDrawablesTransform(rp.drabs, ui.trsid[tindex]);
+        break;
+        }
+    default:
+        {
+        break;
+        }
+    }
+
+unsigned int trsid = rp.drabs.trsids[ind]; // gets the transformation ID
+ui.trsid[n] = trsid;   // sets the new transformation ID
+
+return ui.ui_id[n];    // returning the new UI ID
+}
+*/
+
+GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr)
+{
+GUI_Button button {
+    .ssi = {spfp, nosp, spr}
+};
+return button;
+}
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button)
+{
+static unsigned int ui_id = 0;
+
+unsigned int rid = CreateSpriteRenderable(rp.rds, button.ssi.spfp, button.ssi.nosp, button.ssi.spr);
 unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
-ind = AddDrawable(rp.drabs, trsid, rid);
-break;
+int ind = AddDrawable(rp.drabs, trsid, rid);
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform
+table.data.push_back(button);   // adding the actual button
+
+ui_id++;
+
+return ui_id - 1;
+}
+
+GUI_Menu createMenu(vec2 pos, unsigned int head_id)
+{
+GUI_Menu menu {
+    .ui_ids = {},
+    .men_head_ui_id = head_id
+};
+return menu;
+}
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu)
+{
+static unsigned int ui_id = 0;
+unsigned int trsid;
+
+for(int i = 0; i < btab.ui_id.size(); i++)  // loop through the button table
+    if(btab.ui_id[i] == menu.men_head_ui_id)    // if the UI ID of the head is equal to the button table then set it
+        {
+        trsid = btab.trsid[i];
+        break;  // shall not need to continue looping
+        }
+
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform of the head
+table.data.push_back(menu);     // adding the menu
+
+ui_id++;
+
+return ui_id - 1;
 }
 
 #endif

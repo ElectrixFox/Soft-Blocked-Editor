@@ -27,7 +27,7 @@ ghig = height;
 printf("\n%dx%d", gwid, ghig);
 }
 
-UI_Table ui;
+// UI_Table ui;
 RenderPacket ui_rp;
 InputManager inpman;
 
@@ -54,7 +54,7 @@ glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
-ui = InitialiseUI();
+// ui = InitialiseUI();
 ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
@@ -62,7 +62,17 @@ RenderPacket block_rp;
 
 InitialiseBlockDetails();
 
-BuildSelectBar();
+vec2 topright = {1255.0f, 695.0f};
+const float padding = 10.0f;
+vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
+
+UI_Element_Table<GUI_Button> ui_bts_tab;
+GUI_Button btn = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 1);
+GUI_Button btn2 = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
+addToElementTable(ui_bts_tab, ui_rp, position, 25.0f, btn);
+addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, btn2);
+
+// BuildSelectBar();
 
     /*
     {
@@ -167,14 +177,14 @@ while(!glfwWindowShouldClose(window))   // main loop
     MoveCamera(cam);
     ApplyCamera(cam, block_rp.rds);
     ApplyProjection(cam, block_rp.rds);
-    // ApplyProjection(cam, ui_rp.rds);
+    ApplyProjection(cam, ui_rp.rds);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
 
     DrawRenderPacket(block_rp);
-    // ClearCamera(ui_rp.rds);
-    // DrawRenderPacket(ui_rp);
+    ClearCamera(ui_rp.rds);
+    DrawRenderPacket(ui_rp);
     
     glfwSwapBuffers(window);
     glfwPollEvents();

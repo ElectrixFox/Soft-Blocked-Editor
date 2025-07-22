@@ -248,40 +248,54 @@ void checkUI(UI_Table ui, RenderPacket rp);
 
 #ifdef CPP_LIBRARY
 
-class UI_Element
-    {
-    public:
-    UI_Element()
-    {
-    
-    }
+#pragma region Trigger Action Table
 
-    ~UI_Element()
+enum GUI_ACTION_TRIGGER
     {
-    
-    }
-
-    public:
-    unsigned int ui_id;
-    unsigned int trsid;
+    UI_TRIGGER_PRESS,
+    UI_TRIGGER_HOVER,
+    UI_NO_TRIGGERS
     };
 
-class UI_Button : public UI_Element
+typedef void (*ui_act_fun)(int);
+
+struct UI_Trigger_Action_Table
     {
-    public:
-        UI_Button(RenderPacket& rp, vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr);
+    std::vector<unsigned int> ui_id;
+    std::vector<ui_act_fun> action; // the actions for this trigger
     };
 
+#pragma endregion
+
+struct GUI_Menu
+    {
+    std::vector<unsigned int> ui_ids;
+    unsigned int men_head_ui_id;
+    };
+
+struct GUI_Button
+    {
+    SpriteSheetInfo ssi;
+    };
+
+template<typename T>
 struct UI_Element_Table
     {
-    std::vector<unsigned int> ui_id;    // primary key
-    std::vector<unsigned int> trsid;    // foreign key to link to transform
+    std::vector<unsigned int> ui_id;
+    std::vector<unsigned int> trsid;
 
-    std::vector<UI_Element> elements;
+    std::vector<T> data;
+    UI_Trigger_Action_Table actions[UI_NO_TRIGGERS];  // array of all different actions, since indexed by action it should be easy to find the correct ones
     };
 
 
-void addToElementTable(UI_Element_Table& table, UI_Element element);
+GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr);
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button);
+
+GUI_Menu createMenu(vec2 pos, unsigned int head_id);
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
 
 
 #endif

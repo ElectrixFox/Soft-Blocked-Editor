@@ -71,9 +71,13 @@ void ApplyProjection(Camera cam, RenderDetails rds);
 
 #pragma region EditorUI
 
+#ifdef EDITOR_UI
+
 /**
  * Builds the block selection bar
  */
 void BuildSelectBar();
+
+#endif
 
 #pragma endregion

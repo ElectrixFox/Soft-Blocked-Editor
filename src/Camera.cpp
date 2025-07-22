@@ -19,7 +19,7 @@ return
     };
 }
 
-m4 getProjectionMatrix(Camera cam) { return getProjection(*cam.scrspx, *cam.scrspy, 0); }
+m4 getProjectionMatrix(Camera cam) { return getProjection(*cam.scrspx, *cam.scrspy, 1); }
 
 int MoveCamera(Camera& cam)
 {

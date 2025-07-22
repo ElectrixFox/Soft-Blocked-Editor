@@ -6,7 +6,7 @@ const int snap_to_grid = 1;
 const int grid_size = 50;
 
 extern RenderPacket ui_rp;
-extern UI_Table ui;
+// extern UI_Table ui;
 
 /*
 extern UI_Table ui;
@@ -42,6 +42,8 @@ void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.
 #pragma endregion
 
 #pragma region EditorUI
+
+#ifdef EDITOR_UI
 
 static void changeBlock(int ui_id)
 {
@@ -117,5 +119,7 @@ for (int i = 0; i < nblk; i++)
         }
     }
 }
+
+#endif
 
 #pragma endregion
