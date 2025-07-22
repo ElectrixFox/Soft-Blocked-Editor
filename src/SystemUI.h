@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 
-#define C_LIBRARY
+#define CPP_LIBRARY
 
 #ifdef C_LIBRARY
 
