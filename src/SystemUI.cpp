@@ -1,6 +1,12 @@
 #include "SystemUI.h"
 
+#ifdef C_LIBRARY
+
 const int datsize = 256;
+
+#ifdef __cplusplus
+extern "C"{
+#endif 
 
 #pragma region Trigger Action Table
 
@@ -106,6 +112,8 @@ else
 }
 
 #pragma endregion
+
+#pragma region UI_Table
 
 UI_Table InitialiseUI()
 {
@@ -308,7 +316,7 @@ int index = findUIIDinTable(ui, ui_id);    // getting the UI element in the UI t
 vec2 pos = getPosition(rp.tds, ui.trsid[index]); // getting the position
 vec2 scale = getScale(rp.tds, ui.trsid[index]); // getting the scale
 
-RenderInformation ri = reinterpret_cast<const RenderInformation&>(ui.data[findUIIDinTable(ui, ui_id)]);  // getting the render information
+RenderInformation ri = ui.data[findUIIDinTable(ui, ui_id)];  // getting the render information
 int mensize = ri.meni.ui_ids.size();  // getting the size of the menu
 
 pos = {pos.x - ((mensize + 1) * 50.0f + padding), pos.y};   // getting the new position
@@ -407,3 +415,30 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
         }
     }
 }
+
+#pragma endregion
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif
+
+#ifdef CPP_LIBRARY
+
+void addToElementTable(UI_Element_Table& table, UI_Element element)
+{
+table.elements.push_back(element);
+table.ui_id.push_back(element.ui_id);
+table.trsid.push_back(element.trsid);
+}
+
+UI_Button::UI_Button(vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr)
+{
+unsigned int rid = CreateSpriteRenderable(rp.rds, spfp, nosp, spr);
+unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
+ind = AddDrawable(rp.drabs, trsid, rid);
+break;
+}
+
+#endif

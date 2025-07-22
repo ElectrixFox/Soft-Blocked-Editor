@@ -7,6 +7,10 @@
 #include <iostream>
 #include <algorithm>
 
+#define C_LIBRARY
+
+#ifdef C_LIBRARY
+
 typedef enum
     {
     UI_TRIGGER_PRESS,
@@ -225,5 +229,47 @@ void removeButton(UI_Table& ui, RenderPacket& rp, unsigned int ui_id);
  * @param rp The render packet for the UI
  */
 void checkUI(UI_Table ui, RenderPacket rp);
+
+#endif
+
+#ifdef CPP_LIBRARY
+
+class UI_Element
+    {
+    public:
+    UI_Element()
+    {
+    
+    }
+
+    ~UI_Element()
+    {
+    
+    }
+
+    public:
+    unsigned int ui_id;
+    unsigned int trsid;
+    };
+
+class UI_Button : public UI_Element
+    {
+    public:
+    UI_Button(vec2 pos, float scale, const char* spfp, unsigned int nosp, unsigned int spr);
+    };
+
+struct UI_Element_Table
+    {
+    std::vector<unsigned int> ui_id;    // primary key
+    std::vector<unsigned int> trsid;    // foreign key to link to transform
+
+    std::vector<UI_Element> elements;
+    };
+
+
+void addToElementTable(UI_Element_Table& table, UI_Element element);
+
+
+#endif
 
 #endif
