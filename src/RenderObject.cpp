@@ -187,7 +187,7 @@ for (int i = 0; i < rds.rid.size(); i++)
         rds.rid[i],
         rds.vao[i],
         rds.shader[i],
-        getActiveTexture(rds.texture[i])
+        rds.texture[i]
         );
     }
 }
