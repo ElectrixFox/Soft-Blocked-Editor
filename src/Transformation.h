@@ -10,7 +10,6 @@ struct TransformationDetails
     std::vector<vec2> pos;
     std::vector<vec2> scale;
     std::vector<float> angle;
-    unsigned int size;
     };
 typedef struct TransformationDetails TransformationDetails;
 

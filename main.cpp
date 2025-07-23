@@ -7,6 +7,8 @@
 #include <include/GLFW/glfw3.h>
 #include <GL/glu.h>
 
+#define GLFW_KEY_FULL_STOP GLFW_KEY_PERIOD
+
 #include "src/Transformation.h"
 #include "src/RenderObject.h"
 
@@ -86,7 +88,7 @@ Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
 ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
-RenderPacket block_rp;
+RenderPacket block_rp = InitialiseRenderPacket();
 
 InitialiseBlockDetails();
 
@@ -113,7 +115,7 @@ assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 
 BuildSelectBar();
 
-    /*
+
     {
     int** grid;
     int w, h;
@@ -126,7 +128,7 @@ BuildSelectBar();
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
-    */
+
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -136,6 +138,14 @@ while(!glfwWindowShouldClose(window))   // main loop
     
     if(isPressed(GLFW_KEY_ESCAPE))
         glfwSetWindowShouldClose(window, 1);
+    
+    if(isPressedSingle(GLFW_KEY_FULL_STOP))
+        {
+        int** grid;
+        int w, h;
+        getLevel(block_rp, &w, &h, &grid);
+        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+        }
     
     /*
     if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))

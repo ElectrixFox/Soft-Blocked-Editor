@@ -272,10 +272,10 @@ static vec2 getMinimumPosition(TransformationDetails tds)
 // find the bottom left and top right blocks (the extremes)
 float minx = 0, maxx = 0, miny = 0, maxy = 0;
 
-if(tds.size == 0)   // stop if there are no transforms
+if(tds.trsid.size() == 0)   // stop if there are no transforms
     return {-1.0f, -1.0f};
 
-for (int i = 0; i < tds.size; i++)  // find the first deletable
+for (int i = 0; i < tds.trsid.size(); i++)  // find the first deletable
     {
     minx = tds.pos[i].x;
     maxx = tds.pos[i].x;
@@ -284,7 +284,7 @@ for (int i = 0; i < tds.size; i++)  // find the first deletable
     }
 
 
-for (int i = 0; i < tds.size; i++)
+for (int i = 0; i < tds.trsid.size(); i++)
     {
     // getting the extreme points
     if(tds.pos[i].x < minx)
@@ -305,7 +305,7 @@ return {minx, miny};
 
 int getBlockAtPosition(TransformationDetails tds, vec2 pos)
 {
-for (int i = 0; i < tds.size; i++)
+for (int i = 0; i < tds.trsid.size(); i++)
     if(tds.pos[i].x == pos.x && tds.pos[i].y == pos.y)
         return tds.trsid[i];
 return -1;
@@ -315,6 +315,10 @@ unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, c
 {
 printf("\n\n\nImmovables update");
 vec2 minpos = getMinimumPosition(rp.tds);
+
+printf("\nMinimum position: ");
+OutputVec2(minpos);
+printf("\n");
 for (int i = 0; i < h; i++)
     {
     for (int j = 0; j < w; j++)
@@ -324,10 +328,14 @@ for (int i = 0; i < h; i++)
             float theta = 0.0f;
             BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, {(float)j, (float)i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
+            printf("\nPosition: ");
+            OutputVec2(posi);
             int trsid = getBlockAtPosition(rp.tds, posi);
             if(trsid != -1)
                 {
-                unsigned int rid = rp.drabs.rids[findDrawablesTransform(rp.drabs, trsid)];
+                int index = findDrawablesTransform(rp.drabs, trsid);
+                printf("\n%d %d", trsid, rp.drabs.trsids[index]);
+                unsigned int rid = rp.drabs.rids[index];
                 RemoveBlock(rp, rid);
                 rid = _PlaceBlockCustom(rp, getImmovableBlock(imstate), posi, theta);   // getting the new render ID
                 trsid = rp.drabs.trsids[findDrawablesRenderable(rp.drabs, rid)];

@@ -100,10 +100,12 @@ void getLevel(const RenderPacket rp, int* w, int* h, int*** grid)
 // find the bottom left and top right blocks (the extremes)
 float minx = 0, maxx = 0, miny = 0, maxy = 0;
 
-if(rp.tds.size == 0)   // stop if there are no transforms
+const int tsize = rp.tds.trsid.size();
+
+if(tsize == 0)  // stop if there are no transforms
     return;
 
-for (int i = 0; i < rp.tds.size; i++)  // find the first deletable
+for (int i = 0; i < tsize; i++) // find the first deletable
     {
     minx = rp.tds.pos[i].x;
     maxx = rp.tds.pos[i].x;
@@ -112,7 +114,7 @@ for (int i = 0; i < rp.tds.size; i++)  // find the first deletable
     }
 
 
-for (int i = 0; i < rp.tds.size; i++)
+for (int i = 0; i < tsize; i++)
     {
     // getting the extreme points
     if(rp.tds.pos[i].x < minx)
@@ -171,9 +173,12 @@ for (int y = h; 0 < y; y--)
         int btype = grid[h - y][x];
 
         if(btype != 0)
+            {
             PlaceBlock(rp, (BLOCK)(btype - 1), pos);
+            printf("\nPosition: ");
+            OutputVec2(pos);
+            }
         }
     }
-
 
 }

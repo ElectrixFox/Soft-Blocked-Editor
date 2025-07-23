@@ -9,11 +9,11 @@ return tds;
 
 int getTransformationIDIndex(TransformationDetails tds, unsigned int trsid)
 {
-if(tds.size > trsid)    // if the size is bigger than the ID then it is a valid ID
+if(tds.trsid.size() > trsid)    // if the size is bigger than the ID then it is a valid ID
     if(tds.trsid[trsid] == trsid)   // just in case no manipulation of the table has happened
         return trsid;
 
-for (int i = 0; i < tds.size; i++)  // simple linear search
+for (int i = 0; i < tds.trsid.size(); i++)  // simple linear search
     if(tds.trsid[i] == trsid)
         return i;
 return -1;
@@ -41,7 +41,6 @@ if(index == -1) return; // if the index isn't found just quit
 tds.trsid.erase(tds.trsid.begin() + index);
 tds.pos.erase(tds.pos.begin() + index);
 tds.scale.erase(tds.scale.begin() + index);
-tds.trsid.erase(tds.trsid.begin() + index);
 tds.angle.erase(tds.angle.begin() + index);
 }
 
@@ -83,7 +82,7 @@ return getM4ID();   // return the identity so nothing bad goes on
 
 void getTransformModelMatrices(TransformationDetails tds, m4* models)
 {
-const int n = tds.size; // for ease of use
+const int n = tds.trsid.size(); // for ease of use
 models = (m4*)malloc(n * sizeof(m4));   // allocating the memory to be used
 
 for (int i = 0; i < n; i++)
@@ -102,7 +101,7 @@ return 0;
 static int hasPressedN(TransformationDetails trds, vec2 curpos, unsigned int n)
 {
 int total = 0;  // total things pressed
-for (int i = 0; i < trds.size; i++)
+for (int i = 0; i < trds.trsid.size(); i++)
     if(CheckPressed(trds, trds.trsid[i], curpos)) // checking if anything has been pressed
         total++;
 
@@ -115,7 +114,7 @@ int PressedAnother(TransformationDetails trds, vec2 curpos) { return hasPressedN
 
 int PressedArea(TransformationDetails trds, vec2 curpos, float range)
 {
-for (int i = 0; i < trds.size; i++)
+for (int i = 0; i < trds.trsid.size(); i++)
     if(abs(trds.pos[i].x - curpos.x) < range && abs(trds.pos[i].y - curpos.y) < range)
         return 1; // if the current transformation has a horizontal and vertical distance is less than the range then it is in the square area
 
@@ -124,7 +123,7 @@ return 0;
 
 unsigned int getPressedBlock(TransformationDetails trds, vec2 curpos)
 {
-for (int i = 0; i < trds.size; i++)
+for (int i = 0; i < trds.trsid.size(); i++)
     if(CheckPressed(trds, trds.trsid[i], curpos)) // checking if anything has been pressed
         return trds.trsid[i];
 return 0;
@@ -133,7 +132,7 @@ return 0;
 
 int getTransformAt(TransformationDetails tds, vec2 pos)
 {
-for (int i = 0; i < tds.size; i++)  // loop through all of the transforms
+for (int i = 0; i < tds.trsid.size(); i++)  // loop through all of the transforms
     if(tds.pos[i].x == pos.x && tds.pos[i].y == pos.y)  // if they are the same vector
         return tds.trsid[i];
 return -1;
@@ -143,7 +142,7 @@ void OutputTransformations(TransformationDetails tds)
 {
 printf("\n\n%32s", "Transformations Table");
 printf("\n%-10s%-20s%-13s\t", "ID", "Position", "Scale");
-for (int i = 0; i < tds.size; i++)
+for (int i = 0; i < tds.trsid.size(); i++)
     {
     printf("\n%-10d(%07.2f, %07.2f)%-2s(%05.2f, %05.2f)\t",
         tds.trsid[i],
