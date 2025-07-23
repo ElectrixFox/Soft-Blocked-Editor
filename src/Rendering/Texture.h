@@ -4,11 +4,14 @@
 #include <string.h>
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
+#include <iostream>
+#include <vector>
+#include <tuple>
 
 unsigned int getActiveTexture(unsigned int texture);
 unsigned int getTexture(unsigned int texture);
 
-extern "C" unsigned int CreateTexture(const char*);
+unsigned int CreateTexture(const char*);
 
 void BindTexture(unsigned int texture);
 

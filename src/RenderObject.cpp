@@ -44,6 +44,12 @@ int index = getRenderDetailsIDIndex(rd, rid);  // finding the ID
 if(index == -1)
     return; // if the index isn't found just quit
 
+glDeleteVertexArrays(1, &rd.vao[index]);
+glDeleteBuffers(1, &rd.vbo[index]);
+glDeleteBuffers(1, &rd.ibo[index]);
+glDeleteProgram(rd.shader[index]);
+glDeleteTextures(1, &rd.texture[index]);
+
 rd.rid.erase(rd.rid.begin() + index);
 rd.vao.erase(rd.vao.begin() + index);
 rd.vbo.erase(rd.vbo.begin() + index);

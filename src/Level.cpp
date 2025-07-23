@@ -71,6 +71,7 @@ for (int i = 0; i < gridh; i++)
         }
     }
 
+free(fcont);
 *grid = tgrid;
 }
 
@@ -173,11 +174,7 @@ for (int y = h; 0 < y; y--)
         int btype = grid[h - y][x];
 
         if(btype != 0)
-            {
             PlaceBlock(rp, (BLOCK)(btype - 1), pos);
-            printf("\nPosition: ");
-            OutputVec2(pos);
-            }
         }
     }
 

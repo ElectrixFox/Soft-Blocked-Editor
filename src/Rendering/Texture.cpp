@@ -4,6 +4,7 @@
 #include "include/stb/stb_image.h"
 
 static char fps[32][64]; // array of file paths
+static std::vector<std::tuple<unsigned int, const char*>> texinf;
 
 static unsigned int SetTextureVariable(unsigned int, const char*);
 
@@ -63,7 +64,7 @@ glGenerateMipmap(GL_TEXTURE_2D);
 
 stbi_image_free(data);
 
-texture = SetTextureVariable(texture, path);
+texinf.push_back({texture, path});
 
 return texture;
 }
@@ -72,7 +73,12 @@ void BindTexture(unsigned int texture)
 {
 // GL_TEXTURE0 is the first of many consecutive numbers referring to active textures so if we just add the active we get the correct thing
 glActiveTexture(GL_TEXTURE0);
-glBindTexture(GL_TEXTURE_2D, getTexture(texture));  // binds the texture
+glBindTexture(GL_TEXTURE_2D, texture);  // binds the texture
 }
 
-const char* getTextureFilePath(unsigned int texture) { return fps[getTexture(texture)]; }
+const char* getTextureFilePath(unsigned int texture)
+{
+for (auto entry : texinf)
+    if(std::get<0>(entry) == texture)
+        return std::get<1>(entry);
+}

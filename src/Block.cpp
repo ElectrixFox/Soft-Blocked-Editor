@@ -43,11 +43,6 @@ const unsigned int n = blds.rids.size();
 // setting all the new details
 blds.rids.push_back(rid);
 blds.blocks.push_back(block);
-
-/*
-blds.rids[n] = rid;
-blds.blocks[n] = block;
-*/
 }
 
 void UnassignBlock(unsigned int rid)

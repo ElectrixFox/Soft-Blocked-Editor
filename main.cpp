@@ -61,7 +61,7 @@ previd = id;
 glfwWaitEventsTimeout(0.1f);
 }
 
-int main()
+int main(int argc, char const *argv[])
 {
 unsigned int width = gwid;
 unsigned int height = ghig;
@@ -115,11 +115,20 @@ assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 
 BuildSelectBar();
 
+char* levelfp = (char*)malloc(128 * sizeof(char));
+const char* deffp = "res/levels/level3.txt";
+strcpy(levelfp, deffp);
+
+if(argc > 1)
+    {
+    strcpy(levelfp, argv[1]);
+    printf("\n%s", levelfp);
+    }
 
     {
     int** grid;
     int w, h;
-    ReadLevel("res/levels/level3.txt", &w, &h, &grid);
+    ReadLevel(levelfp, &w, &h, &grid);
     
     OutputLevel((const int**)grid, w, h);
     if(w != 0 && h != 0)
@@ -235,6 +244,10 @@ while(!glfwWindowShouldClose(window))   // main loop
     
     glfwSwapBuffers(window);
     glfwPollEvents();
+
+    GLenum err = glGetError();
+    if(err != 0)
+        printf("\nERROR: Code %d", err);
     }
 
 glfwDestroyWindow(window);

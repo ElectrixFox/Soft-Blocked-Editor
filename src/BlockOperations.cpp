@@ -316,9 +316,6 @@ unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, c
 printf("\n\n\nImmovables update");
 vec2 minpos = getMinimumPosition(rp.tds);
 
-printf("\nMinimum position: ");
-OutputVec2(minpos);
-printf("\n");
 for (int i = 0; i < h; i++)
     {
     for (int j = 0; j < w; j++)
@@ -328,20 +325,15 @@ for (int i = 0; i < h; i++)
             float theta = 0.0f;
             BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, {(float)j, (float)i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
-            /*
-            printf("\nPosition: ");
-            OutputVec2(posi);
-            */
+
+            
             int trsid = getBlockAtPosition(rp.tds, posi);
             if(trsid != -1)
                 {
                 int index = findDrawablesTransform(rp.drabs, trsid);
                 unsigned int rid = rp.drabs.rids[index];
-                printf("\nType %d at ", getBlockFromRenderID(rid) + 1);
-                OutputVec2(posi);
                 RemoveBlock(rp, rid);
                 rid = _PlaceBlockCustom(rp, getImmovableBlock(imstate), posi, theta);   // getting the new render ID
-                trsid = rp.drabs.trsids[findDrawablesRenderable(rp.drabs, rid)];
                 }
             
             }
