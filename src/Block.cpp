@@ -57,8 +57,8 @@ int index = getBlockRenderIndex(rid); // finding the ID
 if(index == -1)
     return; // if the index isn't found just quit
 
-blds.rids.erase(blds.rids.begin() + blds.rids[index]);
-blds.blocks.erase(blds.blocks.begin() + blds.blocks[index]);
+blds.rids.erase(blds.rids.begin() + index);
+blds.blocks.erase(blds.blocks.begin() + index);
 }
 
 BlockInfo getBlockInfo(BLOCK block)

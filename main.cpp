@@ -147,7 +147,6 @@ while(!glfwWindowShouldClose(window))   // main loop
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     
-    /*
     if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
         {
         int** grid;
@@ -185,7 +184,7 @@ while(!glfwWindowShouldClose(window))   // main loop
         cpos.x = 5 * roundf(cpos.x / 5);
         cpos.y = 5 * roundf(cpos.y / 5);
 
-        if(!PressedArea(block_rp.tds, cpos, 50.0f)) // && !PressedArea(ui_rp.tds, ncpos, 50.0f))
+        if(!PressedArea(block_rp.tds, cpos, 50.0f) && !PressedArea(ui_rp.tds, ncpos, 50.0f))
             {
             printf("\nPlacing block");
             unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
@@ -221,7 +220,6 @@ while(!glfwWindowShouldClose(window))   // main loop
                 }
             }
         }
-    */
 
     MoveCamera(cam);
     ApplyCamera(cam, block_rp.rds);
