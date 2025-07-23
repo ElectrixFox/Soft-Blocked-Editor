@@ -5,7 +5,6 @@
 
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
-#include <GL/glu.h>
 
 #define GLFW_KEY_FULL_STOP GLFW_KEY_PERIOD
 
