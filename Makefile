@@ -6,8 +6,12 @@ APPNAME = main
 LIBS = -L./lib
 
 ifeq ($(OS), Windows_NT)	# if the OS is windows add this build condition
-	CXXFLAGS += -static-libstdc++ -static-libgcc # -mwin32
-	LIBS += -lopengl32 -lgdi32 -lglfw3dll -lglew32
+	CXXFLAGS += -static-libstdc++ -static-libgcc -static # -mwin32
+	
+# production
+	LIBS += -lglfw3 -lglew32s -lopengl32 -lgdi32
+# testing
+	# LIBS += -lopengl32 -lgdi32 -lglfw3dll -lglew32
 else
 	LIBS += -lm -lGL -lGLEW -lglfw3dll -ldl
 endif

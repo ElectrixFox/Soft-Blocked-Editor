@@ -1,6 +1,7 @@
 #ifndef INPUT_MANAGER_H
 #define INPUT_MANAGER_H
 #pragma once
+#define GLEW_STATIC
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

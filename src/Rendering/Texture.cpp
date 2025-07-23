@@ -81,4 +81,5 @@ const char* getTextureFilePath(unsigned int texture)
 for (auto entry : texinf)
     if(std::get<0>(entry) == texture)
         return std::get<1>(entry);
+return "";
 }

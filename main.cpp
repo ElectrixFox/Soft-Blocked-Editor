@@ -1,3 +1,4 @@
+#define GLEW_STATIC
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,8 +18,6 @@
 #include "src/Editor.h"
 #include "src/SystemUI.h"
 
-using namespace std;
-
 int gwid = 1280, ghig = 720;
 
 void on_window_resize(GLFWwindow* window, int width, int height)
@@ -37,28 +36,6 @@ printf("\nPressed %d", i);
 RenderPacket ui_rp;
 InputManager inpman;
 UI_Manager ui_man(ui_rp);
-
-
-void fld(int id)
-{
-printf("\nFolding %d");
-static int previd = -1;
-
-GUI_Menu& menu = getMenu(ui_man.ui_men_tab, id);
-int folded = menu.folded;
-
-if(folded == 0 && previd != id)
-    {
-    foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
-    }
-else if(folded == 1 && previd != id)
-    {
-    unfoldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
-    }
-
-previd = id;
-glfwWaitEventsTimeout(0.1f);
-}
 
 int main(int argc, char const *argv[])
 {
@@ -83,7 +60,6 @@ glEnable(GL_BLEND);
 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
-// ui = InitialiseUI();
 ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
@@ -133,10 +109,12 @@ if(argc > 1)
     if(w != 0 && h != 0)
         {
         DrawLevel(block_rp, w, h, (const int**)grid);
+        
+        getLevel(block_rp, &w, &h, &grid);
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
-
+free(levelfp);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -189,8 +167,8 @@ while(!glfwWindowShouldClose(window))   // main loop
         {
         vec2 cpos = GetCursorPositionRelative(cam);
         vec2 ncpos = getCursorPosition();
-        cpos.x = 5 * roundf(cpos.x / 5);
-        cpos.y = 5 * roundf(cpos.y / 5);
+        cpos.x = 50 * roundf(cpos.x / 50);
+        cpos.y = 50 * roundf(cpos.y / 50);
 
         if(!PressedArea(block_rp.tds, cpos, 50.0f) && !PressedArea(ui_rp.tds, ncpos, 50.0f))
             {

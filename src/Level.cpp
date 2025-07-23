@@ -71,7 +71,6 @@ for (int i = 0; i < gridh; i++)
         }
     }
 
-free(fcont);
 *grid = tgrid;
 }
 

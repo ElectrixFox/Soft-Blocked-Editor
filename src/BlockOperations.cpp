@@ -315,6 +315,7 @@ unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, c
 {
 printf("\n\n\nImmovables update");
 vec2 minpos = getMinimumPosition(rp.tds);
+printf("\n%d", rp.tds.trsid.size());
 
 for (int i = 0; i < h; i++)
     {
