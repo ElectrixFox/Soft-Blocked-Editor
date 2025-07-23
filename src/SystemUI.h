@@ -301,23 +301,27 @@ struct UI_Manager
 
 GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr);
 
-unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button);
-
 GUI_Menu createMenu(vec2 pos, unsigned int head_id);
 
-GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
+unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button);
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Button button);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu);
+
+GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
+GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id);
 
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
-
 void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
 
 void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id);
 
 void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id);
+void foldMenu(UI_Manager& ui_man, unsigned int men_id);
 
 void unfoldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id);
+void unfoldMenu(UI_Manager& ui_man, unsigned int men_id);
 
 #endif
 
