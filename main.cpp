@@ -38,6 +38,27 @@ InputManager inpman;
 UI_Manager ui_man(ui_rp);
 
 
+void fld(int id)
+{
+printf("\nFolding %d");
+static int previd = -1;
+
+GUI_Menu& menu = getMenu(ui_man.ui_men_tab, id);
+int folded = menu.folded;
+
+if(folded == 0 && previd != id)
+    {
+    foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
+    }
+else if(folded == 1 && previd != id)
+    {
+    unfoldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
+    }
+
+previd = id;
+glfwWaitEventsTimeout(0.1f);
+}
+
 int main()
 {
 unsigned int width = gwid;
@@ -78,22 +99,19 @@ UI_Element_Table<GUI_Menu> ui_men_tab;
 GUI_Button btn = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 1);
 GUI_Button btn2 = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
 unsigned int btn1id = addToElementTable(ui_bts_tab, ui_rp, position, 25.0f, btn);
-addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, btn2);
+unsigned int btn2id = addToElementTable(ui_bts_tab, ui_rp, {position.x - 50.0f, position.y}, 25.0f, btn2);
 
 position = {topright.x, topright.y - (1 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
 GUI_Menu men = createMenu(position, btn1id);
 unsigned int menid = addToElementTable(ui_men_tab, ui_bts_tab, ui_rp, position, men);
-
-assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
-assignElementAction(ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &output);
+addToMenu(ui_men_tab, menid, btn2id);
 
 ui_man.ui_btn_tab = ui_bts_tab;
 ui_man.ui_men_tab = ui_men_tab;
 
-auto lambda = [](int id)
-    {
-    foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_rp, id);
-    };
+assignElementAction(ui_bts_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
+assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
+
 
 // BuildSelectBar();
 

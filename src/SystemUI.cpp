@@ -708,6 +708,12 @@ if(index == -1) // if ID not found
 return index;
 }
 
+GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id)
+{
+int index = findUIInUITable(table, ui_id);
+return table.data[index];
+}
+
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
 {
 int index = findUIInUITable(table, ui_id);
@@ -726,7 +732,8 @@ vec2 cpos = getCursorPosition();
 return PointInSquare(cpos, pos, scale);
 }
 
-static int isCursorOnUIElement(UI_Element_Table<GUI_Button> table, RenderPacket rp, unsigned int ui_id)
+template <typename T>
+static int isCursorOnUIElement(UI_Element_Table<T> table, RenderPacket rp, unsigned int ui_id)
 {
 int index = findUIInUITable(table, ui_id);
 vec2 pos = getPosition(rp.tds, table.trsid[index]);
@@ -773,6 +780,13 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 void UI_Manager::checkUI()
 {
 _checkUI(ui_btn_tab, ui_rp);
+_checkUI(ui_men_tab, ui_rp);
+}
+
+void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id)
+{
+int index = findUIInUITable(men_tab, men_id);   // finding the menu
+men_tab.data[index].ui_ids.push_back(ui_id);
 }
 
 void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id)
@@ -782,11 +796,30 @@ GUI_Menu men = men_tab.data[index]; // gets the menu
 
 for (unsigned int bt_id : men.ui_ids)
     {
+    printf("\nDeleting");
     index = findUIInUITable(btn_tab, bt_id);    // finds the UI ID in the table
     int ind2 = findDrawablesTransform(rp.drabs, btn_tab.trsid[index]);  // finding the index of the drawable record
     RemoveRenderDetail(rp.rds, rp.drabs.rids[ind2]); // remove the render detail from the render details object
     UnassignDrawable(rp.drabs, btn_tab.trsid[index]);   // removes the drawable
     }
+men.folded = 1;
+}
+
+void unfoldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id)
+{
+int index = findUIInUITable(men_tab, men_id);   // finds the menu head
+GUI_Menu men = men_tab.data[index]; // gets the menu
+
+for (unsigned int bt_id : men.ui_ids)
+    {
+    printf("\nCreating");
+    index = findUIInUITable(btn_tab, bt_id);    // finds the UI ID in the table
+    GUI_Button button = btn_tab.data[index];    // getting the button
+    unsigned int rid = CreateSpriteRenderable(rp.rds, button.ssi.spfp, button.ssi.nosp, button.ssi.spr);    // creating the new renderable
+    unsigned int trsid = btn_tab.trsid[index];  // getting the transform ID
+    AddDrawable(rp.drabs, trsid, rid);
+    }
+men.folded = 0;
 }
 
 #endif
