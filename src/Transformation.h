@@ -11,7 +11,6 @@ struct TransformationDetails
     std::vector<vec2> scale;
     std::vector<float> angle;
     };
-typedef struct TransformationDetails TransformationDetails;
 
 /**
  * Initialises the transformation details to enable adding and removing easily

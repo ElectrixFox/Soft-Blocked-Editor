@@ -13,7 +13,6 @@ struct RenderDetails
     std::vector<unsigned int> shader;
     std::vector<unsigned int> texture;
     };
-typedef struct RenderDetails RenderDetails;
 
 /**
  * Initialises a new RenderDetails object
