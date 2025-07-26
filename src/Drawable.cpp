@@ -15,7 +15,7 @@ drabs.trsids.push_back(trid);
 return drabs.rids.size();
 }
 
-int findDrawablesTransform(Drawables drabs, unsigned int trid)
+int findDrawablesTransform(const Drawables& drabs, unsigned int trid)
 {
 for (int i = 0; i < drabs.rids.size(); i++)
     if (drabs.trsids[i] == trid) // if the ID matches
@@ -23,7 +23,7 @@ for (int i = 0; i < drabs.rids.size(); i++)
 return -1; // if the ID isn't found return -1
 }
 
-int findDrawablesRenderable(Drawables drabs, unsigned int rid)
+int findDrawablesRenderable(const Drawables& drabs, unsigned int rid)
 {
 for (int i = 0; i < drabs.rids.size(); i++)
     if (drabs.rids[i] == rid) // if the ID matches

@@ -30,7 +30,7 @@ RenderDetails InitialiseRenderDetails();
  * 
  * @returns Index of ID in the details object or -1 if not found
  */
-int getRenderDetailsIDIndex(RenderDetails rd, unsigned int rid);
+int getRenderDetailsIDIndex(const RenderDetails& rd, unsigned int rid);
 
 /**
  * Adds a render object to the details
@@ -91,7 +91,7 @@ void DrawRenderable(RenderDetails rds, unsigned int rid);
  * 
  * @returns The programs of the render IDs
  */
-unsigned int* getRenderablePrograms(RenderDetails rds, std::vector<unsigned int> rids);
+std::vector<unsigned int> getRenderablePrograms(const RenderDetails& rds, std::vector<unsigned int> rids);
 
 /**
  * Outputs the render details

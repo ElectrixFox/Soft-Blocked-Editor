@@ -90,20 +90,24 @@ assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 
 BuildSelectBar();
 
-char* levelfp = (char*)malloc(128 * sizeof(char));
 const char* deffp = "res/levels/level3.txt";
+/*
+char* levelfp = (char*)malloc(128 * sizeof(char));
 strcpy(levelfp, deffp);
+*/
 
+/*
 if(argc > 1)
     {
     strcpy(levelfp, argv[1]);
     printf("\n%s", levelfp);
     }
+*/
 
     {
     int** grid;
     int w, h;
-    ReadLevel(levelfp, &w, &h, &grid);
+    ReadLevel(deffp, &w, &h, &grid);
     
     OutputLevel((const int**)grid, w, h);
     if(w != 0 && h != 0)
@@ -114,7 +118,6 @@ if(argc > 1)
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
-free(levelfp);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {

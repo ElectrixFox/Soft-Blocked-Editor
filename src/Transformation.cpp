@@ -7,7 +7,7 @@ TransformationDetails tds;  // creating the details
 return tds;
 }
 
-int getTransformationIDIndex(TransformationDetails tds, unsigned int trsid)
+int getTransformationIDIndex(const TransformationDetails& tds, unsigned int trsid)
 {
 if(tds.trsid.size() > trsid)    // if the size is bigger than the ID then it is a valid ID
     if(tds.trsid[trsid] == trsid)   // just in case no manipulation of the table has happened

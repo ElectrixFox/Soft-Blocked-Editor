@@ -31,7 +31,7 @@ TransformationDetails InitialiseTransformationDetails();
  * 
  * @returns Index of ID in the details object or -1 if not found
  */
-int getTransformationIDIndex(TransformationDetails tds, unsigned int trsid);
+int getTransformationIDIndex(const TransformationDetails& tds, unsigned int trsid);
 
 /**
  * Adds a transformation to the details

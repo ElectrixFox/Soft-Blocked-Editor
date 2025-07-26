@@ -6,7 +6,7 @@ RenderDetails rd;   // creating the details
 return rd;
 }
 
-int getRenderDetailsIDIndex(RenderDetails rd, unsigned int rid)
+int getRenderDetailsIDIndex(const RenderDetails& rd, unsigned int rid)
 {
 if(rd.rid.size() > rid)  // if the size is bigger than the ID then it is a valid ID
     if(rd.rid[rid] == rid)  // just in case no manipulation of the table has happened
@@ -167,12 +167,12 @@ BindVAO(rds.vao[index]);
 glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-unsigned int* getRenderablePrograms(RenderDetails rds, unsigned int* rids, int size)
+std::vector<unsigned int> getRenderablePrograms(const RenderDetails& rds, std::vector<unsigned int> rids)
 {
-unsigned int* progs = (unsigned int*)malloc(size * sizeof(unsigned int));
+std::vector<unsigned int> progs;
 
-for (int i = 0; i < size; i++)
-    progs[i] = rds.shader[getRenderDetailsIDIndex(rds, rids[i])];  // getting and setting the programs
+for (int i = 0; i < rids.size(); i++)
+    progs.push_back(rds.shader[getRenderDetailsIDIndex(rds, rids[i])]); // getting and setting the programs
 
 return progs;
 }

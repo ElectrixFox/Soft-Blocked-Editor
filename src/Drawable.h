@@ -29,7 +29,7 @@ int AddDrawable(Drawables& drabs, const unsigned int trid, const unsigned int ri
  * 
  * @returns -1 if not found and the index otherwise
  */
-int findDrawablesTransform(Drawables drabs, unsigned int trid);
+int findDrawablesTransform(const Drawables& drabs, unsigned int trid);
 
 /**
  * Finds the index of the given render ID in the drawables table
@@ -39,7 +39,7 @@ int findDrawablesTransform(Drawables drabs, unsigned int trid);
  * 
  * @returns -1 if not found and the index otherwise
  */
-int findDrawablesRenderable(Drawables drabs, unsigned int rid);
+int findDrawablesRenderable(const Drawables& drabs, unsigned int rid);
 
 /**
  * Gets the render IDs from an array of transform IDs

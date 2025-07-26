@@ -303,7 +303,7 @@ for (int i = 0; i < tds.trsid.size(); i++)
 return {minx, miny};
 }
 
-int getBlockAtPosition(TransformationDetails tds, vec2 pos)
+int getBlockAtPosition(const TransformationDetails& tds, vec2 pos)
 {
 for (int i = 0; i < tds.trsid.size(); i++)
     if(tds.pos[i].x == pos.x && tds.pos[i].y == pos.y)
@@ -327,8 +327,9 @@ for (int i = 0; i < h; i++)
             BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, {(float)j, (float)i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
 
-            
+            printf("\n%d", rp.tds.trsid[0]);
             int trsid = getBlockAtPosition(rp.tds, posi);
+
             if(trsid != -1)
                 {
                 int index = findDrawablesTransform(rp.drabs, trsid);
