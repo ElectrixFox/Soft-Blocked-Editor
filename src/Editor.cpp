@@ -101,7 +101,8 @@ BLOCK menuDetails[] =   // the base blocks
     BLOCK_MOVABLE_BARRIER,
     BLOCK_MOVABLE_BLOCK,
     BLOCK_IMMOVABLE_BLOCK,
-    BLOCK_COUNTABLE_BLOCK
+    BLOCK_COUNTABLE_BLOCK,
+    BLOCK_TELEPORTER_SOURCE
     };
 const int nblk = sizeof(menuDetails) / sizeof(BLOCK);
 

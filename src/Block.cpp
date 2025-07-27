@@ -64,7 +64,7 @@ switch (block)
         return (BlockInfo){"res/sprites/player_spritesheet.png", 2, 1};
         break;
     case BLOCK_MOVABLE_BARRIER:
-        return (BlockInfo){"res/sprites/movable_barrier_tilesheet.png", 1, 1};
+        return (BlockInfo){"res/sprites/barriers_tilesheet_short.png", 2, 1};
         break;
     case BLOCK_MOVABLE_BLOCK:
         return (BlockInfo){"res/sprites/movable_spritesheet_short.png", 2, 1};
@@ -80,6 +80,18 @@ switch (block)
         break;
     case BLOCK_PLAYER_DESTINATION:
         return (BlockInfo){"res/sprites/player_spritesheet.png", 2, 2};
+        break;
+    case BLOCK_COUNTABLE_DESTINATION:
+        return (BlockInfo){"res/sprites/countable_movable_spritesheet_short.png", 3, 2};
+        break;
+    case BLOCK_PLAYER_BARRIER:
+        return (BlockInfo){"res/sprites/barriers_tilesheet_short.png", 2, 2};
+        break;
+    case BLOCK_TELEPORTER_SOURCE:
+        return (BlockInfo){"res/sprites/teleporter_tilesheet.png", 2, 1};
+        break;
+    case BLOCK_TELEPORTER_DESTINATION:
+        return (BlockInfo){"res/sprites/teleporter_tilesheet.png", 2, 2};
         break;
     default:
         break;
