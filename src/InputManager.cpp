@@ -25,6 +25,29 @@ switch (action)
     }
 }
 
+void updateMouse(GLFWwindow* window, int button, int action, int mods)
+{
+switch (action)
+    {
+    case GLFW_PRESS:
+        inpman.mbtns[button] = 1;
+        break;
+    case GLFW_RELEASE:
+        inpman.mbtns[button] = 0;
+        break;
+    case GLFW_REPEAT:
+        inpman.mbtns[button] = 2;
+        break;
+    default:
+        break;
+    }
+}
+
+void updateCurpos(GLFWwindow* window, double xpos, double ypos)
+{
+inpman.cpos = {(float)xpos, (float)ypos};
+}
+
 vec2 _getCursorPosition(GLFWwindow* window)
 {
 double x, y;
@@ -64,6 +87,37 @@ return 0;
 int isHeldDown(int key)
 {
 if(inpman.keys[key] == 2)
+    {
+    return 1;
+    }
+else
+    {
+    return 0;
+    }
+}
+
+
+int isMouseButtonPressed(int button)
+{
+static int pbtn = -1;
+int action = glfwGetMouseButton(inpman.window, button);
+
+if(pbtn != button && action == GLFW_PRESS)
+    {
+    pbtn = button;
+    return 1;
+    }
+else if(pbtn == button && action == GLFW_RELEASE)
+    {
+    pbtn = -1;
+    }
+
+return 0;
+}
+
+int isMouseButtonHeld(int button)
+{
+if(inpman.mbtns[button] == 1)
     {
     return 1;
     }

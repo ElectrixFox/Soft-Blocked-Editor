@@ -23,6 +23,25 @@ m4 getProjectionMatrix(Camera cam) { return getProjection(*cam.scrspx, *cam.scrs
 
 int MoveCamera(Camera& cam)
 {
+static vec2 prevpos = getCursorPosition();
+
+if(isMouseButtonHeld(GLFW_MOUSE_BUTTON_MIDDLE))
+    {
+    printf("\nTrying to move");
+    vec2 cpos = getCursorPosition();
+    if(prevpos.x != cpos.x || prevpos.y != cpos.y)
+        {
+        float dx = prevpos.x - cpos.x;
+        float dy = prevpos.y - cpos.y;
+
+        cam.poscomponent.x -= dx;
+        cam.poscomponent.y -= dy;
+        }
+    prevpos = cpos;
+    }
+else
+    prevpos = getCursorPosition();
+/*
 if(isPressedSingle(GLFW_KEY_W)) // move up
     cam.poscomponent.y -= 5;
 else if(isPressedSingle(GLFW_KEY_A)) // move left
@@ -33,6 +52,7 @@ else if(isPressedSingle(GLFW_KEY_D)) // move right
     cam.poscomponent.x -= 5;
 else
     return 0;
+*/
 return 1;
 }
 

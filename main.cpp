@@ -54,6 +54,8 @@ glfwMakeContextCurrent(window); // sets the context of the window
 
 glfwSetWindowSizeCallback(window, on_window_resize);
 glfwSetKeyCallback(window, updateInput);
+glfwSetMouseButtonCallback(window, updateMouse);
+glfwSetCursorPosCallback(window, updateCurpos);
 
 glewInit();
 glEnable(GL_BLEND);

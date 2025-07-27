@@ -12,7 +12,7 @@
 
 #include "MathsOperations.h"
 
-typedef struct
+struct InputManager
     {
     /**
      * -1 is null
@@ -22,12 +22,20 @@ typedef struct
      */
     int keys[1024];
 
+    int mbtns[128];
+
+    vec2 cpos;  // the cursor position
+
     GLFWwindow* window;
-    } InputManager;
+    };
 
 void InitialiseInputManager(GLFWwindow* window);
 
 void updateInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+
+void updateMouse(GLFWwindow* window, int button, int action, int mods);
+
+void updateCurpos(GLFWwindow* window, double xpos, double ypos);
 
 vec2 getCursorPosition();
 
@@ -36,6 +44,10 @@ int isPressed(int key);
 int isPressedSingle(int key);
 
 int isHeldDown(int key);
+
+int isMouseButtonPressed(int button);
+
+int isMouseButtonHeld(int button);
 
 /**
  * Gets the indices of the positions which are in the area
