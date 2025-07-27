@@ -29,6 +29,7 @@ struct Text_Manager
 void AddLetter(Text_Manager& text_man, char letter, vec2 position, float scale);
 void AddLetter(RenderPacket& text_rp, char letter, vec2 position, float scale);
 
+void AddCharacter(RenderPacket& text_rp, char ch, vec2 position, float scale);
 
 
 #endif

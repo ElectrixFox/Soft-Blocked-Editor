@@ -91,12 +91,13 @@ unsigned int CreateSpritesheetRenderable(RenderDetails& rd, const char* spfp, un
  * 
  * @param rd Reference the the render details
  * @param texfp File path to the text sheet
+ * @param nch The number of characters in the sheet
  * @param chr The character to render
  * @param flip Should the sheet be flipped (defaults to flip)
  * 
  * @returns The ID of the render object
  */
-unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int chr, int flip = 1);
+unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int nch, int chr, int flip = 1);
 
 /**
  * Just creates a standard coloured square

@@ -168,8 +168,15 @@ if(argc > 1)
         }
     }
 
-AddLetter(text_rp, 'A', {500.0f, 500.0f}, 100.0f);
+for (int i = 0; i < 26; i++)
+    {
+    AddCharacter(text_rp, (char)((int)'A' + i), {(i * 50.0f), 2000.0f}, 25.0f);
+    }
 
+for (int i = 0; i < 10; i++)
+    {
+    AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
+    }
 /*
 const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
 unsigned int rid = CreateSpritesheetRenderable(text_rp.rds, textsheet, 40, 1440, 36, 1);

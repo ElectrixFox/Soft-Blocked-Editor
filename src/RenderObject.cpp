@@ -115,10 +115,10 @@ unsigned int CreateSpritesheetRenderable(RenderDetails& rd, const char* spfp, un
 return _CreateSpriteSheetRenderable(rd, nosp, spr, "res/texvert.shader", "res/texfrag.shader", spfp, 1);
 }
 
-unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int chr, int flip)
+unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int nch, int chr, int flip)
 {
 unsigned int shape;
-GeneralInitialise(&shape, 36, 1, SHAPE_TEXT);
+GeneralInitialise(&shape, nch, chr, SHAPE_TEXT);
 
 return _CreateRenderable(rd, shape, "res/textvert.shader", "res/textfrag.shader", texfp, flip);
 }

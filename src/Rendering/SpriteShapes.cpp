@@ -2,19 +2,19 @@
 
 void SetNumberOfSprites(unsigned int* shape, unsigned int numofspr)
 {
-unsigned int mask = 0b11111110000000000U;  // the mask for the number of sprites
-*(shape) = ((*(shape) & (~mask)) | (numofspr << 10));
+unsigned int mask = 0b111111100000000000000U;  // the mask for the number of sprites
+*(shape) = ((*(shape) & (~mask)) | (numofspr << 14));
 }
 
 void SetActiveSprite(unsigned int* shape, unsigned int sprite)
 {
-unsigned int mask = 0b00000001111100000U;  // the mask for the active sprite
-*(shape) = ((*(shape) & ~mask) | (sprite << 5));
+unsigned int mask = 0b000000011111110000000U;  // the mask for the active sprite
+*(shape) = ((*(shape) & ~mask) | (sprite << 7));
 }
 
 void SetActiveShape(unsigned int* shape, unsigned int sh)
 {
-unsigned int mask = 0b00000000000011111U;  // the mask for the active sprite
+unsigned int mask = 0b000000000000001111111U;  // the mask for the active shape
 *(shape) = (((*shape) & (~mask)) | sh);
 }
 
@@ -27,19 +27,19 @@ SetActiveShape(shape, sh);
 
 unsigned int GetNumberOfSprites(unsigned int shape)
 {
-unsigned int mask = 0b11111110000000000U;  // the mask for the number of sprites
-return ((shape & mask) >> 10);
+unsigned int mask = 0b111111100000000000000U;  // the mask for the number of sprites
+return ((shape & mask) >> 14);
 }
 
 unsigned int GetActiveSprite(unsigned int shape)
 {
-unsigned int mask = 0b00000001111100000U;  // the mask for the active sprite
-return ((shape & mask) >> 5);
+unsigned int mask = 0b000000011111110000000U;  // the mask for the active sprite
+return ((shape & mask) >> 7);
 }
 
 unsigned int GetActiveShape(unsigned int shape)
 {
-unsigned int mask = 0b00000000000011111U;  // the mask for the active sprite
+unsigned int mask = 0b000000000000001111111U;  // the mask for the active shape
 return (shape & mask);
 }
 
