@@ -415,15 +415,79 @@ GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
  */
 GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id);
 
+/**
+ * Assigns the element action to the button element
+ * 
+ * @param table A reference to the button table
+ * @param ui_id The UI ID of the element to add the trigger to
+ * @param trigger The trigger to activate the action
+ * @param action The action to perform
+ */
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
+
+/**
+ * Assigns the element action to the menu element
+ * 
+ * @param table A reference to the menu table
+ * @param ui_id The UI ID of the element to add the trigger to
+ * @param trigger The trigger to activate the action
+ * @param action The action to perform
+ */
 void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
 
+/**
+ * Assigns the element action to the text box element
+ * 
+ * @param table A reference to the text box table
+ * @param ui_id The UI ID of the element to add the trigger to
+ * @param trigger The trigger to activate the action
+ * @param action The action to perform
+ */
+void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
+
+/**
+ * Adds the UI element with the given UI ID to the menu
+ * 
+ * @param men_tab A reference to the menu table
+ * @param men_id The UI ID of the menu
+ * @param ui_id The UI ID of the element to add to the table
+ */
 void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id);
 
+/**
+ * Folds the menu
+ * 
+ * @param men_tab A reference to the menu table
+ * @param btn_tab The menu table
+ * @param rp A reference to the render packet for the UI
+ * @param men_id The UI ID of the menu
+ */
 void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id);
+
+/**
+ * Folds the menu
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param men_id The UI ID of the menu
+ */
 void foldMenu(UI_Manager& ui_man, unsigned int men_id);
 
+/**
+ * Unfolds the menu
+ * 
+ * @param men_tab A reference to the menu table
+ * @param btn_tab The menu table
+ * @param rp A reference to the render packet for the UI
+ * @param men_id The UI ID of the menu
+ */
 void unfoldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id);
+
+/**
+ * Unfolds the menu
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param men_id The UI ID of the menu
+ */
 void unfoldMenu(UI_Manager& ui_man, unsigned int men_id);
 
 #endif
