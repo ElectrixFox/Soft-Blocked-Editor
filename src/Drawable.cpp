@@ -31,12 +31,12 @@ for (int i = 0; i < drabs.rids.size(); i++)
 return -1; // if the ID isn't found return -1
 }
 
-unsigned int* getRenderIDsFromTransformIDs(Drawables drabs, unsigned int* trids, unsigned int size)
+std::vector<unsigned int> getRenderIDsFromTransformIDs(Drawables drabs, std::vector<unsigned int> trids)
 {
-unsigned int* rids = (unsigned int*)malloc(size * sizeof(unsigned int));
+std::vector<unsigned int> rids;
 
-for (int i = 0; i < size; i++)
-    rids[i] = drabs.rids[findDrawablesTransform(drabs, trids[i])];  // getting and setting the drawable IDs
+for (int i = 0; i < trids.size(); i++)
+    rids.push_back(drabs.rids[findDrawablesTransform(drabs, trids[i])]);  // getting and setting the drawable IDs
 
 return rids;
 }

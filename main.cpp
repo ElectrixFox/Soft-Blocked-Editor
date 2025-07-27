@@ -115,7 +115,7 @@ if(argc > 1)
         DrawLevel(block_rp, w, h, (const int**)grid);
         
         getLevel(block_rp, &w, &h, &grid);
-        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+        // UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
 
@@ -177,6 +177,7 @@ while(!glfwWindowShouldClose(window))   // main loop
             {
             printf("\nPlacing block");
             unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
+            /*
             if(getBlockFromRenderID(rid) == BLOCK_IMMOVABLE_BLOCK)
                 {
                 int** grid;
@@ -184,6 +185,7 @@ while(!glfwWindowShouldClose(window))   // main loop
                 getLevel(block_rp, &w, &h, &grid);
                 UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
                 }
+            */
             }
         }
     else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
@@ -205,7 +207,7 @@ while(!glfwWindowShouldClose(window))   // main loop
                 int** grid;
                 int w, h;
                 getLevel(block_rp, &w, &h, &grid);
-                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+                // UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
                 }
             }
         }

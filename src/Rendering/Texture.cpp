@@ -4,7 +4,7 @@
 #include "include/stb/stb_image.h"
 
 static char fps[32][64]; // array of file paths
-static std::vector<std::tuple<unsigned int, const char*>> texinf;
+std::vector<std::tuple<unsigned int, const char*>> texinf;
 
 static unsigned int SetTextureVariable(unsigned int, const char*);
 

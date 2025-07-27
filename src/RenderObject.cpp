@@ -101,10 +101,7 @@ unsigned int shape = 0;
 GeneralInitialise(&shape, nosp, spr, SQUARE);
 
 viBundle vbund = GetShapeVertices(shape);   // the bundle containing the vertices and count
-float* vertices = vbund.vi;
-
 viBundle ibund = GetShapeIndices(shape);    // the bundle containing the indices and count
-unsigned int* indices = ibund.vi;
 
 // creating the shader
 prog = CreateShader(vsfp, fsfp);    // creates the shader object
@@ -118,9 +115,9 @@ if(texfp != NULL)   // if there is a texture
     }
 
 vao = CreateVAO();  // creating the vao
-ibo = CreateIBO(indices, ibund.n); // creating the ibo
+ibo = CreateIBO(ibund.vi, ibund.n); // creating the ibo
 BindIBO(ibo);  // binding the ibo to the vao
-vbo = CreateVBO(vertices, vbund.n);  // creating the vbo
+vbo = CreateVBO(vbund.vi, vbund.n);  // creating the vbo
 BindVBO(vbo);  // binding the vbo to the vao
 
 unsigned int ilay[1] = {3};

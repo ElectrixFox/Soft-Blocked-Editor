@@ -62,8 +62,13 @@ static void getScope(const int w, const int h, const int** grid, vec2 pos, const
 {
 int x = pos.x, y = pos.y;
 
-*scope = (int**)malloc(sizeof(int) * pow(scpesc, 2));
-int** tscope = (int**)malloc(sizeof(int*) * scpesc);
+const int sze = sizeof(int) * pow(scpesc, 2);
+
+*scope = new int*[sze];
+
+// *scope = (int**)malloc(sizeof(int) * pow(scpesc, 2));
+// int** tscope = (int**)malloc(sizeof(int*) * scpesc);
+int** tscope = new int*[sze];
 
 if(scpesc % 2 == 1)
     {
@@ -71,7 +76,8 @@ if(scpesc % 2 == 1)
     for (int j = y - interv; j <= y + interv; j++)
         {
         int jind = j - (y - interv);    // the actual j from 0 to scpesc
-        tscope[jind] = (int*)malloc(sizeof(scpesc));
+        tscope[jind] = new int[sizeof(int) * scpesc];
+        // tscope[jind] = (int*)malloc(sizeof(scpesc));
         
         if(j < 0 || h <= j)
             {
@@ -99,7 +105,8 @@ else
     for (int j = y - interv; j < y + interv; j++)
         {
         int jind = j - (y - interv);    // the actual j from 0 to scpesc
-        tscope[jind] = (int*)malloc(sizeof(scpesc));
+        tscope[jind] = new int[sizeof(int) * scpesc];
+        // tscope[jind] = (int*)malloc(sizeof(scpesc));
         
         if(j < 0 || h <= j)
             {

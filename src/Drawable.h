@@ -46,11 +46,10 @@ int findDrawablesRenderable(const Drawables& drabs, unsigned int rid);
  * 
  * @param drabs The drawables table
  * @param trids The transformation IDs to find in the drawables
- * @param size The number of IDs
  * 
  * @returns An array of renderable IDs
  */
-unsigned int* getRenderIDsFromTransformIDs(Drawables drabs, unsigned int* trids, unsigned int size);
+std::vector<unsigned int> getRenderIDsFromTransformIDs(Drawables drabs, std::vector<unsigned int> trids);
 
 void UnassignDrawable(Drawables& drabs, unsigned int trid);
 
