@@ -68,7 +68,7 @@ const int nchars = 36;
 int pt = 0; // the point of the character in the character set
 
 if(isdigit(ch))
-    pt = ((int)'9' - (int)ch);
+    pt = (((int)'9' + 1) - (int)ch);
 else if(isalpha(ch))
     pt = nchars - ((int)ch - (int)'A');
 

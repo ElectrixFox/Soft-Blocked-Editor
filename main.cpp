@@ -164,7 +164,7 @@ if(argc > 1)
         DrawLevel(block_rp, w, h, (const int**)grid);
         
         getLevel(block_rp, &w, &h, &grid);
-        // UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
 
@@ -173,16 +173,11 @@ for (int i = 0; i < 26; i++)
     AddCharacter(text_rp, (char)((int)'A' + i), {(i * 50.0f), 2000.0f}, 25.0f);
     }
 
-for (int i = 0; i < 10; i++)
+for (int i = 0; i < 11; i++)
     {
     AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
     }
-/*
-const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
-unsigned int rid = CreateSpritesheetRenderable(text_rp.rds, textsheet, 40, 1440, 36, 1);
-unsigned int trsid = AddTransformation(text_rp.tds, {500.0f, 500.0f}, {50.0f, 75.0f}, 0.0f);
-AddDrawable(text_rp.drabs, trsid, rid);
-*/
+
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
