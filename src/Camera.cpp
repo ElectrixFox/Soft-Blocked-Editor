@@ -23,24 +23,24 @@ m4 getProjectionMatrix(Camera cam) { return getProjection(*cam.scrspx, *cam.scrs
 
 int MoveCamera(Camera& cam)
 {
-static vec2 prevpos = getCursorPosition();
+static vec2 prevpos = getCursorPosition();  // initially it should be the cursor posision
 
 if(isMouseButtonHeld(GLFW_MOUSE_BUTTON_MIDDLE))
     {
-    printf("\nTrying to move");
-    vec2 cpos = getCursorPosition();
-    if(prevpos.x != cpos.x || prevpos.y != cpos.y)
+    vec2 cpos = getCursorPosition(); // getting where the cursor is
+    if(prevpos.x != cpos.x || prevpos.y != cpos.y)  // if the vectors are different
         {
-        float dx = prevpos.x - cpos.x;
-        float dy = prevpos.y - cpos.y;
-
-        cam.poscomponent.x -= dx;
+        float dx = prevpos.x - cpos.x;  // find the change in the x coordinate
+        float dy = prevpos.y - cpos.y;  // find the change in the y coordinate
+        
+        // apply the "drag"
+        cam.poscomponent.x -= dx;   // subtract the difference as its a drag
         cam.poscomponent.y -= dy;
         }
-    prevpos = cpos;
+    prevpos = cpos; // setthe previous position to the current
     }
 else
-    prevpos = getCursorPosition();
+    prevpos = getCursorPosition();   // reinitialise the previous position
 /*
 if(isPressedSingle(GLFW_KEY_W)) // move up
     cam.poscomponent.y -= 5;

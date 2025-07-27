@@ -19,7 +19,7 @@ for (int y = 0; y < h; y++)
     {
     for (int x = 0; x < w; x++)
         {
-        printf("%d ", grid[y][x]);
+        printf("%-2d ", grid[y][x]);
         }
     printf("\n");
     }
@@ -84,7 +84,7 @@ for (int i = 0; i < h; i++)
     for (int j = 0; j < w; j++)
         {
         char tmp[32];
-        sprintf(tmp, "%2d ", grid[i][j]);    // convert the int to a string
+        sprintf(tmp, "%d ", grid[i][j]);    // convert the int to a string
         strcat(output, tmp);    // append the string to the output
         }
     output[strlen(output) - 1] = '\n';  // set the last character of the line to be the new line instead of a space
