@@ -12,7 +12,7 @@
 unsigned int getActiveTexture(unsigned int texture);
 unsigned int getTexture(unsigned int texture);
 
-unsigned int CreateTexture(const char*);
+unsigned int CreateTexture(const char*, int flip = 0);
 
 void BindTexture(unsigned int texture);
 

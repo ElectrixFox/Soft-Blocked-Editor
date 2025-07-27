@@ -17,6 +17,7 @@
 #include "src/Drawable.h"
 #include "src/Editor.h"
 #include "src/SystemUI.h"
+#include "src/Text.h"
 
 int gwid = 1280, ghig = 720;
 
@@ -33,9 +34,31 @@ printf("\nPressed %d", i);
 }
 
 // UI_Table ui;
-RenderPacket ui_rp;
 InputManager inpman;
+
+RenderPacket ui_rp;
 UI_Manager ui_man(ui_rp);
+
+RenderPacket text_rp;
+Text_Manager text_man(text_rp);
+
+
+static void toggleMenu(int ui_id)
+{
+static int prevuid = -1;
+
+if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu is folded
+    {
+    if(prevuid != -1)
+        {
+        printf("\nFolding %d", prevuid);
+        foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_man.ui_rp, prevuid);
+        }
+
+    printf("\nUnfolding %d", ui_id);
+    unfoldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_man.ui_rp, ui_id);
+    }
+}
 
 int main(int argc, char const *argv[])
 {
@@ -66,6 +89,7 @@ ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
+RenderPacket text_rp = InitialiseRenderPacket();
 
 InitialiseBlockDetails();
 
@@ -89,6 +113,29 @@ assignElementAction(ui_man.ui_btn_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
 assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 */
 
+vec2 topleft = {25.0f, 695.0f};
+const float padding = 10.0f;
+vec2 position = {topleft.x, topleft.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
+
+GUI_Button menhead = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 1);
+unsigned int head_id = addToElementTable(ui_man, position, 25.0f, menhead);
+
+GUI_Menu men = createMenu(position, head_id);
+unsigned int men_id = addToElementTable(ui_man, position, men);
+// assignElementAction(ui_man.ui_men_tab, men_id, UI_TRIGGER_HOVER, &ufld);
+// assignElementAction(ui_man.ui_men_tab, men_id, UI_TRIGGER_LEAVE_HOVER, &fld);
+
+GUI_Button entbt = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
+
+position = {topleft.x, topleft.y - (1 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
+unsigned int entry = addToElementTable(ui_man, position, 25.0f, entbt);
+assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &output);
+
+addToMenu(ui_man.ui_men_tab, men_id, entry);
+
+// foldMenu(ui_man, men_id);
+
+// assignElementAction(ui_man.ui_men_tab, men_id, (GUI_ACTION_TRIGGER)0, &output);
 
 BuildSelectBar();
 
@@ -120,6 +167,15 @@ if(argc > 1)
         // UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
+
+AddLetter(text_rp, 'A', {500.0f, 500.0f}, 100.0f);
+
+/*
+const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
+unsigned int rid = CreateSpritesheetRenderable(text_rp.rds, textsheet, 40, 1440, 36, 1);
+unsigned int trsid = AddTransformation(text_rp.tds, {500.0f, 500.0f}, {50.0f, 75.0f}, 0.0f);
+AddDrawable(text_rp.drabs, trsid, rid);
+*/
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -224,7 +280,13 @@ while(!glfwWindowShouldClose(window))   // main loop
 
     DrawRenderPacket(block_rp);
     ClearCamera(ui_rp.rds);
+
     DrawRenderPacket(ui_rp);
+    ClearCamera(text_rp.rds);
+
+    ApplyCamera(cam, text_rp.rds);
+    ApplyProjection(cam, text_rp.rds);
+    DrawRenderPacket(text_rp);
     
     glfwSwapBuffers(window);
     glfwPollEvents();

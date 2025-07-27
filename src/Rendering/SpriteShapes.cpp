@@ -2,19 +2,19 @@
 
 void SetNumberOfSprites(unsigned int* shape, unsigned int numofspr)
 {
-unsigned int mask = 0b111110000000000U;  // the mask for the number of sprites
+unsigned int mask = 0b11111110000000000U;  // the mask for the number of sprites
 *(shape) = ((*(shape) & (~mask)) | (numofspr << 10));
 }
 
 void SetActiveSprite(unsigned int* shape, unsigned int sprite)
 {
-unsigned int mask = 0b000001111100000U;  // the mask for the active sprite
+unsigned int mask = 0b00000001111100000U;  // the mask for the active sprite
 *(shape) = ((*(shape) & ~mask) | (sprite << 5));
 }
 
 void SetActiveShape(unsigned int* shape, unsigned int sh)
 {
-unsigned int mask = 0b000000000011111U;  // the mask for the active sprite
+unsigned int mask = 0b00000000000011111U;  // the mask for the active sprite
 *(shape) = (((*shape) & (~mask)) | sh);
 }
 
@@ -27,19 +27,19 @@ SetActiveShape(shape, sh);
 
 unsigned int GetNumberOfSprites(unsigned int shape)
 {
-unsigned int mask = 0b111110000000000U;  // the mask for the number of sprites
+unsigned int mask = 0b11111110000000000U;  // the mask for the number of sprites
 return ((shape & mask) >> 10);
 }
 
 unsigned int GetActiveSprite(unsigned int shape)
 {
-unsigned int mask = 0b000001111100000U;  // the mask for the active sprite
+unsigned int mask = 0b00000001111100000U;  // the mask for the active sprite
 return ((shape & mask) >> 5);
 }
 
 unsigned int GetActiveShape(unsigned int shape)
 {
-unsigned int mask = 0b000000000011111U;  // the mask for the active sprite
+unsigned int mask = 0b00000000000011111U;  // the mask for the active sprite
 return (shape & mask);
 }
 
@@ -54,7 +54,24 @@ if(sprites == 1)    // if there is only one sprite
 
 switch (GetActiveShape(shape))  // gets the shape by masking
     {
-    case SQUARE:
+    case SHAPE_SQUARE:
+        {
+        const float vertices[] = {
+            1.0f,  1.0f, 1.0f,      1.0f, (float)sprite / (float)sprites,
+            1.0f, -1.0f, 1.0f,      1.0f, (float)(sprite - 1) / (float)sprites,
+            -1.0f, -1.0f, 1.0f,     0.0f, (float)(sprite - 1) / (float)sprites,
+            -1.0f,  1.0f, 1.0f,     0.0f, (float)sprite / (float)sprites
+        };
+        unsigned int n = sizeof(vertices) / sizeof(vertices[0]);
+        float* fl = (float*)calloc(n, sizeof(float));
+        for (int i = 0; i < n; i++)
+            {
+            fl[i] = vertices[i];
+            }
+        return {fl, n};
+        break;
+        }
+    case SHAPE_TEXT:
         {
         const float vertices[] = {
             1.0f,  1.0f, 1.0f,      1.0f, (float)sprite / (float)sprites,
@@ -82,7 +99,22 @@ viBundle<unsigned int> GetShapeIndices(unsigned int shape)
 {
 switch (GetActiveShape(shape))  // gets the shape by masking
     {
-    case SQUARE:
+    case SHAPE_SQUARE:
+        {
+        const unsigned int indices[] = {
+            0, 1, 3,
+            1, 2, 3
+        };
+        unsigned int n = sizeof(indices) / sizeof(indices[0]);
+        unsigned int* ui = (unsigned int*)calloc(n, sizeof(unsigned int));
+        for (int i = 0; i < n; i++)
+            {
+            ui[i] = indices[i];
+            }
+        return {ui, n};
+        break;
+        }
+    case SHAPE_TEXT:
         {
         const unsigned int indices[] = {
             0, 1, 3,

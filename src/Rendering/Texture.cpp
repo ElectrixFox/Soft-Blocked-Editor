@@ -37,7 +37,7 @@ unsigned int mask = 0b1111000000000000U;  // the mask for the active texture
 return (texture & ~mask);   // everything that isn't the mask
 }
 
-unsigned int CreateTexture(const char* path)
+unsigned int CreateTexture(const char* path, int flip)
 {
 unsigned int texture;
 glGenTextures(1, &texture);
@@ -50,7 +50,7 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 int width, height, nrChannels;
-// stbi_set_flip_vertically_on_load(1);
+stbi_set_flip_vertically_on_load(flip);
 unsigned char* data = stbi_load(path, &width, &height, &nrChannels, 0);
 if(!data)
     {

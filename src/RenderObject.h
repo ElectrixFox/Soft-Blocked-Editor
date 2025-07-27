@@ -72,6 +72,33 @@ unsigned int CreateSquareRenderable(RenderDetails& rd);
 unsigned int CreateSpriteRenderable(RenderDetails& rd, const char* spfp, unsigned int nosp, unsigned int spr);
 
 /**
+ * Creates a renderable object from a sprite sheet
+ * 
+ * @param rd Reference the the render details
+ * @param spfp File path to the sprite sheet
+ * @param sh_w The width of the sprite sheet image
+ * @param sh_h The height of the sprite sheet image
+ * @param nosp Number of sprites on the sheet
+ * @param spr The sprite to render
+ * @param flip Should the sheet be flipped (defaults to not)
+ * 
+ * @returns The ID of the render object
+ */
+unsigned int CreateSpritesheetRenderable(RenderDetails& rd, const char* spfp, unsigned int sh_w, unsigned int sh_h, unsigned int nosp, unsigned int spr, int flip = 0);
+
+/**
+ * Creates a renderable character from a text sheet
+ * 
+ * @param rd Reference the the render details
+ * @param texfp File path to the text sheet
+ * @param chr The character to render
+ * @param flip Should the sheet be flipped (defaults to flip)
+ * 
+ * @returns The ID of the render object
+ */
+unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int chr, int flip = 1);
+
+/**
  * Just creates a standard coloured square
  * 
  * @param rd Reference the the render details

@@ -782,6 +782,19 @@ for (int i = 0; i < table.ui_id.size(); i++)
     }
 
 
+for (int i = 0; i < table.ui_id.size(); i++)
+    {
+    int index = findUITriggerActionIDinTable(table.actions[UI_TRIGGER_LEAVE_HOVER], table.ui_id[i]);
+    if(index == -1) // if there is no hover action then skip
+        continue;
+    
+    if(!isCursorOnUIElement(table, rp, table.ui_id[i]))
+        {
+        // printf("\nPerforming hover action for %d", ui.ui_id[i]);
+        table.actions[UI_TRIGGER_LEAVE_HOVER].action[index](table.ui_id[i]);
+        }
+    }
+
 if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
     {
     for (int i = 0; i < table.ui_id.size(); i++)

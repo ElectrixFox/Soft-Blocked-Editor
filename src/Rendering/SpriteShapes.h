@@ -8,7 +8,8 @@
 
 typedef enum SHAPE
     {
-    SQUARE = 0,
+    SHAPE_SQUARE = 0,
+    SHAPE_TEXT,
     } SHAPE;
 
 struct SpriteSheetInfo
