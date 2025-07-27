@@ -4,7 +4,35 @@
 #include <string.h>
 #include <math.h>
 
-typedef struct vec2 { float x, y; } vec2;
+struct vec2
+    {
+    float x, y;
+
+    int operator!=(vec2 v)
+        {
+        return (x != v.x || y != v.y);
+        }
+    
+    vec2 operator+(vec2 v)
+        {
+        return {x + v.x, y + v.y};
+        }
+    
+    vec2 operator-(vec2 v)
+        {
+        return {x - v.x, y - v.y};
+        }
+    
+    vec2 operator*(float a)
+        {
+        return {a * x, a * y};
+        }
+    
+    vec2 operator/(float a)
+        {
+        return {x / a, y / a};
+        }
+    };
 typedef struct vec3 { float x, y, z; } vec3;
 
 typedef struct mat3 { vec3 mat[3]; } mat3;

@@ -757,6 +757,14 @@ GUI_Menu menu {
 return menu;
 }
 
+GUI_Text_Box createTextBox(vec2 pos, std::string cont)
+{
+GUI_Text_Box box {
+    .cont = cont
+};
+return box;
+}
+
 #pragma endregion
 
 #pragma region Adding Elements

@@ -18,6 +18,8 @@ struct RenderDetails
  * Initialises a new RenderDetails object
  * 
  * @returns A new initialised RenderDetails object
+ * 
+ * @deprecated
  */
 RenderDetails InitialiseRenderDetails();
 
@@ -55,6 +57,9 @@ void RemoveRenderDetail(RenderDetails& rd, unsigned int rid);
 
 #pragma region Functions
 
+/**
+ * @deprecated Unused
+ */
 unsigned int CreateSquareRenderable(RenderDetails& rd);
 
 /**

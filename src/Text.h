@@ -3,6 +3,22 @@
 #pragma once
 #include "Drawable.h"
 
+struct Character_Table
+    {
+    std::vector<unsigned int> chrid;
+    std::vector<unsigned int> rid;
+
+    std::vector<char> chrs;
+    };
+
+struct Text_Table
+    {
+    std::vector<unsigned int> txid;
+    std::vector<unsigned int> trsid;
+
+    std::vector<std::string> txt;
+    };
+
 struct Text_Manager
     {
     Text_Manager(RenderPacket& in_text_rp) : text_rp(in_text_rp) {}
@@ -10,6 +26,7 @@ struct Text_Manager
     RenderPacket& text_rp;   // the renderables are indexed a-z 0-9
     };
 
+Character_Table InitialiseCharacterTable(RenderDetails& rds);
 
 /**
  * Creates a letter renderable object

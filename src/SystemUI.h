@@ -270,6 +270,8 @@ struct UI_Trigger_Action_Table
 
 #pragma endregion
 
+#pragma region Structs
+
 struct GUI_Menu
     {
     std::vector<unsigned int> ui_ids;
@@ -309,9 +311,19 @@ struct UI_Manager
     RenderPacket& ui_rp;
     };
 
+#pragma endregion
+
+#pragma region Creation
+
 GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr);
 
 GUI_Menu createMenu(vec2 pos, unsigned int head_id);
+
+GUI_Text_Box createTextBox(vec2 pos, std::string cont);
+
+#pragma endregion
+
+#pragma region Element Adding
 
 /**
  * Adds a button to the UI system
@@ -351,7 +363,6 @@ unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Eleme
  */
 unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx);
 
-
 /**
  * Adds a button to the UI system
  * 
@@ -385,6 +396,10 @@ unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu);
  */
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx);
 
+#pragma endregion 
+
+#pragma region Element Getting
+
 /**
  * Gets the button with the given ID
  * 
@@ -415,6 +430,10 @@ GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
  */
 GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id);
 
+#pragma endregion
+
+#pragma region Element Action Assigning
+
 /**
  * Assigns the element action to the button element
  * 
@@ -444,6 +463,8 @@ void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, 
  * @param action The action to perform
  */
 void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
+
+#pragma endregion
 
 /**
  * Adds the UI element with the given UI ID to the menu

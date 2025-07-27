@@ -133,6 +133,26 @@ assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &output);
 
 addToMenu(ui_man.ui_men_tab, men_id, entry);
 
+GUI_Text_Box entbx = createTextBox(position, "Hello");
+
+position = {topleft.x, topleft.y - (2 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
+unsigned int bxentry = addToElementTable(ui_man, position, entbx);
+assignElementAction(ui_man.ui_text_box_tab, bxentry, (GUI_ACTION_TRIGGER)0, &output);
+
+addToMenu(ui_man.ui_men_tab, men_id, bxentry);
+
+for (int i = 0; i < 26; i++)
+    {
+    AddCharacter(text_rp, (char)((int)'A' + i), {(i * 50.0f), 2000.0f}, 25.0f);
+    }
+
+for (int i = 0; i < 11; i++)
+    {
+    AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
+    }
+
+
+
 // foldMenu(ui_man, men_id);
 
 // assignElementAction(ui_man.ui_men_tab, men_id, (GUI_ACTION_TRIGGER)0, &output);
@@ -167,17 +187,6 @@ if(argc > 1)
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
-
-for (int i = 0; i < 26; i++)
-    {
-    AddCharacter(text_rp, (char)((int)'A' + i), {(i * 50.0f), 2000.0f}, 25.0f);
-    }
-
-for (int i = 0; i < 11; i++)
-    {
-    AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
-    }
-
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
