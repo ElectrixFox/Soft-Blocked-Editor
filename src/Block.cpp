@@ -2,17 +2,17 @@
 
 static BlockDetails blds;
 
-void setBlockSprite(unsigned int* block, unsigned int spr) { SetActiveSprite(block, spr); }
+void setBlockSprite(unsigned long int* block, unsigned int spr) { SetActiveSprite(block, spr); }
 
-unsigned int getBlockSprite(unsigned int block) { return GetActiveSprite(block); }
+unsigned int getBlockSprite(unsigned long int block) { return GetActiveSprite(block); }
 
-void setBlockSpriteCount(unsigned int *block, unsigned int nospr) { SetNumberOfSprites(block, nospr); }
+void setBlockSpriteCount(unsigned long int *block, unsigned int nospr) { SetNumberOfSprites(block, nospr); }
 
-unsigned int getBlockSpriteCount(unsigned int block) { return GetNumberOfSprites(block); }
+unsigned int getBlockSpriteCount(unsigned long int block) { return GetNumberOfSprites(block); }
 
-void setBlockType(unsigned int *block, unsigned int type) { SetActiveShape(block, type); }
+void setBlockType(unsigned long int *block, unsigned int type) { SetActiveShape(block, type); }
 
-BLOCK getBlockType(BLOCK block) { return (BLOCK)GetActiveShape((unsigned int)block); }
+BLOCK getBlockType(BLOCK block) { return (BLOCK)GetActiveShape((unsigned long int)block); }
 
 void InitialiseBlockDetails()
 {

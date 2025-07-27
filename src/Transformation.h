@@ -15,9 +15,6 @@ struct TransformationDetails
 /**
  * Initialises the transformation details to enable adding and removing easily
  * 
- * @param width A pointer to the width of the window
- * @param height A pointer to the height of the window
- * 
  * @returns Newly initialised TransformationDetails object
  */
 TransformationDetails InitialiseTransformationDetails();
@@ -57,11 +54,11 @@ void RemoveTransformation(TransformationDetails& tds, unsigned int tid);
 /**
  * Sets the position of the transform
  * 
- * @param tds The details about the transformation
+ * @param tds A reference to the details about the transformation
  * @param trsid The transformation ID
  * @param newpos The new position to apply
  */
-void setPosition(TransformationDetails tds, unsigned int trsid, vec2 newpos);
+void setPosition(TransformationDetails& tds, unsigned int trsid, vec2 newpos);
 
 /**
  * Gets the position of the transform
@@ -76,20 +73,20 @@ vec2 getPosition(TransformationDetails tds, unsigned int trsid);
 /**
  * Translates the transform
  * 
- * @param tds The transformations table
+ * @param tds A reference transformations table
  * @param trsid The ID of the transformation
  * @param trans The translation to apply 
  */
-void applyTranslation(TransformationDetails tds, unsigned int trsid, vec2 trans);
+void applyTranslation(TransformationDetails& tds, unsigned int trsid, vec2 trans);
 
 /**
  * Sets the scale of the transform
  * 
- * @param tds The details about the transformation
+ * @param tds A reference to the details about the transformation
  * @param trsid The transformation ID
  * @param newscale The new scale to apply
  */
-void setScale(TransformationDetails tds, unsigned int trsid, vec2 newscale);
+void setScale(TransformationDetails& tds, unsigned int trsid, vec2 newscale);
 
 /**
  * Gets the scale of the transform
@@ -104,11 +101,11 @@ vec2 getScale(TransformationDetails tds, unsigned int trsid);
 /**
  * Sets the rotation of the transform
  * 
- * @param tds The transformation array
+ * @param tds A reference to the transformation details
  * @param trsid The transformaion ID
  * @param theta The angle (in radians)
  */
-void setRotation(TransformationDetails tds, unsigned int trsid, float theta);
+void setRotation(TransformationDetails& tds, unsigned int trsid, float theta);
 
 /**
  * Gets the model matrix for the transformation
@@ -125,6 +122,8 @@ m4 getTransformModelMatrix(TransformationDetails tds, unsigned int tid);
  * 
  * @param tds The transformation details
  * @param models An array of m4 matrices (this array will be the size of tds.size)
+ * 
+ * @todo This should be turned into a vector
  */
 void getTransformModelMatrices(TransformationDetails tds, m4* models);
 

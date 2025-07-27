@@ -44,7 +44,7 @@ tds.scale.erase(tds.scale.begin() + index);
 tds.angle.erase(tds.angle.begin() + index);
 }
 
-void setPosition(TransformationDetails tds, unsigned int trsid, vec2 newpos)
+void setPosition(TransformationDetails& tds, unsigned int trsid, vec2 newpos)
 {
 int index = getTransformationIDIndex(tds, trsid);   // find the ID
 if(index == -1) return; // if not found return
@@ -53,9 +53,9 @@ tds.pos[index] = newpos;    // setting the new position
 
 vec2 getPosition(TransformationDetails tds, unsigned int trsid) { return tds.pos[getTransformationIDIndex(tds, trsid)]; }
 
-void applyTranslation(TransformationDetails tds, unsigned int trsid, vec2 trans) { setPosition(tds, trsid, addVec2(getPosition(tds, trsid), trans)); }
+void applyTranslation(TransformationDetails& tds, unsigned int trsid, vec2 trans) { setPosition(tds, trsid, addVec2(getPosition(tds, trsid), trans)); }
 
-void setScale(TransformationDetails tds, unsigned int trsid, vec2 newscale)
+void setScale(TransformationDetails& tds, unsigned int trsid, vec2 newscale)
 {
 int index = getTransformationIDIndex(tds, trsid);   // find the ID
 if(index == -1) return; // if not found return
@@ -64,7 +64,7 @@ tds.scale[index] = newscale;    // setting the new scale
 
 vec2 getScale(TransformationDetails tds, unsigned int trsid) { return tds.scale[getTransformationIDIndex(tds, trsid)]; }
 
-void setRotation(TransformationDetails tds, unsigned int trsid, float theta)
+void setRotation(TransformationDetails& tds, unsigned int trsid, float theta)
 {
 int index = getTransformationIDIndex(tds, trsid);   // find the ID
 if(index == -1) return; // if not found return

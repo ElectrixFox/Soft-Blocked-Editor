@@ -50,15 +50,15 @@ typedef struct BlockDetails BlockDetails;
  * @param block A pointer to the block variable
  * @param spr The sprite to set the block
  */
-void setBlockSprite(unsigned int* block, unsigned int spr);
+void setBlockSprite(unsigned long int* block, unsigned int spr);
 
-unsigned int getBlockSprite(unsigned int block);
+unsigned int getBlockSprite(unsigned long int block);
 
-void setBlockSpriteCount(unsigned int* block, unsigned int nospr);
+void setBlockSpriteCount(unsigned long int* block, unsigned int nospr);
 
-unsigned int getBlockSpriteCount(unsigned int block);
+unsigned int getBlockSpriteCount(unsigned long int block);
 
-void setBlockType(unsigned int* block, unsigned int type);
+void setBlockType(unsigned long int* block, unsigned int type);
 
 BLOCK getBlockType(BLOCK block);
 

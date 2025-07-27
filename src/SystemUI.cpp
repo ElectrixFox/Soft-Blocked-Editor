@@ -633,97 +633,7 @@ return ui.ui_id[n];    // returning the new UI ID
 }
 */
 
-GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr)
-{
-GUI_Button button {
-    .ssi = {spfp, nosp, spr}
-};
-return button;
-}
-
-unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button)
-{
-static unsigned int ui_id = 0;
-
-unsigned int rid = CreateSpriteRenderable(rp.rds, button.ssi.spfp, button.ssi.nosp, button.ssi.spr);
-unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
-int ind = AddDrawable(rp.drabs, trsid, rid);
-
-table.ui_id.push_back(ui_id);   // adding the ID
-table.trsid.push_back(trsid);   // adding the transform
-table.data.push_back(button);   // adding the actual button
-
-ui_id++;
-
-return ui_id - 1;
-}
-
-unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Button button)
-{
-UI_Element_Table<GUI_Button>& table = ui_man.ui_btn_tab;
-return addToElementTable(table, ui_man.ui_rp, pos, scale, button);
-}
-
-GUI_Menu createMenu(vec2 pos, unsigned int head_id)
-{
-GUI_Menu menu {
-    .ui_ids = {},
-    .men_head_ui_id = head_id
-};
-return menu;
-}
-
-unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu)
-{
-static unsigned int ui_id = 0;
-unsigned int trsid;
-
-for(int i = 0; i < btab.ui_id.size(); i++)  // loop through the button table
-    if(btab.ui_id[i] == menu.men_head_ui_id)    // if the UI ID of the head is equal to the button table then set it
-        {
-        trsid = btab.trsid[i];
-        break;  // shall not need to continue looping
-        }
-
-
-table.ui_id.push_back(ui_id);   // adding the ID
-table.trsid.push_back(trsid);   // adding the transform of the head
-table.data.push_back(menu);     // adding the menu
-
-ui_id++;
-
-return ui_id - 1;
-}
-
-unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu)
-{
-UI_Element_Table<GUI_Button>& btab = ui_man.ui_btn_tab;
-UI_Element_Table<GUI_Menu>& table = ui_man.ui_men_tab;
-
-return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
-}
-
-unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
-{
-static unsigned int ui_id = 0;
-
-unsigned int rid = AddCharacter(rp, txbx.cont[0], pos, 25.0f);
-unsigned int trsid = rp.tds.trsid[findDrawablesRenderable(rp.drabs, rid)];
-
-table.ui_id.push_back(ui_id);   // adding the ID
-table.trsid.push_back(trsid);   // adding the transform
-table.data.push_back(txbx);   // adding the actual button
-
-ui_id++;
-
-return ui_id - 1;
-}
-
-unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx)
-{
-UI_Element_Table<GUI_Text_Box>& table = ui_man.ui_text_box_tab;
-return addToElementTable(table, ui_man.ui_rp, pos, txbx);
-}
+#pragma region Local Functions
 
 template<typename T>
 static int findUIInUITable(const UI_Element_Table<T>& table, unsigned int ui_id)
@@ -753,40 +663,12 @@ int index = findUIInUITable(table, ui_id);
 return table.data[index];
 }
 
-GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id)
-{
-int index = findUIInUITable(table, ui_id);
-return table.data[index];
-}
-
-GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id)
-{
-int index = findUIInUITable(table, ui_id);
-return table.data[index];
-}
-
-GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id) { return getUIElement(table, ui_id); }
-
 template<typename T>
 static void _assignElementAction(UI_Element_Table<T>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
 {
 int index = findUIInUITable(table, ui_id);
 assignUITriggerAction(table.actions[trigger], ui_id, action);
 }
-
-void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
-{
-int index = findUIInUITable(table, ui_id);
-assignUITriggerAction(table.actions[trigger], ui_id, action);
-}
-
-void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
-{
-int index = findUIInUITable(table, ui_id);
-assignUITriggerAction(table.actions[trigger], ui_id, action);
-}
-
-void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action) { _assignElementAction(table, ui_id, trigger, action); }
 
 static int pressedInRectangle(vec2 pos, vec2 scale)
 {
@@ -851,6 +733,116 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
         }
     }
 }
+
+#pragma endregion
+
+#pragma region Creating Elements
+
+GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr)
+{
+GUI_Button button {
+    .ssi = {spfp, nosp, spr}
+};
+return button;
+}
+
+GUI_Menu createMenu(vec2 pos, unsigned int head_id)
+{
+GUI_Menu menu {
+    .ui_ids = {},
+    .men_head_ui_id = head_id
+};
+return menu;
+}
+
+#pragma endregion
+
+#pragma region Adding Elements
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button)
+{
+static unsigned int ui_id = 0;
+
+unsigned int rid = CreateSpriteRenderable(rp.rds, button.ssi.spfp, button.ssi.nosp, button.ssi.spr);
+unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
+int ind = AddDrawable(rp.drabs, trsid, rid);
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform
+table.data.push_back(button);   // adding the actual button
+
+ui_id++;
+
+return ui_id - 1;
+}
+
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Button button)
+{
+UI_Element_Table<GUI_Button>& table = ui_man.ui_btn_tab;
+return addToElementTable(table, ui_man.ui_rp, pos, scale, button);
+}
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu)
+{
+static unsigned int ui_id = 0;
+unsigned int trsid;
+
+for(int i = 0; i < btab.ui_id.size(); i++)  // loop through the button table
+    if(btab.ui_id[i] == menu.men_head_ui_id)    // if the UI ID of the head is equal to the button table then set it
+        {
+        trsid = btab.trsid[i];
+        break;  // shall not need to continue looping
+        }
+
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform of the head
+table.data.push_back(menu);     // adding the menu
+
+ui_id++;
+
+return ui_id - 1;
+}
+
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu)
+{
+UI_Element_Table<GUI_Button>& btab = ui_man.ui_btn_tab;
+UI_Element_Table<GUI_Menu>& table = ui_man.ui_men_tab;
+
+return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
+}
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
+{
+static unsigned int ui_id = 0;
+
+unsigned int rid = AddCharacter(rp, txbx.cont[0], pos, 25.0f);
+unsigned int trsid = rp.tds.trsid[findDrawablesRenderable(rp.drabs, rid)];
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform
+table.data.push_back(txbx);   // adding the actual button
+
+ui_id++;
+
+return ui_id - 1;
+}
+
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx)
+{
+UI_Element_Table<GUI_Text_Box>& table = ui_man.ui_text_box_tab;
+return addToElementTable(table, ui_man.ui_rp, pos, txbx);
+}
+
+#pragma endregion
+
+GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id) { return getUIElement(table, ui_id); }
+GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id) { return getUIElement(table, ui_id); }
+GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id) { return getUIElement(table, ui_id); }
+
+void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action) { _assignElementAction(table, ui_id, trigger, action); }
+void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action) { _assignElementAction(table, ui_id, trigger, action); }
+void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action) { _assignElementAction(table, ui_id, trigger, action); }
 
 void UI_Manager::checkUI()
 {

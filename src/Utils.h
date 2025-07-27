@@ -13,11 +13,11 @@
  * @returns The lowest ID which is not used
  */
 template <typename T>
-int findNextIDAvailable(std::vector<T> arr)
+unsigned int findNextIDAvailable(std::vector<T> arr)
 {
 int nid = -1;
 
-auto isInArr = [](const std::vector<T> arr, T ele)
+auto isInArr = [](const std::vector<T> arr, T ele)  // a lambda to find if the item is in the array
 {
 for (int i = 0; i < arr.size(); i++)
     if(arr[i] == ele)

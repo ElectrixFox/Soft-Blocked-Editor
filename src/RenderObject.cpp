@@ -22,7 +22,7 @@ static void BubbleSortRenderDetails(RenderDetails* rd);
 
 unsigned int AddRenderDetail(RenderDetails& rd, unsigned int vao, unsigned int vbo, unsigned int ibo, unsigned int shader, unsigned int texture)
 {
-unsigned int id = findNextIDAvailable(rd.rid);  // finding the new ID
+unsigned int id = findNextIDAvailable<unsigned int>(rd.rid);  // finding the new ID
 
 SetUniformM4(shader, "view", getM4ID());    // setting the view shader as the identity
 
@@ -58,7 +58,7 @@ rd.shader.erase(rd.shader.begin() + index);
 rd.texture.erase(rd.texture.begin() + index);
 }
 
-static unsigned int _CreateRenderable(RenderDetails& rd, unsigned int shape, const char* vsfp, const char* fsfp, const char* texfp, int flip = 0)
+static unsigned int _CreateRenderable(RenderDetails& rd, unsigned long int shape, const char* vsfp, const char* fsfp, const char* texfp, int flip = 0)
 {
 unsigned int vao, vbo, ibo, prog, tex = 0;
 
@@ -99,7 +99,7 @@ if(spr == 0)    // checking a valid sprite number
     exit(1);
     }
 
-unsigned int shape = 0;
+unsigned long int shape = 0;
 GeneralInitialise(&shape, nosp, spr, SHAPE_SQUARE);
 
 return _CreateRenderable(rd, shape, vsfp, fsfp, texfp, flip);
@@ -117,7 +117,7 @@ return _CreateSpriteSheetRenderable(rd, nosp, spr, "res/texvert.shader", "res/te
 
 unsigned int CreateTextRenderable(RenderDetails& rd, const char* texfp, int nch, int chr, int flip)
 {
-unsigned int shape;
+unsigned long int shape;
 GeneralInitialise(&shape, nch, chr, SHAPE_TEXT);
 
 return _CreateRenderable(rd, shape, "res/textvert.shader", "res/textfrag.shader", texfp, flip);
@@ -126,7 +126,7 @@ return _CreateRenderable(rd, shape, "res/textvert.shader", "res/textfrag.shader"
 
 unsigned int CreateSquareRenderable(RenderDetails& rd)
 {
-unsigned int shape = 0;
+unsigned long int shape = 0;
 GeneralInitialise(&shape, 1, 1, SHAPE_SQUARE);
 
 return _CreateRenderable(rd, shape, "res/vertex.shader", "res/fragment.shader", NULL);
@@ -134,7 +134,7 @@ return _CreateRenderable(rd, shape, "res/vertex.shader", "res/fragment.shader", 
 
 unsigned int CreatePlainSquareRenderable(RenderDetails& rd)
 {
-unsigned int shape = SHAPE_SQUARE;
+unsigned long int shape = SHAPE_SQUARE;
 GeneralInitialise(&shape, 1, 1, SHAPE_SQUARE);
 
 return _CreateRenderable(rd, shape, "res/vertex.shader", "res/fragment.shader", NULL);

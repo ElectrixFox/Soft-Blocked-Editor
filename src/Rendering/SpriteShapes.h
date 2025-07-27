@@ -37,18 +37,18 @@ The shape variable is of this form
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0| Num S | Sprite| Shape 
 */
-void SetNumberOfSprites(unsigned int* shape, unsigned int numofspr);
-void SetActiveSprite(unsigned int* shape, unsigned int sprite);
-void SetActiveShape(unsigned int* shape, unsigned int sh);
+void SetNumberOfSprites(unsigned long int* shape, unsigned int numofspr);
+void SetActiveSprite(unsigned long int* shape, unsigned int sprite);
+void SetActiveShape(unsigned long int* shape, unsigned int sh);
 
 /**
  * A compactation of setting the number of sprites, the active sprite and the active shape
  */
-void GeneralInitialise(unsigned int* shape, unsigned int numofspr, unsigned int sprite, SHAPE sh);
+void GeneralInitialise(unsigned long int* shape, unsigned int numofspr, unsigned int sprite, SHAPE sh);
 
-unsigned int GetNumberOfSprites(unsigned int shape);
-unsigned int GetActiveSprite(unsigned int shape);
-unsigned int GetActiveShape(unsigned int shape);
+unsigned int GetNumberOfSprites(unsigned long int shape);
+unsigned int GetActiveSprite(unsigned long int shape);
+unsigned int GetActiveShape(unsigned long int shape);
 
-viBundle<float> GetShapeVertices(unsigned int shape);
-viBundle<unsigned int> GetShapeIndices(unsigned int shape);
+viBundle<float> GetShapeVertices(unsigned long int shape);
+viBundle<unsigned int> GetShapeIndices(unsigned long int shape);

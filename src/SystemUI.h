@@ -313,17 +313,107 @@ GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int s
 
 GUI_Menu createMenu(vec2 pos, unsigned int head_id);
 
+/**
+ * Adds a button to the UI system
+ * 
+ * @param table A reference to the element table for the element type
+ * @param rp A reference to the render packet
+ * @param pos The position to render at
+ * @param scale The scale of the element
+ * @param button The button to add
+ * 
+ * @returns The UI ID for that button
+ */
 unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button);
+
+/**
+ * Adds a menu to the UI system
+ * 
+ * @param table A reference to the element table for the element type
+ * @param btab A reference to the button table
+ * @param rp A reference to the render packet
+ * @param pos The position of the menu
+ * @param menu The menu to add
+ * 
+ * @returns The UI ID for that menu
+ */
+unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
+
+/**
+ * Adds a text box to the UI system
+ * 
+ * @param table A reference to the element table for the element type
+ * @param rp A reference to the render packet
+ * @param pos The position of the text box
+ * @param txbx The text box to add
+ * 
+ * @returns The UI ID for that text box
+ */
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx);
+
+
+/**
+ * Adds a button to the UI system
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param pos The position of the menu
+ * @param button The button to add
+ * 
+ * @returns The UI ID for that button
+ */
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Button button);
 
-unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
+/**
+ * Adds a menu to the UI system
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param pos The position of the menu
+ * @param menu The menu to add
+ * 
+ * @returns The UI ID for that menu
+ */
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu);
 
-unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx);
+/**
+ * Adds a text box to the UI system
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param pos The position of the text box
+ * @param txbx The text box to add
+ * 
+ * @returns The UI ID for that text box
+ */
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx);
 
-GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
+/**
+ * Gets the button with the given ID
+ * 
+ * @param table A reference the the button table
+ * @param ui_id The UI ID of the button to find
+ * 
+ * @returns A reference to the button
+ */
 GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id);
+
+/**
+ * Gets the menu with the given ID
+ * 
+ * @param table A reference the the menu table
+ * @param ui_id The UI ID of the menu to find
+ * 
+ * @returns A reference to the menu
+ */
+GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
+
+/**
+ * Gets the text box with the given ID
+ * 
+ * @param table A reference the the text box table
+ * @param ui_id The UI ID of the text box to find
+ * 
+ * @returns A reference to the text box
+ */
+GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id);
 
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);
 void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action);

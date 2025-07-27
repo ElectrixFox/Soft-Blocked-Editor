@@ -1,49 +1,49 @@
 #include "SpriteShapes.h"
 
-void SetNumberOfSprites(unsigned int* shape, unsigned int numofspr)
+void SetNumberOfSprites(unsigned long int* shape, unsigned int numofspr)
 {
-unsigned int mask = 0b111111100000000000000U;  // the mask for the number of sprites
+unsigned int mask = 0b111111100000000000000UL;  // the mask for the number of sprites
 *(shape) = ((*(shape) & (~mask)) | (numofspr << 14));
 }
 
-void SetActiveSprite(unsigned int* shape, unsigned int sprite)
+void SetActiveSprite(unsigned long int* shape, unsigned int sprite)
 {
-unsigned int mask = 0b000000011111110000000U;  // the mask for the active sprite
+unsigned int mask = 0b000000011111110000000UL;  // the mask for the active sprite
 *(shape) = ((*(shape) & ~mask) | (sprite << 7));
 }
 
-void SetActiveShape(unsigned int* shape, unsigned int sh)
+void SetActiveShape(unsigned long int* shape, unsigned int sh)
 {
-unsigned int mask = 0b000000000000001111111U;  // the mask for the active shape
+unsigned int mask = 0b000000000000001111111UL;  // the mask for the active shape
 *(shape) = (((*shape) & (~mask)) | sh);
 }
 
-void GeneralInitialise(unsigned int* shape, unsigned int numofspr, unsigned int sprite, SHAPE sh)
+void GeneralInitialise(unsigned long int* shape, unsigned int numofspr, unsigned int sprite, SHAPE sh)
 {
 SetNumberOfSprites(shape, numofspr);
 SetActiveSprite(shape, sprite);
 SetActiveShape(shape, sh);
 }
 
-unsigned int GetNumberOfSprites(unsigned int shape)
+unsigned int GetNumberOfSprites(unsigned long int shape)
 {
-unsigned int mask = 0b111111100000000000000U;  // the mask for the number of sprites
+unsigned int mask = 0b111111100000000000000UL;  // the mask for the number of sprites
 return ((shape & mask) >> 14);
 }
 
-unsigned int GetActiveSprite(unsigned int shape)
+unsigned int GetActiveSprite(unsigned long int shape)
 {
-unsigned int mask = 0b000000011111110000000U;  // the mask for the active sprite
+unsigned int mask = 0b000000011111110000000UL;  // the mask for the active sprite
 return ((shape & mask) >> 7);
 }
 
-unsigned int GetActiveShape(unsigned int shape)
+unsigned int GetActiveShape(unsigned long int shape)
 {
-unsigned int mask = 0b000000000000001111111U;  // the mask for the active shape
+unsigned int mask = 0b000000000000001111111UL;  // the mask for the active shape
 return (shape & mask);
 }
 
-viBundle<float> GetShapeVertices(unsigned int shape)
+viBundle<float> GetShapeVertices(unsigned long int shape)
 {
 unsigned int sprites = GetNumberOfSprites(shape);
 unsigned int sprite = GetActiveSprite(shape);
@@ -95,7 +95,7 @@ switch (GetActiveShape(shape))  // gets the shape by masking
 return {NULL}; // return an empty bundle if no shape matches
 }
 
-viBundle<unsigned int> GetShapeIndices(unsigned int shape)
+viBundle<unsigned int> GetShapeIndices(unsigned long int shape)
 {
 switch (GetActiveShape(shape))  // gets the shape by masking
     {
