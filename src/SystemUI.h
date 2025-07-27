@@ -4,8 +4,10 @@
 #pragma once
 #include "Drawable.h"
 #include "InputManager.h"
+#include "Text.h"
 #include <iostream>
 #include <algorithm>
+#include <string>
 
 #define CPP_LIBRARY
 
@@ -280,6 +282,11 @@ struct GUI_Button
     SpriteSheetInfo ssi;
     };
 
+struct GUI_Text_Box
+    {
+    std::string cont;
+    };
+
 template<typename T>
 struct UI_Element_Table
     {
@@ -297,6 +304,8 @@ struct UI_Manager
     
     UI_Element_Table<GUI_Button> ui_btn_tab;
     UI_Element_Table<GUI_Menu> ui_men_tab;
+    UI_Element_Table<GUI_Text_Box> ui_text_box_tab;
+    
     RenderPacket& ui_rp;
     };
 
@@ -309,6 +318,9 @@ unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Bu
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu);
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu);
+
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx);
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx);
 
 GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id);
 GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id);

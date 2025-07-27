@@ -703,6 +703,28 @@ UI_Element_Table<GUI_Menu>& table = ui_man.ui_men_tab;
 return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
 }
 
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
+{
+static unsigned int ui_id = 0;
+
+unsigned int rid = AddCharacter(rp, txbx.cont[0], pos, 25.0f);
+unsigned int trsid = rp.tds.trsid[findDrawablesRenderable(rp.drabs, rid)];
+
+table.ui_id.push_back(ui_id);   // adding the ID
+table.trsid.push_back(trsid);   // adding the transform
+table.data.push_back(txbx);   // adding the actual button
+
+ui_id++;
+
+return ui_id - 1;
+}
+
+unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx)
+{
+UI_Element_Table<GUI_Text_Box>& table = ui_man.ui_text_box_tab;
+return addToElementTable(table, ui_man.ui_rp, pos, txbx);
+}
+
 template<typename T>
 static int findUIInUITable(const UI_Element_Table<T>& table, unsigned int ui_id)
 {
@@ -724,6 +746,13 @@ if(index == -1) // if ID not found
 return index;
 }
 
+template<typename T>
+static T& getUIElement(UI_Element_Table<T>& table, unsigned int ui_id)
+{
+int index = findUIInUITable(table, ui_id);
+return table.data[index];
+}
+
 GUI_Menu& getMenu(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id)
 {
 int index = findUIInUITable(table, ui_id);
@@ -734,6 +763,15 @@ GUI_Button& getButton(UI_Element_Table<GUI_Button>& table, unsigned int ui_id)
 {
 int index = findUIInUITable(table, ui_id);
 return table.data[index];
+}
+
+GUI_Text_Box& getTextBox(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id) { return getUIElement(table, ui_id); }
+
+template<typename T>
+static void _assignElementAction(UI_Element_Table<T>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
+{
+int index = findUIInUITable(table, ui_id);
+assignUITriggerAction(table.actions[trigger], ui_id, action);
 }
 
 void assignElementAction(UI_Element_Table<GUI_Button>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action)
@@ -747,6 +785,8 @@ void assignElementAction(UI_Element_Table<GUI_Menu>& table, unsigned int ui_id, 
 int index = findUIInUITable(table, ui_id);
 assignUITriggerAction(table.actions[trigger], ui_id, action);
 }
+
+void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_id, GUI_ACTION_TRIGGER trigger, ui_act_fun action) { _assignElementAction(table, ui_id, trigger, action); }
 
 static int pressedInRectangle(vec2 pos, vec2 scale)
 {
@@ -816,6 +856,7 @@ void UI_Manager::checkUI()
 {
 _checkUI(ui_btn_tab, ui_rp);
 _checkUI(ui_men_tab, ui_rp);
+_checkUI(ui_text_box_tab, ui_rp);
 }
 
 void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id)

@@ -61,7 +61,7 @@ AddDrawable(text_rp.drabs, trsid, rid);
 }
 
 
-void AddCharacter(RenderPacket& text_rp, char ch, vec2 position, float scale)
+unsigned int AddCharacter(RenderPacket& text_rp, char ch, vec2 position, float scale)
 {
 const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
 const int nchars = 36;
@@ -76,5 +76,7 @@ unsigned int rid = CreateTextRenderable(text_rp.rds, textsheet, nchars, pt);
 unsigned int trsid = AddTransformation(text_rp.tds, position, {scale, scale}, 0.0f);
 
 AddDrawable(text_rp.drabs, trsid, rid);
+
+return rid;
 }
 
