@@ -322,7 +322,6 @@ unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, c
 {
 printf("\n\n\nImmovables update");
 vec2 minpos = getMinimumPosition(rp.tds);
-printf("\n%d", rp.tds.trsid.size());
 
 for (int i = 0; i < h; i++)
     {
@@ -334,7 +333,6 @@ for (int i = 0; i < h; i++)
             BLOCK_IM_STATE imstate = getImmovableType(w, h, (const int**)grid, {(float)j, (float)i}, &theta);
             vec2 posi = {minpos.x + j * grid_size, minpos.y + (h - (i + 1)) * grid_size};   // h - (i + 1) as i never reaches h so the expression never checks the minimum y
 
-            printf("\n%d", rp.tds.trsid[0]);
             int trsid = getBlockAtPosition(rp.tds, posi);
 
             if(trsid != -1)

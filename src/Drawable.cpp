@@ -82,6 +82,41 @@ for (int i = 0; i < drabs.rids.size(); i++)
     }
 }
 
+void DrawDrawablesInstancedPosition(const RenderDetails rds, const TransformationDetails tds, const Drawables drabs, float offset)
+{
+// getting all we will need from the transformation objects first
+std::vector<m4> models;
+
+models.push_back(getTransformModelMatrix(tds, drabs.trsids[0]));
+int num = 0;
+for (int i = 1; i < drabs.trsids.size(); i++)
+    {
+    const unsigned int ctrsid = drabs.trsids[i];
+    m4 model;
+    if(ctrsid == drabs.trsids[i - 1])
+        {
+        int index = findDrawablesTransform(drabs, ctrsid);
+        vec2 pos = tds.pos[index];
+        model = GetModelMatrix(pos + (vec2){(num + 1) * offset, 0.0f}, tds.scale[index], tds.angle[index]);
+        num++;
+        }
+    else
+        {
+        model = getTransformModelMatrix(tds, ctrsid);
+        num = 0;
+        }
+
+    models.push_back(model);
+    }
+
+for (int i = 0; i < drabs.rids.size(); i++)
+    {
+    const unsigned int prog = rds.shader[getRenderDetailsIDIndex(rds, drabs.rids[i])];  // may as well make this a constant here for efficiency
+    SetUniformM4(prog, "model", models[i]); // setting the model matrix
+    DrawRenderable(rds, drabs.rids[i]); // finally do the actual drawing
+    }
+}
+
 void OutputDrawables(Drawables drabs)
 {
 printf("\n\n%20s", "Drawables Table");

@@ -59,6 +59,8 @@ void UpdateImmovables(TransformationDetails& tds, Drawables& drabs);
 
 void DrawDrawables(const RenderDetails rds, const TransformationDetails tds, const Drawables drabs);
 
+void DrawDrawablesInstancedPosition(const RenderDetails rds, const TransformationDetails tds, const Drawables drabs, float offset = 25.0f);
+
 /**
  * Outputs the drawables table
  * 

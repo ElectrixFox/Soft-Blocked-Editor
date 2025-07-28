@@ -93,7 +93,8 @@ RenderPacket text_rp = InitialiseRenderPacket();
 
 InitialiseBlockDetails();
 
-/*
+#ifdef TEST_UI
+
 vec2 topright = {1255.0f, 695.0f};
 const float padding = 10.0f;
 vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
@@ -111,7 +112,10 @@ addToMenu(ui_man.ui_men_tab, menid, btn2id);
 
 assignElementAction(ui_man.ui_btn_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
 assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
-*/
+
+#endif
+
+#ifdef TEST_TOP_UI_TEXT
 
 vec2 topleft = {25.0f, 695.0f};
 const float padding = 10.0f;
@@ -151,28 +155,24 @@ for (int i = 0; i < 11; i++)
     AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
     }
 
-
-
 // foldMenu(ui_man, men_id);
 
 // assignElementAction(ui_man.ui_men_tab, men_id, (GUI_ACTION_TRIGGER)0, &output);
+#endif
+
+RenderDetails text_rds = InitialiseRenderDetails();
+TransformationDetails text_tds = InitialiseTransformationDetails();
+Drawables text_drabs = InitialiseDrawables();
+
+Character_Table ch_tab = InitialiseCharacterTable(text_rds);
+Text_Table txt_tab = InitialiseTextTable();
+
+unsigned int text_id = AddText(txt_tab, text_tds, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", {0.0f, 1000.0f});
+CombineText(ch_tab, txt_tab, text_drabs, text_id);
 
 BuildSelectBar();
 
 const char* deffp = "res/levels/level3.txt";
-/*
-char* levelfp = (char*)malloc(128 * sizeof(char));
-strcpy(levelfp, deffp);
-*/
-
-/*
-if(argc > 1)
-    {
-    strcpy(levelfp, argv[1]);
-    printf("\n%s", levelfp);
-    }
-*/
-
     {
     int** grid;
     int w, h;
@@ -293,11 +293,19 @@ while(!glfwWindowShouldClose(window))   // main loop
     ClearCamera(ui_rp.rds);
 
     DrawRenderPacket(ui_rp);
-    ClearCamera(text_rp.rds);
 
+    ApplyCamera(cam, text_rds);
+    ApplyProjection(cam, text_rds);
+    DrawText(txt_tab, text_rds, text_tds, text_drabs);
+
+    #ifdef TEST_TOP_UI_TEXT
+
+    ClearCamera(text_rp.rds);
     ApplyCamera(cam, text_rp.rds);
     ApplyProjection(cam, text_rp.rds);
     DrawRenderPacket(text_rp);
+
+    #endif
     
     glfwSwapBuffers(window);
     glfwPollEvents();
