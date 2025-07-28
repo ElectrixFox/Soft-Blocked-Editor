@@ -46,7 +46,6 @@ struct GUI_Button
 struct GUI_Text_Box
     {
     std::string cont;
-    unsigned int text_id;   // the ID of the text in the text table
     };
 
 template<typename T>
@@ -62,13 +61,20 @@ struct UI_Element_Table
 struct UI_Manager
     {
     void checkUI();
-    UI_Manager(RenderPacket& in_ui_rp) : ui_rp(in_ui_rp) {}
+    UI_Manager(RenderPacket& in_ui_rp) : ui_rp(in_ui_rp), ch_tab(ui_rp.rds) { }
+
+    void initialise()
+        {
+        ui_rp = InitialiseRenderPacket();
+        InitialiseCharacterTable(ch_tab);
+        }
     
     UI_Element_Table<GUI_Button> ui_btn_tab;
     UI_Element_Table<GUI_Menu> ui_men_tab;
     UI_Element_Table<GUI_Text_Box> ui_text_box_tab;
     
     RenderPacket& ui_rp;
+    Character_Table ch_tab;
     };
 
 #pragma endregion
@@ -115,13 +121,14 @@ unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Eleme
  * Adds a text box to the UI system
  * 
  * @param table A reference to the element table for the element type
+ * @param ch_tab A constant reference to the character table
  * @param rp A reference to the render packet
  * @param pos The position of the text box
  * @param txbx The text box to add
  * 
  * @returns The UI ID for that text box
  */
-unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box& txbx);
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, const Character_Table& ch_tab, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx);
 
 /**
  * Adds a button to the UI system

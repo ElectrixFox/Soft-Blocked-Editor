@@ -35,13 +35,14 @@ printf("\nPressed %d", i);
 
 // UI_Table ui;
 InputManager inpman;
-
 RenderPacket ui_rp;
 UI_Manager ui_man(ui_rp);
 
+/*
 RenderPacket text_rp;
 Character_Table ch_tab(text_rp.rds);
 Text_Table txt_tab;
+*/
 
 // RenderPacket text_rp;
 // Text_Manager text_man(text_rp);
@@ -93,8 +94,11 @@ ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
+ui_man.initialise();
+/*
 text_rp = InitialiseRenderPacket();
 InitialiseCharacterTable(ch_tab);
+*/
 
 InitialiseBlockDetails();
 
@@ -303,18 +307,22 @@ while(!glfwWindowShouldClose(window))   // main loop
     DrawRenderPacket(block_rp);
     ClearCamera(ui_rp.rds);
 
-    DrawRenderPacket(ui_rp);
+    DrawDrawablesInstancedPosition(ui_rp.rds, ui_rp.tds, ui_rp.drabs, 50.0f);
 
+    /*
     ApplyCamera(cam, text_rp.rds);
     ApplyProjection(cam, text_rp.rds);
     DrawText(txt_tab, text_rp.rds, text_rp.tds, text_rp.drabs);
+    */
 
     #ifdef TEST_TOP_UI_TEXT
 
+    /*
     ClearCamera(text_rp.rds);
     ApplyCamera(cam, text_rp.rds);
     ApplyProjection(cam, text_rp.rds);
     DrawRenderPacket(text_rp);
+    */
 
     #endif
     

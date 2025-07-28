@@ -1,8 +1,10 @@
 #include "SystemUI.h"
 
+/*
 extern Character_Table ch_tab;
 extern Text_Table txt_tab;
 extern RenderPacket text_rp;
+*/
 
 const int datsize = 256;
 static int idtrk = 0;
@@ -299,16 +301,18 @@ UI_Element_Table<GUI_Menu>& table = ui_man.ui_men_tab;
 return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
 }
 
-unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, RenderPacket& rp, vec2 pos, GUI_Text_Box& txbx)
+unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, const Character_Table& ch_tab, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
 {
 static unsigned int ui_id = 0;
+const float scale = 25.0f;
 
-unsigned int text_id = AddText(txt_tab, text_rp.tds, txbx.cont.c_str(), {0.0f, 1000.0f});
-CombineText(ch_tab, txt_tab, text_rp.drabs, text_id);
+unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
 
-txbx.text_id = text_id;
-
-unsigned int trsid = getTextTransformID(txt_tab, text_id);
+for (char c : txbx.cont)  // for each character in the string
+    {
+    unsigned int rid = findCharacterRenderID(ch_tab, c);    // getting the render ID
+    AddDrawable(rp.drabs, trsid, rid); // creating the new drawable
+    }
 
 table.ui_id.push_back(ui_id);   // adding the ID
 table.trsid.push_back(trsid);   // adding the transform
@@ -322,7 +326,7 @@ return ui_id - 1;
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx)
 {
 UI_Element_Table<GUI_Text_Box>& table = ui_man.ui_text_box_tab;
-return addToElementTable(table, ui_man.ui_rp, pos, txbx);
+return addToElementTable(table, ui_man.ch_tab, ui_man.ui_rp, pos, txbx);
 }
 
 #pragma endregion
