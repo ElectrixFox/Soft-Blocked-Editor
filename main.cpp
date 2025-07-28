@@ -40,7 +40,11 @@ RenderPacket ui_rp;
 UI_Manager ui_man(ui_rp);
 
 RenderPacket text_rp;
-Text_Manager text_man(text_rp);
+Character_Table ch_tab(text_rp.rds);
+Text_Table txt_tab;
+
+// RenderPacket text_rp;
+// Text_Manager text_man(text_rp);
 
 
 static void toggleMenu(int ui_id)
@@ -89,7 +93,8 @@ ui_rp = InitialiseRenderPacket();
 InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
-RenderPacket text_rp = InitialiseRenderPacket();
+text_rp = InitialiseRenderPacket();
+InitialiseCharacterTable(ch_tab);
 
 InitialiseBlockDetails();
 
@@ -115,6 +120,7 @@ assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 
 #endif
 
+#define TEST_TOP_UI_TEXT
 #ifdef TEST_TOP_UI_TEXT
 
 vec2 topleft = {25.0f, 695.0f};
@@ -137,7 +143,7 @@ assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &output);
 
 addToMenu(ui_man.ui_men_tab, men_id, entry);
 
-GUI_Text_Box entbx = createTextBox(position, "Hello");
+GUI_Text_Box entbx = createTextBox(position, "HELLO");
 
 position = {topleft.x, topleft.y - (2 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
 unsigned int bxentry = addToElementTable(ui_man, position, entbx);
@@ -145,6 +151,7 @@ assignElementAction(ui_man.ui_text_box_tab, bxentry, (GUI_ACTION_TRIGGER)0, &out
 
 addToMenu(ui_man.ui_men_tab, men_id, bxentry);
 
+/*
 for (int i = 0; i < 26; i++)
     {
     AddCharacter(text_rp, (char)((int)'A' + i), {(i * 50.0f), 2000.0f}, 25.0f);
@@ -154,21 +161,23 @@ for (int i = 0; i < 11; i++)
     {
     AddCharacter(text_rp, (char)((int)'0' + i), {((26 + i) * 50.0f), 2000.0f}, 25.0f);
     }
+*/
 
 // foldMenu(ui_man, men_id);
 
 // assignElementAction(ui_man.ui_men_tab, men_id, (GUI_ACTION_TRIGGER)0, &output);
 #endif
 
-RenderDetails text_rds = InitialiseRenderDetails();
-TransformationDetails text_tds = InitialiseTransformationDetails();
-Drawables text_drabs = InitialiseDrawables();
-
-Character_Table ch_tab = InitialiseCharacterTable(text_rds);
+/*
+RenderPacket text_rp = InitialiseRenderPacket();
+Character_Table ch_tab = InitialiseCharacterTable(text_rp.rds);
 Text_Table txt_tab = InitialiseTextTable();
+*/
 
-unsigned int text_id = AddText(txt_tab, text_tds, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", {0.0f, 1000.0f});
-CombineText(ch_tab, txt_tab, text_drabs, text_id);
+/*
+unsigned int text_id = AddText(txt_tab, text_rp.tds, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", {0.0f, 1000.0f});
+CombineText(ch_tab, txt_tab, text_rp.drabs, text_id);
+*/
 
 BuildSelectBar();
 
@@ -187,6 +196,8 @@ const char* deffp = "res/levels/level3.txt";
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     }
+
+
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -219,7 +230,7 @@ while(!glfwWindowShouldClose(window))   // main loop
         int** grid;
         int w, h;
         OutputRenderPacketDetails(block_rp);
-        // OutputRenderPacketDetails(ui_rp);
+        OutputRenderPacketDetails(ui_rp);
 
         getLevel(block_rp, &w, &h, &grid);
         OutputLevel((const int**)grid, w, h);
@@ -294,9 +305,9 @@ while(!glfwWindowShouldClose(window))   // main loop
 
     DrawRenderPacket(ui_rp);
 
-    ApplyCamera(cam, text_rds);
-    ApplyProjection(cam, text_rds);
-    DrawText(txt_tab, text_rds, text_tds, text_drabs);
+    ApplyCamera(cam, text_rp.rds);
+    ApplyProjection(cam, text_rp.rds);
+    DrawText(txt_tab, text_rp.rds, text_rp.tds, text_rp.drabs);
 
     #ifdef TEST_TOP_UI_TEXT
 
@@ -316,7 +327,6 @@ while(!glfwWindowShouldClose(window))   // main loop
     }
 
 glfwDestroyWindow(window);
-
 glfwTerminate();    // cleans up all the glfw objects
 
 return 0;

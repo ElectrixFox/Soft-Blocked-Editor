@@ -11,6 +11,10 @@ struct Character_Table
     std::vector<unsigned int> rid;
 
     std::vector<char> chrs;
+
+    Character_Table(RenderDetails& text_rds);
+
+    RenderDetails& rds;
     };
 
 struct Text_Table
@@ -29,6 +33,8 @@ struct Text_Table
  * @returns The new character table
  */
 Character_Table InitialiseCharacterTable(RenderDetails& rds);
+
+void InitialiseCharacterTable(Character_Table& ch_tab);
 
 /**
  * Gets a new text table
@@ -62,6 +68,18 @@ unsigned int findCharacterRenderID(Character_Table ch_tab, char ch);
 unsigned int AddText(Text_Table& txt_tab, TransformationDetails& tds, const char* str, vec2 pos);
 
 /**
+ * Gets the transform ID for the given text ID
+ * 
+ * @param txt_tab The text table
+ * @param text_id The ID of the text to find
+ * 
+ * @returns The transform ID of the text element
+ * 
+ * @warning Will exit and give an error code on incorrect input
+ */
+unsigned int getTextTransformID(Text_Table& txt_tab, unsigned int text_id);
+
+/**
  * Combines the text into a drawable
  * 
  * @param ch_tab A reference to the characters table
@@ -89,6 +107,8 @@ void DrawText(Text_Table& txt_tab, RenderDetails& rds, TransformationDetails& td
  * - finally call draw text to draw it all
  * 
  */
+
+
 
 #pragma endregion
 

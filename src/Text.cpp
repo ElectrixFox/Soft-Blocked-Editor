@@ -7,13 +7,13 @@ Character_Table InitialiseCharacterTable(RenderDetails& rds)
 const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
 const int nchars = 36;
 
-Character_Table ch_tab;
+Character_Table ch_tab(rds);
 
 int nstrt = 10; // digits are below 10
 
 for (int i = 0; i < nchars; i++)    // loop through the character set
     {
-    unsigned int rid = CreateTextRenderable(rds, textsheet, nchars, i + 1); // creating the character
+    unsigned int rid = CreateTextRenderable(ch_tab.rds, textsheet, nchars, i + 1); // creating the character
     char ch;
 
     if(i < nstrt)  // if i is in the digit zone
@@ -26,6 +26,55 @@ for (int i = 0; i < nchars; i++)    // loop through the character set
     }
 
 return ch_tab;
+}
+
+void InitialiseCharacterTable(Character_Table& ch_tab)
+{
+const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
+const int nchars = 36;
+
+int nstrt = 10; // digits are below 10
+
+for (int i = 0; i < nchars; i++)    // loop through the character set
+    {
+    unsigned int rid = CreateTextRenderable(ch_tab.rds, textsheet, nchars, i + 1); // creating the character
+    char ch;
+
+    if(i < nstrt)  // if i is in the digit zone
+        ch = (char)((int)'9' - i);
+    else    // if i is not in the digit zone start from A
+        ch = (char)((int)'Z' - (i - nstrt));
+
+    ch_tab.chrs.push_back(ch);   // setting the character part
+    ch_tab.rid.push_back(rid);  // setting the render ID part
+    }
+}
+
+static void initCharTab(Character_Table& ch_tab)
+{
+const char* textsheet = "res/sprites/general_text_tilesheet_black_plan.png";
+const int nchars = 36;
+
+int nstrt = 10; // digits are below 10
+
+for (int i = 0; i < nchars; i++)    // loop through the character set
+    {
+    unsigned int rid = CreateTextRenderable(ch_tab.rds, textsheet, nchars, i + 1); // creating the character
+    char ch;
+
+    if(i < nstrt)  // if i is in the digit zone
+        ch = (char)((int)'9' - i);
+    else    // if i is not in the digit zone start from A
+        ch = (char)((int)'Z' - (i - nstrt));
+
+    ch_tab.chrs.push_back(ch);   // setting the character part
+    ch_tab.rid.push_back(rid);  // setting the render ID part
+    }
+}
+
+Character_Table::Character_Table(RenderDetails& text_rds)
+    : rds(text_rds)
+{
 }
 
 unsigned int findCharacterRenderID(Character_Table ch_tab, char ch)
@@ -60,6 +109,16 @@ txt_tab.txid.push_back(id);
 txt_tab.txt.push_back(str);
 
 return id++;
+}
+
+unsigned int getTextTransformID(Text_Table& txt_tab, unsigned int text_id)
+{
+for (int i = 0; i < txt_tab.txid.size(); i++)   // finding the text ID
+    if(txt_tab.txid[i] == text_id)
+        return txt_tab.trsid[i];
+
+printf("\nERROR: Could not find the text ID %d", text_id);
+exit(1);
 }
 
 void CombineText(Character_Table& ch_tab, Text_Table& txt_tab, Drawables& drabs, unsigned int text_id)

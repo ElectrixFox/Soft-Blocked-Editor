@@ -38,8 +38,6 @@ BLOCK getBlockFromRenderID(unsigned int rid) { return blds.blocks[getBlockRender
 
 void AssignBlock(unsigned int rid, BLOCK block)
 {
-const unsigned int n = blds.rids.size();
-
 // setting all the new details
 blds.rids.push_back(rid);
 blds.blocks.push_back(block);
