@@ -35,6 +35,7 @@ struct GUI_Menu
     {
     std::vector<unsigned int> ui_ids;
     unsigned int men_head_ui_id;
+    int aligndown = 0;
     int folded = 0;
     };
 
@@ -233,6 +234,8 @@ void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_
 
 #pragma endregion
 
+#pragma region Menu
+
 /**
  * Adds the UI element with the given UI ID to the menu
  * 
@@ -241,6 +244,18 @@ void assignElementAction(UI_Element_Table<GUI_Text_Box>& table, unsigned int ui_
  * @param ui_id The UI ID of the element to add to the table
  */
 void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id);
+
+/**
+ * Adds the UI element with the given UI ID to the menu
+ * 
+ * @param ui_man A reference to the UI manager
+ * @param men_id The UI ID of the menu
+ * @param ui_id The UI ID of the element to add to the table
+ * @param fittomenu Should the element be made to fit to the menu
+ * @param valign Should the elements be vertically
+ */
+
+void addToMenu(UI_Manager& ui_man, unsigned int men_id, unsigned int ui_id, int fittomenu = 1, int valign = 1);
 
 /**
  * Folds the menu
@@ -277,5 +292,7 @@ void unfoldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button
  * @param men_id The UI ID of the menu
  */
 void unfoldMenu(UI_Manager& ui_man, unsigned int men_id);
+
+#pragma endregion
 
 #endif

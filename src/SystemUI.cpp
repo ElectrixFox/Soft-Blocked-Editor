@@ -352,6 +352,19 @@ int index = findUIInUITable(men_tab, men_id);   // finding the menu
 men_tab.data[index].ui_ids.push_back(ui_id);
 }
 
+void addToMenu(UI_Manager& ui_man, unsigned int men_id, unsigned int ui_id, int fittomenu, int valign)
+{
+int index = findUIInUITable(ui_man.ui_men_tab, men_id);   // finding the menu
+
+if(fittomenu == 1)
+    {
+    vec2 headpos = getPosition(ui_man.ui_rp.tds, ui_man.ui_men_tab.trsid[index]);   // getting the head position
+
+    }
+ui_man.ui_men_tab.data[index].ui_ids.push_back(ui_id);
+}
+
+
 void foldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button> btn_tab, RenderPacket& rp, unsigned int men_id)
 {
 int index = findUIInUITable(men_tab, men_id);   // finds the menu head
