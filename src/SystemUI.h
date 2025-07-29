@@ -80,6 +80,25 @@ struct UI_Manager
 
 #pragma endregion
 
+#pragma region ID Management
+
+/**
+ * Gets the UI ID from the ID and the type
+ */
+unsigned int setUIID(unsigned int id, unsigned int type);
+
+/**
+ * Gets the UI ID
+ */
+unsigned int getUIID(unsigned int ui_id);
+
+/**
+ * Gets the UI type
+ */
+unsigned int getUIType(unsigned int ui_id);
+
+#pragma endregion
+
 #pragma region Creation
 
 GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr);
@@ -291,6 +310,12 @@ void unfoldMenu(UI_Element_Table<GUI_Menu>& men_tab, UI_Element_Table<GUI_Button
  * @param men_id The UI ID of the menu
  */
 void unfoldMenu(UI_Manager& ui_man, unsigned int men_id);
+
+#pragma endregion
+
+#pragma region Utilities
+
+int hasPressedUI(UI_Manager ui_man, vec2 cpos);
 
 #pragma endregion
 

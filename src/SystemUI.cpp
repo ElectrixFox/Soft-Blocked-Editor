@@ -166,6 +166,17 @@ vec2 scale = getScale(rp.tds, table.trsid[index]);
 return pressedInRectangle(pos, scale);
 }
 
+template <>
+int isCursorOnUIElement<GUI_Text_Box>(UI_Element_Table<GUI_Text_Box> table, RenderPacket rp, unsigned int ui_id)
+{
+int index = findUIInUITable(table, ui_id);
+int len = table.data[index].cont.length() * 2;  // getting the string length
+vec2 pos = getPosition(rp.tds, table.trsid[index]);
+vec2 scale = getScale(rp.tds, table.trsid[index]);
+scale.x *= len; // stretching the scale along the x to include all of the letters
+return pressedInRectangle(pos, scale);
+}
+
 template <typename T>
 static void _checkUI(UI_Element_Table<T>& table, RenderPacket rp)
 {
@@ -217,6 +228,29 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 
 #pragma endregion
 
+#pragma region ID Management
+
+unsigned int setUIID(unsigned int id, unsigned int type)
+{
+unsigned int mask = 0b1111000000000000U;    // the type mask
+unsigned int ui_id = id | (mask & (type << 12));    // pushing the type back and adding in the ID
+return ui_id;
+}
+
+unsigned int getUIID(unsigned int ui_id)
+{
+unsigned int mask = ~0b1111000000000000U;    // the type mask
+return (ui_id & mask);
+}
+
+unsigned int getUIType(unsigned int ui_id)
+{
+unsigned int mask = 0b1111000000000000U;    // the type mask
+return (ui_id & mask) >> 12;
+}
+
+#pragma endregion
+
 #pragma region Creating Elements
 
 GUI_Button createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr)
@@ -248,9 +282,16 @@ return box;
 
 #pragma region Adding Elements
 
+static unsigned int getNextID(unsigned int type)
+{
+unsigned int ui_id = setUIID(idtrk, type);
+idtrk++;
+return ui_id;
+}
+
 unsigned int addToElementTable(UI_Element_Table<GUI_Button>& table, RenderPacket& rp, vec2 pos, float scale, GUI_Button button)
 {
-static unsigned int ui_id = 0;
+unsigned int ui_id = getNextID(1);
 
 unsigned int rid = CreateSpriteRenderable(rp.rds, button.ssi.spfp, button.ssi.nosp, button.ssi.spr);
 unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
@@ -260,9 +301,7 @@ table.ui_id.push_back(ui_id);   // adding the ID
 table.trsid.push_back(trsid);   // adding the transform
 table.data.push_back(button);   // adding the actual button
 
-ui_id++;
-
-return ui_id - 1;
+return ui_id;
 }
 
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, float scale, GUI_Button button)
@@ -273,9 +312,7 @@ return addToElementTable(table, ui_man.ui_rp, pos, scale, button);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu)
 {
-// static unsigned int ui_id = 0;
-unsigned int& ui_id = idtrk;
-
+unsigned int ui_id = getNextID(2);
 unsigned int trsid;
 
 for(int i = 0; i < btab.ui_id.size(); i++)  // loop through the button table
@@ -290,9 +327,7 @@ table.ui_id.push_back(ui_id);   // adding the ID
 table.trsid.push_back(trsid);   // adding the transform of the head
 table.data.push_back(menu);     // adding the menu
 
-ui_id++;
-
-return ui_id - 1;
+return ui_id;
 }
 
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Menu menu)
@@ -305,8 +340,7 @@ return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, const Character_Table& ch_tab, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
 {
-// static unsigned int ui_id = 0;
-unsigned int& ui_id = idtrk;
+unsigned int ui_id = getNextID(3);
 const float scale = 25.0f;
 
 unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
@@ -321,9 +355,7 @@ table.ui_id.push_back(ui_id);   // adding the ID
 table.trsid.push_back(trsid);   // adding the transform
 table.data.push_back(txbx);   // adding the actual button
 
-ui_id++;
-
-return ui_id - 1;
+return ui_id;
 }
 
 unsigned int addToElementTable(UI_Manager& ui_man, vec2 pos, GUI_Text_Box txbx)
@@ -348,6 +380,8 @@ _checkUI(ui_btn_tab, ui_rp);
 _checkUI(ui_men_tab, ui_rp);
 _checkUI(ui_text_box_tab, ui_rp);
 }
+
+#pragma region Menu
 
 void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigned int ui_id)
 {
@@ -395,6 +429,11 @@ if(fittomenu == 1)
         for (int i = 0; i < combuids.size(); i++)
             if(combuids[i] == ui_id)
                 {
+                printf("\n%d", ui_id);
+                if(getUIType(combuids[i]) == 3) // if the type is a button
+                    {
+                    printf("\nText");
+                    }
                 setPosition(ui_man.ui_rp.tds, combtrsids[i], npos);
                 printf("\nSetting new position: ");
                 OutputVec2(npos);
@@ -449,3 +488,25 @@ men.folded = 0;
 
 void unfoldMenu(UI_Manager& ui_man, unsigned int men_id) { unfoldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_man.ui_rp, men_id); }
 
+#pragma endregion
+
+#pragma region Utilities
+
+int hasPressedUI(UI_Manager ui_man, vec2 cpos)
+{
+for (unsigned int ui_id : ui_man.ui_btn_tab.ui_id)
+    if(isCursorOnUIElement(ui_man.ui_btn_tab, ui_man.ui_rp, ui_id)) // if the cursor is on an element
+        return 1;
+
+for (unsigned int ui_id : ui_man.ui_men_tab.ui_id)
+    if(isCursorOnUIElement(ui_man.ui_men_tab, ui_man.ui_rp, ui_id)) // if the cursor is on an element
+        return 1;
+
+for (unsigned int ui_id : ui_man.ui_text_box_tab.ui_id)
+    if(isCursorOnUIElement(ui_man.ui_text_box_tab, ui_man.ui_rp, ui_id)) // if the cursor is on an element
+        return 1;
+
+return 0;
+}
+
+#pragma endregion

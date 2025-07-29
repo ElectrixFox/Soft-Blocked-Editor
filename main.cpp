@@ -127,7 +127,8 @@ assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
 #define TEST_TOP_UI_TEXT
 #ifdef TEST_TOP_UI_TEXT
 
-vec2 topleft = {25.0f, 695.0f};
+// vec2 topleft = {25.0f, 695.0f};
+vec2 topleft = {500.0f, 695.0f};
 const float padding = 10.0f;
 vec2 position = {topleft.x, topleft.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
 
@@ -142,8 +143,8 @@ unsigned int men_id = addToElementTable(ui_man, position, men);
 GUI_Button entbt = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
 
 // position = {topleft.x, topleft.y - (1 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
-vec2 posi = {500.0f, 500.0f};
-unsigned int entry = addToElementTable(ui_man, posi, 25.0f, entbt);
+// vec2 posi = {500.0f, 500.0f};
+unsigned int entry = addToElementTable(ui_man, {0.0f, 0.0f}, 25.0f, entbt);
 assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &output);
 
 // addToMenu(ui_man.ui_men_tab, men_id, entry);
@@ -152,7 +153,7 @@ addToMenu(ui_man, men_id, entry, 1, 1);
 GUI_Text_Box entbx = createTextBox(position, "HELLO");
 
 position = {topleft.x, topleft.y - (2 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
-unsigned int bxentry = addToElementTable(ui_man, position, entbx);
+unsigned int bxentry = addToElementTable(ui_man, {0.0f, 0.0f}, entbx);
 assignElementAction(ui_man.ui_text_box_tab, bxentry, (GUI_ACTION_TRIGGER)0, &output);
 
 // addToMenu(ui_man.ui_men_tab, men_id, bxentry);
@@ -260,7 +261,7 @@ while(!glfwWindowShouldClose(window))   // main loop
         cpos.x = 50 * roundf(cpos.x / 50);
         cpos.y = 50 * roundf(cpos.y / 50);
 
-        if(!PressedArea(block_rp.tds, cpos, 50.0f) && !PressedArea(ui_rp.tds, ncpos, 50.0f))
+        if(!PressedArea(block_rp.tds, cpos, 50.0f) && !hasPressedUI(ui_man, ncpos))
             {
             printf("\nPlacing block");
             unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
