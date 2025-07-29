@@ -75,7 +75,7 @@ glGetShaderiv(vertshad, GL_COMPILE_STATUS, &success);
 if (!success)
     {
     glGetShaderInfoLog(vertshad, 512, NULL, errmsg);
-    printf("ERROR: Vertex Shader %s", errmsg);
+    printf("\nERROR: Vertex Shader %s", errmsg);
     }
 
 const char* fragsrc = ParseShaderSource(fragfp);
@@ -88,7 +88,7 @@ glGetShaderiv(fragshad, GL_COMPILE_STATUS, &success);
 if (!success)
     {
     glGetShaderInfoLog(fragshad, 512, NULL, errmsg);
-    printf("ERROR: Fragment Shader %s", errmsg);
+    printf("\nERROR: Fragment Shader %s", errmsg);
     }
 
 unsigned int program;   // the program linking both shaders

@@ -10,32 +10,33 @@ struct vec2
 
     int operator!=(vec2 v)
         {
-        return (x != v.x || y != v.y);
+        return (this->x != v.x || this->y != v.y);
         }
     
     vec2 operator+(vec2 v)
         {
-        return {x + v.x, y + v.y};
+        return {this->x + v.x, this->y + v.y};
         }
     
-    vec2 operator+=(const vec2 v)
+    void operator+=(const vec2 v)
         {
-        return {x + v.x, y + v.y};
+        x += v.x;
+        y += v.y;
         }
     
     vec2 operator-(vec2 v)
         {
-        return {x - v.x, y - v.y};
+        return {this->x - v.x, this->y - v.y};
         }
     
     vec2 operator*(float a)
         {
-        return {a * x, a * y};
+        return {a * this->x, a * this->y};
         }
     
     vec2 operator/(float a)
         {
-        return {x / a, y / a};
+        return {this->x / a, this->y / a};
         }
     };
 typedef struct vec3 { float x, y, z; } vec3;

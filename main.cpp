@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <thread>
 
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
@@ -63,6 +64,14 @@ if(prevuid != ui_id) // if the previous ID isn't the menu to unfold and the menu
     printf("\nUnfolding %d", ui_id);
     unfoldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_man.ui_rp, ui_id);
     }
+}
+
+void UpdateAllImmovables(RenderPacket block_rp)
+{
+int** grid;
+int w, h;
+getLevel(block_rp, &w, &h, &grid);
+UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
 }
 
 int main(int argc, char const *argv[])
@@ -167,11 +176,14 @@ const char* deffp = "res/levels/level3.txt";
         }
     }
 
-
-
+int** grid;
+int w, h;
+int chk;
 while(!glfwWindowShouldClose(window))   // main loop
     {
+    int updims = 0;
     ui_man.checkUI();
+    // std::thread t1(UpdateAllImmovables, block_rp);
 
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     
@@ -180,16 +192,11 @@ while(!glfwWindowShouldClose(window))   // main loop
     
     if(isPressedSingle(GLFW_KEY_FULL_STOP))
         {
-        int** grid;
-        int w, h;
-        getLevel(block_rp, &w, &h, &grid);
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
     
     if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
         {
-        int** grid;
-        int w, h;
         printf("\nSaving");
         getLevel(block_rp, &w, &h, &grid);
         WriteLevel("res/levels/level3.txt", w, h, (const int**)grid);
@@ -197,8 +204,6 @@ while(!glfwWindowShouldClose(window))   // main loop
 
     if(isPressedSingle(GLFW_KEY_TAB))
         {
-        int** grid;
-        int w, h;
         OutputRenderPacketDetails(block_rp);
         OutputRenderPacketDetails(ui_rp);
 
@@ -207,9 +212,6 @@ while(!glfwWindowShouldClose(window))   // main loop
         }
     else if(isPressed(GLFW_KEY_0))
         {
-        int** grid;
-        int w, h;
-        getLevel(block_rp, &w, &h, &grid);
         }
     else if(isPressed(GLFW_KEY_1))
         {
@@ -227,15 +229,16 @@ while(!glfwWindowShouldClose(window))   // main loop
             {
             printf("\nPlacing block");
             unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
-            /*
+
             if(getBlockFromRenderID(rid) == BLOCK_IMMOVABLE_BLOCK)
                 {
-                int** grid;
-                int w, h;
-                getLevel(block_rp, &w, &h, &grid);
+                updims = 1;
+                /*
+                if(t1.joinable())
+                    t1.join();
                 UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+                */
                 }
-            */
             }
         }
     else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
@@ -254,21 +257,30 @@ while(!glfwWindowShouldClose(window))   // main loop
 
             if(check == 1)
                 {
-                int** grid;
-                int w, h;
-                getLevel(block_rp, &w, &h, &grid);
-                // UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+                updims = 1;
+                /*if(t1.joinable())
+                    t1.join();
+                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+                */
                 }
             }
         }
+    std::thread t1(getLevel, block_rp, &w, &h, &grid);
 
     MoveCamera(cam);
-    ApplyCamera(cam, block_rp.rds);
-    ApplyProjection(cam, block_rp.rds);
-    ApplyProjection(cam, ui_rp.rds);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
+
+    if(updims)
+        {
+        t1.join();
+        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
+        }
+
+    ApplyCamera(cam, block_rp.rds);
+    ApplyProjection(cam, block_rp.rds);
+    ApplyProjection(cam, ui_rp.rds);
 
     DrawRenderPacket(block_rp);
     ClearCamera(ui_rp.rds);
@@ -281,6 +293,9 @@ while(!glfwWindowShouldClose(window))   // main loop
     GLenum err = glGetError();
     if(err != 0)
         printf("\nERROR: Code %d", err);
+
+    if(t1.joinable())
+        t1.detach();
     }
 
 glfwDestroyWindow(window);
