@@ -274,6 +274,7 @@ while(!glfwWindowShouldClose(window))   // main loop
 
     if(updims)
         {
+        printf("\nJoining thread");
         t1.join();
         UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
         }
