@@ -161,6 +161,8 @@ template <typename T>
 static int isCursorOnUIElement(UI_Element_Table<T> table, RenderPacket rp, unsigned int ui_id)
 {
 int index = findUIInUITable(table, ui_id);
+if(findDrawablesTransform(rp.drabs, table.trsid[index]) == -1)  // if cannot find the transform in the drawables then it has not been drawn and shouldn't be checked
+    return 0;
 vec2 pos = getPosition(rp.tds, table.trsid[index]);
 vec2 scale = getScale(rp.tds, table.trsid[index]);
 return pressedInRectangle(pos, scale);
@@ -171,6 +173,8 @@ int isCursorOnUIElement<GUI_Text_Box>(UI_Element_Table<GUI_Text_Box> table, Rend
 {
 int index = findUIInUITable(table, ui_id);
 int len = table.data[index].cont.length() * 2;  // getting the string length
+if(findDrawablesTransform(rp.drabs, table.trsid[index]) == -1)  // if cannot find the transform in the drawables then it has not been drawn and shouldn't be checked
+    return 0;
 vec2 pos = getPosition(rp.tds, table.trsid[index]);
 vec2 scale = getScale(rp.tds, table.trsid[index]);
 scale.x *= len; // stretching the scale along the x to include all of the letters

@@ -95,36 +95,9 @@ InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
 ui_man.initialise();
-/*
-text_rp = InitialiseRenderPacket();
-InitialiseCharacterTable(ch_tab);
-*/
-
 InitialiseBlockDetails();
 
-#ifdef TEST_UI
-
-vec2 topright = {1255.0f, 695.0f};
-const float padding = 10.0f;
-vec2 position = {topright.x, topright.y - (0 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
-
-GUI_Button btn = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 1);
-GUI_Button btn2 = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
-unsigned int btn1id = addToElementTable(ui_man, position, 25.0f, btn);
-unsigned int btn2id = addToElementTable(ui_man, {position.x - 50.0f, position.y}, 25.0f, btn2);
-
-position = {topright.x, topright.y - (1 * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
-GUI_Menu men = createMenu(position, btn1id);
-unsigned int menid = addToElementTable(ui_man, position, men);
-
-addToMenu(ui_man.ui_men_tab, menid, btn2id);
-
-assignElementAction(ui_man.ui_btn_tab, btn1id, (GUI_ACTION_TRIGGER)0, &output);
-assignElementAction(ui_man.ui_men_tab, menid, (GUI_ACTION_TRIGGER)1, &fld);
-
-#endif
-
-#define TEST_TOP_UI_TEXT
+// #define TEST_TOP_UI_TEXT
 #ifdef TEST_TOP_UI_TEXT
 
 // vec2 topleft = {25.0f, 695.0f};
@@ -175,17 +148,6 @@ for (int i = 0; i < 11; i++)
 
 // assignElementAction(ui_man.ui_men_tab, men_id, (GUI_ACTION_TRIGGER)0, &output);
 #endif
-
-/*
-RenderPacket text_rp = InitialiseRenderPacket();
-Character_Table ch_tab = InitialiseCharacterTable(text_rp.rds);
-Text_Table txt_tab = InitialiseTextTable();
-*/
-
-/*
-unsigned int text_id = AddText(txt_tab, text_rp.tds, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789", {0.0f, 1000.0f});
-CombineText(ch_tab, txt_tab, text_rp.drabs, text_id);
-*/
 
 BuildSelectBar();
 
@@ -312,24 +274,7 @@ while(!glfwWindowShouldClose(window))   // main loop
     ClearCamera(ui_rp.rds);
 
     DrawDrawablesInstancedPosition(ui_rp.rds, ui_rp.tds, ui_rp.drabs, 50.0f);
-
-    /*
-    ApplyCamera(cam, text_rp.rds);
-    ApplyProjection(cam, text_rp.rds);
-    DrawText(txt_tab, text_rp.rds, text_rp.tds, text_rp.drabs);
-    */
-
-    #ifdef TEST_TOP_UI_TEXT
-
-    /*
-    ClearCamera(text_rp.rds);
-    ApplyCamera(cam, text_rp.rds);
-    ApplyProjection(cam, text_rp.rds);
-    DrawRenderPacket(text_rp);
-    */
-
-    #endif
-    
+   
     glfwSwapBuffers(window);
     glfwPollEvents();
 
