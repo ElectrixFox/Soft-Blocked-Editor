@@ -141,11 +141,13 @@ unsigned int men_id = addToElementTable(ui_man, position, men);
 
 GUI_Button entbt = createButton(position, 25.0f, "res/sprites/movable_spritesheet_short.png", 2, 2);
 
-position = {topleft.x, topleft.y - (1 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
-unsigned int entry = addToElementTable(ui_man, position, 25.0f, entbt);
+// position = {topleft.x, topleft.y - (1 * 50.0f + padding)};  // placing the items in a vertical line on the right side of the screen
+vec2 posi = {500.0f, 500.0f};
+unsigned int entry = addToElementTable(ui_man, posi, 25.0f, entbt);
 assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &output);
 
-addToMenu(ui_man.ui_men_tab, men_id, entry);
+// addToMenu(ui_man.ui_men_tab, men_id, entry);
+addToMenu(ui_man, men_id, entry, 1, 1);
 
 GUI_Text_Box entbx = createTextBox(position, "HELLO");
 
@@ -153,7 +155,8 @@ position = {topleft.x, topleft.y - (2 * 50.0f + padding)};  // placing the items
 unsigned int bxentry = addToElementTable(ui_man, position, entbx);
 assignElementAction(ui_man.ui_text_box_tab, bxentry, (GUI_ACTION_TRIGGER)0, &output);
 
-addToMenu(ui_man.ui_men_tab, men_id, bxentry);
+// addToMenu(ui_man.ui_men_tab, men_id, bxentry);
+addToMenu(ui_man, men_id, bxentry, 1, 1);
 
 /*
 for (int i = 0; i < 26; i++)

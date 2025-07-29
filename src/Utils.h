@@ -41,3 +41,13 @@ if(nid == -1)
     }
 return nid;
 }
+
+template<typename T>
+std::vector<T> mergeVectors(std::vector<T> A, std::vector<T> B)
+{
+std::vector<T> comb;
+comb.reserve(A.size() + B.size());   // reserving the memory
+comb.insert(comb.end(), A.begin(), A.end() );  // adding A into the combined
+comb.insert(comb.end(), B.begin(), B.end() );  // adding B into the combined
+return comb;
+}

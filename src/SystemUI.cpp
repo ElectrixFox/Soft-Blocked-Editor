@@ -7,7 +7,7 @@ extern RenderPacket text_rp;
 */
 
 const int datsize = 256;
-static int idtrk = 0;
+static unsigned int idtrk = 0;
 
 #pragma region Trigger Action Table
 
@@ -273,7 +273,9 @@ return addToElementTable(table, ui_man.ui_rp, pos, scale, button);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Menu>& table, const UI_Element_Table<GUI_Button>& btab, RenderPacket& rp, vec2 pos, GUI_Menu menu)
 {
-static unsigned int ui_id = 0;
+// static unsigned int ui_id = 0;
+unsigned int& ui_id = idtrk;
+
 unsigned int trsid;
 
 for(int i = 0; i < btab.ui_id.size(); i++)  // loop through the button table
@@ -303,7 +305,8 @@ return addToElementTable(table, btab, ui_man.ui_rp, pos, menu);
 
 unsigned int addToElementTable(UI_Element_Table<GUI_Text_Box>& table, const Character_Table& ch_tab, RenderPacket& rp, vec2 pos, GUI_Text_Box txbx)
 {
-static unsigned int ui_id = 0;
+// static unsigned int ui_id = 0;
+unsigned int& ui_id = idtrk;
 const float scale = 25.0f;
 
 unsigned int trsid = AddTransformation(rp.tds, pos, {scale, scale}, 0.0f);
@@ -352,16 +355,62 @@ int index = findUIInUITable(men_tab, men_id);   // finding the menu
 men_tab.data[index].ui_ids.push_back(ui_id);
 }
 
+template<typename T>
+static vec2 getUIElementPosition(UI_Element_Table<T> table, RenderPacket rp, unsigned int ui_id)
+{
+int index = findUIInUITable(table, ui_id);  // finding the element
+return getPosition(rp.tds, table.trsid[index]); // getting the position
+}
+
+template<typename T>
+static void setUIElementPosition(UI_Element_Table<T> table, RenderPacket& rp, unsigned int ui_id, vec2 npos)
+{
+int index = findUIInUITable(table, ui_id);  // finding the element
+setPosition(rp.tds, table.trsid[index], npos);  // setting the position
+}
+
 void addToMenu(UI_Manager& ui_man, unsigned int men_id, unsigned int ui_id, int fittomenu, int valign)
 {
+const float spacing = 50.0f;
+
 int index = findUIInUITable(ui_man.ui_men_tab, men_id);   // finding the menu
+ui_man.ui_men_tab.data[index].ui_ids.push_back(ui_id);  // adding the new element to the menu
 
 if(fittomenu == 1)
     {
     vec2 headpos = getPosition(ui_man.ui_rp.tds, ui_man.ui_men_tab.trsid[index]);   // getting the head position
+    vec2 npos = headpos;
+    printf("\nHead position: ");
+    OutputVec2(npos);
+
+    vec2 offset = (valign == 1) ? (vec2){0.0f, -spacing} : (vec2){spacing, 0.0f};   // getting the offset
+
+    for (unsigned int id : ui_man.ui_men_tab.data[index].ui_ids)
+        {
+        npos = npos + offset;
+
+        std::vector<unsigned int> combuids = mergeVectors(ui_man.ui_btn_tab.ui_id, mergeVectors({}, ui_man.ui_text_box_tab.ui_id));
+        std::vector<unsigned int> combtrsids = mergeVectors(ui_man.ui_btn_tab.trsid, mergeVectors({}, ui_man.ui_text_box_tab.trsid));
+
+        for (int i = 0; i < combuids.size(); i++)
+            if(combuids[i] == ui_id)
+                {
+                setPosition(ui_man.ui_rp.tds, combtrsids[i], npos);
+                printf("\nSetting new position: ");
+                OutputVec2(npos);
+                break;
+                }
+        
+        /*
+        index = findUIInUITable(ui_man.ui_btn_tab, ui_id);  // finding the element
+        setUIElementPosition(ui_man.ui_btn_tab, ui_man.ui_rp, id, npos);
+        */
+        // setPosition(ui_man.ui_rp.tds, ui_man.ui_btn_tab.trsid[index], npos);
+        }
+    
+
 
     }
-ui_man.ui_men_tab.data[index].ui_ids.push_back(ui_id);
 }
 
 

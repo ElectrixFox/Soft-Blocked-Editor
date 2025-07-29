@@ -254,7 +254,6 @@ void addToMenu(UI_Element_Table<GUI_Menu>& men_tab, unsigned int men_id, unsigne
  * @param fittomenu Should the element be made to fit to the menu
  * @param valign Should the elements be vertically
  */
-
 void addToMenu(UI_Manager& ui_man, unsigned int men_id, unsigned int ui_id, int fittomenu = 1, int valign = 1);
 
 /**
