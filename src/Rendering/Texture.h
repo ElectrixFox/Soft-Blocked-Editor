@@ -9,10 +9,12 @@
 #include <vector>
 #include <tuple>
 
+unsigned int SetTextureVariable(unsigned int tex, int active);
+
 unsigned int getActiveTexture(unsigned int texture);
 unsigned int getTexture(unsigned int texture);
 
-unsigned int CreateTexture(const char*, int flip = 0);
+unsigned int CreateTexture(const char*, int active = 0, int flip = 0);
 
 void BindTexture(unsigned int texture);
 

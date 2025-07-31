@@ -2,6 +2,7 @@
 #include "MathsOperations.h"
 #include "InputManager.h"
 #include "Rendering/Shader.h"
+#include "RenderObject.h"
 #include <vector>
 
 struct Camera
@@ -72,3 +73,30 @@ void _ApplyCamera(Camera cam, std::vector<unsigned int> progs);
  * @param size The number of programs
  */
 void _ApplyStaticCamera(Camera cam, std::vector<unsigned int> progs);
+
+/**
+ * Applies the view matrix to all render details in the given table
+ * 
+ * @param cam The camera to apply
+ * @param rds The render details containing the shaders
+ * 
+ * @warning Make sure the right render detail table is passed otherwise things can go very wrong very quickly
+ */
+void ApplyCamera(Camera cam, RenderDetails rds);
+
+/**
+ * Clears the camera from all the following renderables
+ * 
+ * @param rds The render table
+ */
+void ClearCamera(RenderDetails rds);
+
+/**
+ * Applies the projection matrix to all render details in the given table
+ * 
+ * @param cam The camera to apply
+ * @param rds The render details containing the shaders
+ * 
+ * @warning Make sure the right render detail table is passed otherwise things can go very wrong very quickly
+ */
+void ApplyProjection(Camera cam, RenderDetails rds);

@@ -8,8 +8,6 @@
 #include <include/GL/glew.h>
 #include <include/GLFW/glfw3.h>
 
-#define GLFW_KEY_FULL_STOP GLFW_KEY_PERIOD
-
 #include "src/Transformation.h"
 #include "src/RenderObject.h"
 
@@ -39,11 +37,9 @@ InputManager inpman;
 RenderPacket ui_rp;
 UI_Manager ui_man(ui_rp);
 
-/*
 RenderPacket text_rp;
 Character_Table ch_tab(text_rp.rds);
 Text_Table txt_tab;
-*/
 
 // RenderPacket text_rp;
 // Text_Manager text_man(text_rp);
@@ -183,88 +179,9 @@ while(!glfwWindowShouldClose(window))   // main loop
     {
     int updims = 0;
     ui_man.checkUI();
-    // std::thread t1(UpdateAllImmovables, block_rp);
+    CheckEditorInput(block_rp, cam, updims, w, h, grid);
 
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
-    
-    if(isPressed(GLFW_KEY_ESCAPE))
-        glfwSetWindowShouldClose(window, 1);
-    
-    if(isPressedSingle(GLFW_KEY_FULL_STOP))
-        {
-        UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
-        }
-    
-    if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
-        {
-        printf("\nSaving");
-        getLevel(block_rp, &w, &h, &grid);
-        WriteLevel("res/levels/level3.txt", w, h, (const int**)grid);
-        }
-
-    if(isPressedSingle(GLFW_KEY_TAB))
-        {
-        OutputRenderPacketDetails(block_rp);
-        OutputRenderPacketDetails(ui_rp);
-
-        getLevel(block_rp, &w, &h, &grid);
-        OutputLevel((const int**)grid, w, h);
-        }
-    else if(isPressed(GLFW_KEY_0))
-        {
-        }
-    else if(isPressed(GLFW_KEY_1))
-        {
-        printf("\nCausing break");
-        }
-
-    if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
-        {
-        vec2 cpos = GetCursorPositionRelative(cam);
-        vec2 ncpos = getCursorPosition();
-        cpos.x = 50 * roundf(cpos.x / 50);
-        cpos.y = 50 * roundf(cpos.y / 50);
-
-        if(!PressedArea(block_rp.tds, cpos, 50.0f) && !hasPressedUI(ui_man, ncpos))
-            {
-            printf("\nPlacing block");
-            unsigned int rid = _PlaceBlockCustom(block_rp, getActiveBlock(), cpos, 0.0f);
-
-            if(getBlockFromRenderID(rid) == BLOCK_IMMOVABLE_BLOCK)
-                {
-                updims = 1;
-                /*
-                if(t1.joinable())
-                    t1.join();
-                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
-                */
-                }
-            }
-        }
-    else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
-        {
-        vec2 cpos = GetCursorPositionRelative(cam);
-        if(PressedAnother(block_rp.tds, cpos))
-            {
-            printf("\nTrying to remove");
-            unsigned int ttrsid = getPressedBlock(block_rp.tds, cpos);
-            unsigned int trid = block_rp.drabs.rids[findDrawablesTransform(block_rp.drabs, ttrsid)];
-            int check = 0;  // the check to see if the immovables should be updated
-
-            if(getBlockFromRenderID(trid) == BLOCK_IMMOVABLE_BLOCK) check = 1;
-
-            RemoveBlock(block_rp, trid);
-
-            if(check == 1)
-                {
-                updims = 1;
-                /*if(t1.joinable())
-                    t1.join();
-                UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
-                */
-                }
-            }
-        }
     std::thread t1(getLevel, block_rp, &w, &h, &grid);
 
     MoveCamera(cam);

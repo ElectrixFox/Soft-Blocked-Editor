@@ -6,7 +6,7 @@
 #include "Level.h"
 #include "SystemUI.h"
 
-#pragma region Main
+#pragma region Functions
 
 /**
  * A function to read the level
@@ -31,40 +31,7 @@ BlockInfo getActiveBlock();
  */
 void setActiveBlock(BlockInfo block);
 
-/**
- * Selects the block type to be placed
- * 
- * @param drabs The drawable objects table
- * @param trsid The transformation ID of the object
- */
-void SelectBlock(Drawables drabs, unsigned int trsid);
-
-/**
- * Applies the view matrix to all render details in the given table
- * 
- * @param cam The camera to apply
- * @param rds The render details containing the shaders
- * 
- * @warning Make sure the right render detail table is passed otherwise things can go very wrong very quickly
- */
-void ApplyCamera(Camera cam, RenderDetails rds);
-
-/**
- * Clears the camera from all the following renderables
- * 
- * @param rds The render table
- */
-void ClearCamera(RenderDetails rds);
-
-/**
- * Applies the projection matrix to all render details in the given table
- * 
- * @param cam The camera to apply
- * @param rds The render details containing the shaders
- * 
- * @warning Make sure the right render detail table is passed otherwise things can go very wrong very quickly
- */
-void ApplyProjection(Camera cam, RenderDetails rds);
+void CheckEditorInput(RenderPacket& block_rp, Camera& cam, int& updims, int w, int h, int** grid);
 
 #pragma endregion
 

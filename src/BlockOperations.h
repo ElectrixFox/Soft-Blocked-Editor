@@ -45,6 +45,8 @@ unsigned int _PlaceBlockCustom(RenderPacket& rp, BlockInfo block, vec2 position,
  */
 unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position);
 
+unsigned int PlaceBlock(RenderPacket& rp, BlockInfo block, vec2 position, float theta = 0.0f);
+
 /**
  * Removes a block at the position
  * 
@@ -87,5 +89,7 @@ unsigned int PlaceImmovableBlock(RenderPacket& rp, BlockInfo block, vec2 positio
  * @param grid The actual grid
  */
 unsigned int UpdateImmovableBlocks(RenderPacket& rp, const int w, const int h, const int** grid);
+
+void CycleCountableCounter(RenderPacket& block_rp, unsigned int trid);
 
 #endif

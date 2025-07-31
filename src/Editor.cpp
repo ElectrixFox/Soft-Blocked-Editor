@@ -5,40 +5,82 @@ static BlockInfo cblock = {"res/sprites/player_spritesheet.png", 2, 1};
 const int snap_to_grid = 1;
 const int grid_size = 50;
 
-// extern RenderPacket ui_rp;
-// extern UI_Table ui;
-
 extern UI_Manager ui_man;
-/*
-extern UI_Table ui;
-extern RenderPacket ui_rp;
-*/
 
-#pragma region Main
+#pragma region Functions
 
 BlockInfo getActiveBlock() { return cblock; }
 
 void setActiveBlock(BlockInfo block) { cblock = block; }
 
-void SelectBlock(Drawables drabs, unsigned int trsid)
+void CheckEditorInput(RenderPacket& block_rp, Camera& cam, int& updims, int w, int h, int** grid)
 {
-/*
-int index = findDrawablesTransform(drabs, trsid); // find the drawable from the transform
-setActiveBlock(getBlockFromRenderID(drabs.rids[index]));    // sets the active block
-*/
-}
+GLFWwindow* window = getWindow();
+RenderPacket& ui_rp = ui_man.ui_rp;
 
-void ApplyCamera(Camera cam, RenderDetails rds) { _ApplyCamera(cam, rds.shader); }
-
-void ClearCamera(RenderDetails rds)
-{
-for (int i = 0; i < rds.rid.size(); i++)
+// keyboard actions
+if(isPressed(GLFW_KEY_ESCAPE))
+    glfwSetWindowShouldClose(window, 1);
+else if(isPressedSingle(GLFW_KEY_FULL_STOP))
     {
-    SetUniformM4(rds.shader[i], "view", getM4ID());
+    UpdateImmovableBlocks(block_rp, w, h, (const int**)grid);
     }
-}
+else if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
+    {
+    printf("\nSaving");
+    getLevel(block_rp, &w, &h, &grid);
+    WriteLevel("res/levels/level3.txt", w, h, (const int**)grid);
+    }
+else if(isPressedSingle(GLFW_KEY_TAB))
+    {
+    OutputRenderPacketDetails(block_rp);
+    OutputRenderPacketDetails(ui_rp);
 
-void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.shader); }
+    getLevel(block_rp, &w, &h, &grid);
+    OutputLevel((const int**)grid, w, h);
+    }
+
+// mouse actions
+if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+    {
+    vec2 cpos = GetCursorPositionRelative(cam);
+    vec2 ncpos = getCursorPosition();
+    cpos.x = 50 * roundf(cpos.x / 50);
+    cpos.y = 50 * roundf(cpos.y / 50);
+
+    if(!PressedArea(block_rp.tds, cpos, 50.0f) && !hasPressedUI(ui_man, ncpos))
+        {
+        unsigned int bl_id = PlaceBlock(block_rp, getActiveBlock(), cpos);  // placing the block
+
+        if(getBlockType(bl_id) == BLOCK_IMMOVABLE_BLOCK) updims = 1;    // if the newly placed block is immovable do the update
+        }
+    else if(PressedArea(block_rp.tds, cpos, 50.0f)) // if a block has been clicked
+        {
+        unsigned int trid = block_rp.drabs.getRenderIDFromTransformID(getPressedBlock(block_rp.tds, cpos)); // gets the render ID for the block 
+        const BLOCK btype = getBlockType(getBlockIDFromRenderID(trid)); // gets the type of the block
+
+        if(btype == BLOCK_COUNTABLE_BLOCK)
+            {
+            CycleCountableCounter(block_rp, trid);
+            }
+        }
+    }
+else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
+    {
+    vec2 cpos = GetCursorPositionRelative(cam);
+    if(PressedAnother(block_rp.tds, cpos))
+        {
+        unsigned int trid = block_rp.drabs.getRenderIDFromTransformID(getPressedBlock(block_rp.tds, cpos)); // gets the render ID for the block 
+        const BLOCK btype = getBlockType(getBlockIDFromRenderID(trid)); // gets the type of the block
+
+        RemoveBlock(block_rp, trid);
+
+        if(btype == BLOCK_IMMOVABLE_BLOCK) updims = 1;  // if it is an immovable block then update the immovables
+        }
+    }
+
+
+}
 
 #pragma endregion
 

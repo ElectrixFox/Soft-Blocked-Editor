@@ -6,9 +6,7 @@
 static char fps[32][64]; // array of file paths
 std::vector<std::tuple<unsigned int, const char*>> texinf;
 
-static unsigned int SetTextureVariable(unsigned int, const char*);
-
-static unsigned int SetTextureVariable(unsigned int tex, const char* fp)
+/*static unsigned int SetTextureVariable(unsigned int tex, const char* fp)
 {
 unsigned int mask = 0b1111000000000000U;  // the mask for the active texture
 
@@ -24,6 +22,13 @@ for (int i = 0; i < nfps; i++)
 strcpy(fps[nfps], fp);  // copy the new file path into the filepaths array
 return ((tex & ~mask) | (nfps << 12));
 }
+*/
+
+unsigned int SetTextureVariable(unsigned int tex, int active)
+{
+unsigned int mask = 0b1111000000000000U;  // the mask for the active texture
+return ((tex & ~mask) | (active << 12));
+}
 
 unsigned int getActiveTexture(unsigned int texture)
 {
@@ -37,7 +42,7 @@ unsigned int mask = 0b1111000000000000U;  // the mask for the active texture
 return (texture & ~mask);   // everything that isn't the mask
 }
 
-unsigned int CreateTexture(const char* path, int flip)
+unsigned int CreateTexture(const char* path, int active, int flip)
 {
 unsigned int texture;
 glGenTextures(1, &texture);
@@ -64,6 +69,7 @@ glGenerateMipmap(GL_TEXTURE_2D);
 
 stbi_image_free(data);
 
+SetTextureVariable(texture, active);
 texinf.push_back({texture, path});
 
 return texture;
@@ -72,8 +78,8 @@ return texture;
 void BindTexture(unsigned int texture)
 {
 // GL_TEXTURE0 is the first of many consecutive numbers referring to active textures so if we just add the active we get the correct thing
-glActiveTexture(GL_TEXTURE0);
-glBindTexture(GL_TEXTURE_2D, texture);  // binds the texture
+glActiveTexture(GL_TEXTURE0  + getActiveTexture(texture));
+glBindTexture(GL_TEXTURE_2D, getTexture(texture));  // binds the texture
 }
 
 const char* getTextureFilePath(unsigned int texture)

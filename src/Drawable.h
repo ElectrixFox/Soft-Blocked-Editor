@@ -3,9 +3,13 @@
 #include "Transformation.h"
 
 struct Drawables {
-    std::vector<unsigned int> trsids;
     std::vector<unsigned int> rids;
+    std::vector<unsigned int> trsids;
     Drawables() : rids(), trsids() {}
+
+    unsigned int getRenderIDFromTransformID(unsigned int trsid);
+
+    unsigned int getTransformIDFromRenderID(unsigned int rid);
 };
 
 Drawables InitialiseDrawables();

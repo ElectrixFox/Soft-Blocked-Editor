@@ -5,6 +5,8 @@
 #include <iostream>
 #include <vector>
 
+#define GLFW_KEY_FULL_STOP GLFW_KEY_PERIOD
+
 /**
  * Finds the next free ID slot starting from 0
  * 

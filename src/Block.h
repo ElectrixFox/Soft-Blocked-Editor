@@ -39,10 +39,10 @@ typedef struct BlockInfo BlockInfo;
 
 struct BlockDetails
     {
+    std::vector<unsigned int> bl_id;
     std::vector<unsigned int> rids;
     std::vector<BLOCK> blocks;
     };
-typedef struct BlockDetails BlockDetails;
 
 /**
  * Sets the active sprite of the block
@@ -59,6 +59,12 @@ void setBlockSpriteCount(unsigned long int* block, unsigned int nospr);
 unsigned int getBlockSpriteCount(unsigned long int block);
 
 void setBlockType(unsigned long int* block, unsigned int type);
+
+BLOCK getBlockType(unsigned int in_bl_id);
+
+unsigned int getBlockRenderID(unsigned int in_bl_id);
+
+unsigned int getBlockIDFromRenderID(unsigned int rid);
 
 BLOCK getBlockType(BLOCK block);
 
@@ -99,8 +105,10 @@ BLOCK getBlockFromRenderID(unsigned int rid);
  * 
  * @param rid The ID of the renderable
  * @param block The block to assign
+ * 
+ * @returns The ID of the block assigned
  */
-void AssignBlock(unsigned int rid, BLOCK block);
+unsigned int AssignBlock(unsigned int rid, BLOCK block);
 
 /**
  * Unassigns a block from the render object

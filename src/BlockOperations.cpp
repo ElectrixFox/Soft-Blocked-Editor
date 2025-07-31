@@ -21,22 +21,60 @@ const BlockInfo bi = block; // renaming
 unsigned int sprite = bi.spr;
 unsigned int nosprites = bi.nosp;
 BLOCK bltype = getBlockFromDetails(bi.spfp, bi.nosp, bi.spr);
-if(getBlockFromFilePath(bi.spfp) == BLOCK_IMMOVABLE_BLOCK)
-    bltype = BLOCK_IMMOVABLE_BLOCK;
-// BLOCK bltype = getBlockFromFilePath(bi.spfp);   // gets the block type
 
 position = snap_to_grid ? snapOperation(position) : position;   // do the snap operation if should snap to grid and if not don't
 
-unsigned int rd = CreateSpriteRenderable(rp.rds, bi.spfp, nosprites, sprite);
+unsigned int rd = CreateSpriteRenderable(rp.rds, bi.spfp, nosprites, sprite);    // create the alternate sprite
 unsigned int td = AddTransformation(rp.tds, position, {25.0f, 25.0f}, theta);
 
-AssignBlock(rd, bltype);
+unsigned int bl_id = AssignBlock(rd, bltype);
 AddDrawable(rp.drabs, td, rd);
 
-return rd;
+return bl_id;
 }
 
-unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position) { return _PlaceBlockCustom(rp, getBlockInfo(getBlockType(block)), position, 0.0f); }
+// unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position) { return _PlaceBlockCustom(rp, getBlockInfo(getBlockType(block)), position, 0.0f); }
+
+unsigned int PlaceBlock(RenderPacket& rp, BLOCK block, vec2 position) { return PlaceBlock(rp, getBlockInfo(block), position); }
+
+unsigned int PlaceBlock(RenderPacket& rp, BlockInfo block, vec2 position, float theta)
+{
+BLOCK btype = getBlockFromDetails(block.spfp, block.nosp, block.spr);
+
+switch (btype)
+    {
+    case BLOCK::BLOCK_COUNTABLE_BLOCK:
+        {
+        position = snap_to_grid ? snapOperation(position) : position;   // do the snap operation if should snap to grid and if not don't
+
+        unsigned int rd = CreateSpriteRenderable(rp.rds, block.spfp, block.nosp, block.spr);    // create the alternate sprite
+        unsigned int td = AddTransformation(rp.tds, position, {25.0f, 25.0f}, theta);   // getting the transformation object
+
+        unsigned int bl_id = AssignBlock(rd, btype);
+        AddDrawable(rp.drabs, td, rd);
+
+return bl_id;
+        break;
+        }
+    case BLOCK::BLOCK_TELEPORTER_SOURCE:
+        {
+        // do the stuff here
+        return _PlaceBlockCustom(rp, block, position, 0.0f);
+        break;
+        }
+    case BLOCK::BLOCK_TELEPORTER_DESTINATION:
+        {
+        // do the stuff here
+        return _PlaceBlockCustom(rp, block, position, 0.0f);
+        break;
+        }
+    default:
+        {
+        return _PlaceBlockCustom(rp, block, position, theta);
+        break;
+        }
+    }
+}
 
 void RemoveBlock(RenderPacket& rp, unsigned int rid)
 {
@@ -340,7 +378,7 @@ for (int i = 0; i < h; i++)
                 int index = findDrawablesTransform(rp.drabs, trsid);
                 unsigned int rid = rp.drabs.rids[index];
                 RemoveBlock(rp, rid);
-                rid = _PlaceBlockCustom(rp, getImmovableBlock(imstate), posi, theta);   // getting the new render ID
+                rid = PlaceBlock(rp, getImmovableBlock(imstate), posi, theta);   // getting the new render ID
                 }
             
             }
@@ -348,6 +386,11 @@ for (int i = 0; i < h; i++)
     }
 
 return 0;
+}
+
+void CycleCountableCounter(RenderPacket& block_rp, unsigned int trid)
+{
+
 }
 
 #pragma endregion

@@ -14,6 +14,34 @@ void setBlockType(unsigned long int *block, unsigned int type) { SetActiveShape(
 
 BLOCK getBlockType(BLOCK block) { return (BLOCK)GetActiveShape((unsigned long int)block); }
 
+
+BLOCK getBlockType(unsigned int in_bl_id)
+{
+for (int i = 0; i < blds.bl_id.size(); i++)
+    if(blds.bl_id[i] == in_bl_id)
+        return blds.blocks[i];
+printf("\nERROR: Could not find block type");
+exit(1);
+}
+
+unsigned int getBlockRenderID(unsigned int in_bl_id)
+{
+for (int i = 0; i < blds.bl_id.size(); i++)
+    if(blds.bl_id[i] == in_bl_id)
+        return blds.rids[i];
+printf("\nERROR: Could not find block render ID");
+exit(1);
+}
+
+unsigned int getBlockIDFromRenderID(unsigned int rid)
+{
+for (int i = 0; i < blds.rids.size(); i++)
+    if(blds.rids[i] == rid)
+        return blds.bl_id[i];
+printf("\nERROR: Could not find block ID");
+exit(1);
+}
+
 void InitialiseBlockDetails()
 {
 
@@ -36,11 +64,16 @@ return -1;
 
 BLOCK getBlockFromRenderID(unsigned int rid) { return blds.blocks[getBlockRenderIndex(rid)]; }
 
-void AssignBlock(unsigned int rid, BLOCK block)
+unsigned int AssignBlock(unsigned int rid, BLOCK block)
 {
+static unsigned int bl_id = 0;
+
 // setting all the new details
 blds.rids.push_back(rid);
 blds.blocks.push_back(block);
+blds.bl_id.push_back(bl_id++);
+
+return bl_id - 1;
 }
 
 void UnassignBlock(unsigned int rid)
@@ -52,6 +85,7 @@ if(index == -1)
 
 blds.rids.erase(blds.rids.begin() + index);
 blds.blocks.erase(blds.blocks.begin() + index);
+blds.bl_id.erase(blds.bl_id.begin() + index);
 }
 
 BlockInfo getBlockInfo(BLOCK block)
@@ -141,6 +175,9 @@ return (BLOCK)-1;
 
 BLOCK getBlockFromDetails(const char* spfp, unsigned int nosp, unsigned int spr)
 {
+if(getBlockFromFilePath(spfp) == BLOCK::BLOCK_IMMOVABLE_BLOCK)  // check if it is immovable here as they don't get picked up too well
+    return BLOCK::BLOCK_IMMOVABLE_BLOCK;
+
 for (int i = 0; i < getBlockCount(); i++)
     {
     BlockInfo bi = getBlockInfo((BLOCK)i);

@@ -30,6 +30,10 @@ for (int i = 0; i < drabs.rids.size(); i++)
         return i; // return the index
 return -1; // if the ID isn't found return -1
 }
+    
+unsigned int Drawables::getRenderIDFromTransformID(unsigned int trsid) { return rids[findDrawablesTransform(*this, trsid)]; }
+
+unsigned int Drawables::getTransformIDFromRenderID(unsigned int rid) { return trsids[findDrawablesRenderable(*this, rid)]; }
 
 std::vector<unsigned int> getRenderIDsFromTransformIDs(Drawables drabs, std::vector<unsigned int> trids)
 {

@@ -81,3 +81,15 @@ for (int i = 0; i < progs.size(); i++)
     SetUniformM4(progs[i], "view", view);
     }
 }
+
+void ApplyCamera(Camera cam, RenderDetails rds) { _ApplyCamera(cam, rds.shader); }
+
+void ClearCamera(RenderDetails rds)
+{
+for (int i = 0; i < rds.rid.size(); i++)
+    {
+    SetUniformM4(rds.shader[i], "view", getM4ID());
+    }
+}
+
+void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.shader); }
