@@ -10,7 +10,7 @@ struct vec2
  
     int operator==(const vec2 v)
         {
-        return (this->x == v.x || this->y == v.y);
+        return (this->x == v.x && this->y == v.y);
         }
 
     int operator!=(vec2 v)

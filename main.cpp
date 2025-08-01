@@ -56,19 +56,24 @@ InitialiseInputManager(window);
 
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
 
-Block blk1(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
+Block_Manager blk_man;
+/*Block blk1(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
 Block blk2(BLOCK_TYPE::BLOCK_MOVABLE_BLOCK, {450.0f, 500.0f});
 Block blk3(BLOCK_TYPE::BLOCK_MOVABLE_DESTINATION, {500.0f, 500.0f});
-Block_Manager blk_man;
 
 blk_man.addNewBlock(blk1);
 blk_man.addNewBlock(blk2);
 blk_man.addNewBlock(blk3);
+*/
 
 int w, h;
 int** grid;
 ReadLevel("res/levels/level1.txt", &w, &h, &grid);
+OutputLevel((const int**)grid, w, h);
 DrawLevel(blk_man, w, h, (const int**)grid);
+getLevel(blk_man, &w, &h, &grid);
+OutputLevel((const int**)grid, w, h);
+UpdateImmovableBlocks(blk_man);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {

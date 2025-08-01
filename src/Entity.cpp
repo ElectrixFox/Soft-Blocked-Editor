@@ -46,6 +46,35 @@ switch (btype)
     }
 }
 
+SpriteSheetInfo getImmovableBlock(BLOCK_IM_STATE state)
+{
+// To-Do: This could be changed to just use the state as the parameter as it counts from 1 to 6
+switch (state)
+    {
+    case BLOCK_IM_STATE_ALONE:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 1};
+        break;
+    case BLOCK_IM_STATE_LINE_END:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 2};
+        break;
+    case BLOCK_IM_STATE_LINE_STRAIGHT:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 3};
+        break;
+    case BLOCK_IM_STATE_THREE_INTERSECT:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 4};
+        break;
+    case BLOCK_IM_STATE_FOUR_INTERSECT:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 5};
+        break;
+    case BLOCK_IM_STATE_CORNER:
+        return (SpriteSheetInfo){"res/sprites/immovable_tilesheet_short.png", 6, 6};
+        break;
+    default:
+        return (SpriteSheetInfo){};
+        break;
+    }
+}
+
 Block::Block(BLOCK_TYPE btype, vec2 position)
     : type(btype), bl_id(id++), pos(position)
 {
@@ -104,7 +133,7 @@ for (const Block& blk : blocks)
 return 0;
 }
 
-const Block Block_Manager::getBlockAt(vec2 position) const
+const Block& Block_Manager::getBlockAt(vec2 position) const
 {
 for (const Block& blk : blocks)
     if(position == blk.pos)

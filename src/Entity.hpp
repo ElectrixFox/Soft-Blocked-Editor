@@ -30,7 +30,24 @@ enum BLOCK_TYPE {
     BLOCK_COUNT
 };
 
+enum BLOCK_IM_STATE {
+    BLOCK_NULL,
+    BLOCK_IM_STATE_ALONE,
+    BLOCK_IM_STATE_LINE_END,
+    BLOCK_IM_STATE_LINE_STRAIGHT,
+    BLOCK_IM_STATE_THREE_INTERSECT,
+    BLOCK_IM_STATE_FOUR_INTERSECT,
+    BLOCK_IM_STATE_CORNER
+};
+
 SpriteSheetInfo getBlockSSI(BLOCK_TYPE btype);
+
+/**
+ * Gets the block information for the immovable block
+ * 
+ * @returns The block information
+ */
+SpriteSheetInfo getImmovableBlock(BLOCK_IM_STATE state);
 
 struct Block
     {
@@ -50,13 +67,16 @@ struct Block
 
     // runtime stuff
     void draw();
-    std::function<void (Block& blk)> update();
+    std::function<void (Block& blk)> update;
     };
 
 
 class Block_Manager
     {
     public:
+        Block_Manager()
+            : blocks()
+            {}
         void drawBlocks(Camera cam);
         void addNewBlock(Block blk);
         Block& getBlock(unsigned int bl_id);
@@ -64,7 +84,7 @@ class Block_Manager
         Block& getBlockAt(vec2 position);
 
         int isBlockAt(vec2 position) const;
-        const Block getBlockAt(vec2 position) const;
+        const Block& getBlockAt(vec2 position) const;
 
         const int getBlockCount() const { return blocks.size(); };
         

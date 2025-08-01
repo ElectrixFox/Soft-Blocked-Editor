@@ -41,7 +41,7 @@ void WriteLevel(const char* levelfp, const int w, const int h, const int** grid)
  * @param h A pointer to the height (this will be set)
  * @param grid A pointer to a 2D array of integers (again this will be set)
  */
-void getLevel(const Block_Manager blk_man, int* w, int* h, int*** grid);
+void getLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
 
 /**
  * Draws the level to the screen
@@ -52,3 +52,24 @@ void getLevel(const Block_Manager blk_man, int* w, int* h, int*** grid);
  * @param grid The actual grid (a 2D array of integers)
  */
 void DrawLevel(Block_Manager& blk_man, int w, int h, const int** grid);
+
+
+/**
+ * Gets the type of the immovable block
+ * 
+ * @param w The width of the grid
+ * @param h The height of the grid
+ * @param grid A constant grid
+ * @param pos The position of the block in the grid to get the type of
+ * @param angle A pointer to the angle to be changed if there is an angle
+ * 
+ * @returns The state of the immovable state
+ */
+BLOCK_IM_STATE getImmovableType(const int w, const int h, const int** grid, vec2 pos, float* angle);
+
+/**
+ * Updates the immovable blocks in the level
+ * 
+ * @param rp A reference to the block manager
+ */
+unsigned int UpdateImmovableBlocks(Block_Manager& block_man);
