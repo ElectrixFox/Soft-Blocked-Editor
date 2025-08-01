@@ -76,15 +76,6 @@ memcpy(tmp, *arr, nsize * sizeof(elesize));
 
 void ShrinkArrayByOne(void** arr, const unsigned int size, unsigned int elesize) { _ShrinkArray(arr, size, size - 1, elesize); }
 
-static unsigned int findArrMin(unsigned int* arr, int size)
-{
-unsigned int min = arr[0];
-for (int i = 0; i < size; i++)
-    if(arr[i] < min)
-        min = arr[i];
-return min;
-}
-
 vec2 ScalarMultVec2(vec2 v, float a) { return (vec2){a * v.x, a * v.y}; }
 
 vec3 ScalarMultVec3(vec3 v, float a) { return (vec3){a * v.x, a * v.y, a * v.x}; }

@@ -2,6 +2,7 @@
 #define ENTITY_HPP
 #pragma once
 #include "Renderer.hpp"
+#include "Camera.hpp"
 #include <functional>
 
 struct Entity
@@ -36,6 +37,7 @@ struct Block
     Block(BLOCK_TYPE btype, vec2 position);
 
     const BLOCK_TYPE type;
+    unsigned int bl_id;
         
     // rendering stuff
     RenderObject rend_obj;
@@ -55,12 +57,19 @@ struct Block
 class Block_Manager
     {
     public:
-        void drawBlocks();
-        void AddNewBlock(Block blk);
-        Block& getBlock();
+        void drawBlocks(Camera cam);
+        void addNewBlock(Block blk);
+        Block& getBlock(unsigned int bl_id);
 
-    private:
+        Block& getBlockAt(vec2 position);
+
+        int isBlockAt(vec2 position) const;
+        const Block getBlockAt(vec2 position) const;
+
+        const int getBlockCount() const { return blocks.size(); };
+        
         std::vector<Block> blocks;
+    private:
     };
 
 

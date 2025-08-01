@@ -7,6 +7,11 @@
 struct vec2
     {
     float x, y;
+ 
+    int operator==(const vec2 v)
+        {
+        return (this->x == v.x || this->y == v.y);
+        }
 
     int operator!=(vec2 v)
         {
@@ -55,7 +60,10 @@ struct vec4
         case 1: return y;
         case 2: return z;
         case 3: return w;
-        default: break;
+        default:
+            printf("\nERROR: Index out of bounds of vector");
+            exit(1);
+            break;
         }
         }
     };

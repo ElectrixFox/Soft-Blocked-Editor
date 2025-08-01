@@ -1,5 +1,7 @@
 #include "Entity.hpp"
 
+static unsigned int id = 0;
+
 SpriteSheetInfo getBlockSSI(BLOCK_TYPE btype)
 {
 switch (btype)
@@ -45,7 +47,7 @@ switch (btype)
 }
 
 Block::Block(BLOCK_TYPE btype, vec2 position)
-    : pos(pos), type(btype)
+    : type(btype), bl_id(id++), pos(position)
 {
 this->ssi = getBlockSSI(type);
 this->rend_obj = RenderObject(this->ssi, 0);
@@ -67,4 +69,62 @@ switch (type)
         break;
         }
     }
+}
+
+void Block_Manager::drawBlocks(Camera cam)
+{
+for(Block block : blocks)
+    {
+    ApplyCamera(cam, block.rend_obj.prog);
+    ApplyProjection(cam, block.rend_obj.prog);
+    block.draw();
+    }
+}
+        
+void Block_Manager::addNewBlock(Block blk)
+{
+blocks.push_back(blk);
+}
+
+Block& Block_Manager::getBlock(unsigned int bl_id)
+{
+for (Block& blk : blocks)
+    if(blk.bl_id == bl_id)
+        return blk;
+
+printf("\nERROR: Cannot find block %d", bl_id);
+exit(1);
+}
+
+int Block_Manager::isBlockAt(vec2 position) const
+{
+for (const Block& blk : blocks)
+    if(position == blk.pos)
+        return 1;
+return 0;
+}
+
+const Block Block_Manager::getBlockAt(vec2 position) const
+{
+for (const Block& blk : blocks)
+    if(position == blk.pos)
+        return blk;
+
+printf("\nERROR: Cannot find block at ");
+OutputVec2(position);
+exit(1);
+}
+
+        
+Block& Block_Manager::getBlockAt(vec2 position)
+{
+if(isBlockAt(position))    // if there is not a block at the position
+    for (Block& blk : blocks)
+        if(blk.pos == position)
+            return blk;
+
+printf("\nERROR: Cannot find block at ");
+OutputVec2(position);
+exit(1);
+
 }

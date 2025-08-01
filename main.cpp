@@ -12,6 +12,10 @@
 #include "src/Renderer.hpp"
 #include "src/Camera.hpp"
 #include "src/Entity.hpp"
+#include "src/Level.hpp"
+
+const int snap_to_grid = 1;
+const int grid_size = 50;
 
 int gwid = 1280, ghig = 720;
 
@@ -51,11 +55,20 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 InitialiseInputManager(window);
 
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
-RenderObject tst({"res/sprites/player_spritesheet.png", 2, 1}, 0);
-RenderObject tst2({"res/sprites/player_spritesheet.png", 2, 2}, 0);
-RenderObject tst3({"res/sprites/player_barrier_tilesheet.png", 1, 1}, 0);
 
-Block blk(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
+Block blk1(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
+Block blk2(BLOCK_TYPE::BLOCK_MOVABLE_BLOCK, {450.0f, 500.0f});
+Block blk3(BLOCK_TYPE::BLOCK_MOVABLE_DESTINATION, {500.0f, 500.0f});
+Block_Manager blk_man;
+
+blk_man.addNewBlock(blk1);
+blk_man.addNewBlock(blk2);
+blk_man.addNewBlock(blk3);
+
+int w, h;
+int** grid;
+ReadLevel("res/levels/level1.txt", &w, &h, &grid);
+DrawLevel(blk_man, w, h, (const int**)grid);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -65,19 +78,7 @@ while(!glfwWindowShouldClose(window))   // main loop
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
 
-    ApplyCamera(cam, tst.prog);
-    ApplyProjection(cam, tst.prog);
-    drawRenderObject(tst, {500.0f, 500.0f}, {25.0f, 25.0f}, 0.0f);
-
-    ApplyCamera(cam, tst2.prog);
-    ApplyProjection(cam, tst2.prog);
-    drawRenderObject(tst2, {450.0f, 500.0f}, {25.0f, 25.0f}, 0.0f);
-
-    ApplyCamera(cam, tst3.prog);
-    ApplyProjection(cam, tst3.prog);
-    drawRenderObject(tst3, {550.0f, 500.0f}, {25.0f, 25.0f}, 0.0f);
-
-    blk.draw();
+    blk_man.drawBlocks(cam);
     
     glfwSwapBuffers(window);
     glfwPollEvents();
