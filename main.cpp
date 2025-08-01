@@ -11,6 +11,7 @@
 #include "src/InputManager.h"
 #include "src/Renderer.hpp"
 #include "src/Camera.hpp"
+#include "src/Entity.hpp"
 
 int gwid = 1280, ghig = 720;
 
@@ -54,6 +55,8 @@ RenderObject tst({"res/sprites/player_spritesheet.png", 2, 1}, 0);
 RenderObject tst2({"res/sprites/player_spritesheet.png", 2, 2}, 0);
 RenderObject tst3({"res/sprites/player_barrier_tilesheet.png", 1, 1}, 0);
 
+Block blk(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
+
 while(!glfwWindowShouldClose(window))   // main loop
     {
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
@@ -73,6 +76,8 @@ while(!glfwWindowShouldClose(window))   // main loop
     ApplyCamera(cam, tst3.prog);
     ApplyProjection(cam, tst3.prog);
     drawRenderObject(tst3, {550.0f, 500.0f}, {25.0f, 25.0f}, 0.0f);
+
+    blk.draw();
     
     glfwSwapBuffers(window);
     glfwPollEvents();

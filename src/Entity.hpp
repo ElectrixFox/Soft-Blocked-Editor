@@ -4,13 +4,66 @@
 #include "Renderer.hpp"
 #include <functional>
 
-class Entity
+struct Entity
+    {
+    Entity();
+
+    void draw();
+    std::function<void (Entity&)> update();
+    };
+
+#pragma region Block
+
+enum BLOCK_TYPE {
+    BLOCK_PLAYER = 0,
+    BLOCK_MOVABLE_BARRIER = 1,
+    BLOCK_MOVABLE_BLOCK = 2,
+    BLOCK_IMMOVABLE_BLOCK,
+    BLOCK_COUNTABLE_BLOCK,
+    BLOCK_MOVABLE_DESTINATION,
+    BLOCK_PLAYER_DESTINATION,
+    BLOCK_COUNTABLE_DESTINATION,
+    BLOCK_PLAYER_BARRIER,
+    BLOCK_TELEPORTER_SOURCE,
+    BLOCK_TELEPORTER_DESTINATION,
+    BLOCK_COUNT
+};
+
+SpriteSheetInfo getBlockSSI(BLOCK_TYPE btype);
+
+struct Block
+    {
+    Block(BLOCK_TYPE btype, vec2 position);
+
+    const BLOCK_TYPE type;
+        
+    // rendering stuff
+    RenderObject rend_obj;
+    SpriteSheetInfo ssi;
+
+    // transformation stuff
+    vec2 pos;
+    vec2 scale;
+    float angle;
+
+    // runtime stuff
+    void draw();
+    std::function<void (Block& blk)> update();
+    };
+
+
+class Block_Manager
     {
     public:
-        Entity();
+        void drawBlocks();
+        void AddNewBlock(Block blk);
+        Block& getBlock();
 
-        void draw();
-        std::function<void (Entity&)> update();
+    private:
+        std::vector<Block> blocks;
     };
+
+
+#pragma endregion
 
 #endif

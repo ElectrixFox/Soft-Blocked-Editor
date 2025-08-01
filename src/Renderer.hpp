@@ -10,6 +10,8 @@ struct RenderObject
     {
     unsigned int vao = 0, vbo = 0, ibo = 0, prog = 0, tex = 0;
 
+    RenderObject() {};
+
     RenderObject(SpriteSheetInfo ssi, int flip = 0)
         {
         static int ind = 0;
