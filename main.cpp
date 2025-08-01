@@ -100,6 +100,7 @@ InitialiseInputManager(window);
 
 RenderPacket block_rp = InitialiseRenderPacket();
 ui_man.initialise();
+
 InitialiseBlockDetails();
 
 // #define TEST_TOP_UI_TEXT

@@ -2,7 +2,6 @@
 
 #pragma region Block Manager
 
-
 #pragma endregion
 
 #pragma region Block Operations
