@@ -100,13 +100,18 @@ void OutputMatn(int n, int m, const float** A);
 void OutputMatrix(m4 matrix);
 
 /**
- * Outputs a matn
+ * Outputs a mat3
  * 
- * @param n The number of rows
- * @param m The number of columns
  * @param A The matrix to output
  */
 void OutputMat3(mat3 A);
+
+/**
+ * Outputs a mat4
+ * 
+ * @param A The matrix to output
+ */
+void OutputMat4(m4 A);
 
 /**
  * Increases the size of the passed array to the new size

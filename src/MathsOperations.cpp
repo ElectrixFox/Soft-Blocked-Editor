@@ -30,6 +30,12 @@ for (int i = 0; i < 3; i++)
     printf("\n%.2f %.2f %.2f", A.mat[i].x, A.mat[i].y, A.mat[i].z);
 }
 
+void OutputMat4(m4 A)
+{
+for (int i = 0; i < 4; i++)
+    printf("\n%.2f %.2f %.2f %.2f", A[i].x, A[i].y, A[i].z, A[i].w);
+}
+
 void OutputMatrix(m4 matrix)
 {
 for (int i = 0; i < 4; i++)

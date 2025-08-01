@@ -95,6 +95,13 @@ switch (GetActiveShape(shape))  // gets the shape by masking
 return {NULL}; // return an empty bundle if no shape matches
 }
 
+viBundle<float> GetShapeVertices(SHAPE shape, unsigned int nosp, unsigned int spr)
+{
+unsigned long int shpe = 0;
+GeneralInitialise(&shpe, nosp, spr, shape);
+return GetShapeVertices(shpe);
+}
+
 viBundle<unsigned int> GetShapeIndices(unsigned long int shape)
 {
 switch (GetActiveShape(shape))  // gets the shape by masking
@@ -136,4 +143,11 @@ switch (GetActiveShape(shape))  // gets the shape by masking
     }
 
 return {NULL}; // return an empty bundle if no shape matches
+}
+
+viBundle<unsigned int> GetShapeIndices(SHAPE shape)
+{
+unsigned long int shpe = 0;
+GeneralInitialise(&shpe, 0, 0, shape);
+return GetShapeIndices(shpe);
 }
