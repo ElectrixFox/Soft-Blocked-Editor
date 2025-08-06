@@ -261,8 +261,8 @@ for (int i = 0; i < nblk; i++)
             tbtn.clickable = 1;
             tbtn.onclick = chblk_fun;
             
-            ed.ui_man.addNewElement(tbtn);
             addToMenu(menu, tbtn);
+            ed.ui_man.addNewElement(tbtn);
             }
         ed.ui_man.addNewElement(menu);
         foldMenu(ed.ui_man, menu);

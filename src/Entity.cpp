@@ -336,10 +336,6 @@ switch (type)
             rcent = {ele.pos.x, ele.pos.y + md * ele.scale.y * ele.entries.size() / 2}; // the center of the rectangle
             rscle = {ele.scale.x, ele.scale.y * ele.entries.size()};
             }
-        printf("\n");
-        OutputVec2(rcent);
-        printf(" ");
-        OutputVec2(rscle);
 
         return PointInSquare(cpos, rcent, rscle);    // if the cursor is in the square or the positions match
         break;
@@ -357,11 +353,11 @@ return 0;
 int UI_Manager::hasPressedUI(vec2 cpos) const
 {
 for (const UI_Element& ele : elements)  // for each element
-    if(cpos == ele.pos && ele.render) // if the positions match
+    if(cpos == ele.pos) // if the positions match
         return 1;
 
 for (const UI_Element& ele : elements)  // for each element
-    if(PointInSquare(cpos, ele.pos, ele.scale) && ele.render) // if the cursor is in the square
+    if(PointInSquare(cpos, ele.pos, ele.scale)) // if the cursor is in the square
         return 1;
 
 return 0;
