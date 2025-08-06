@@ -78,17 +78,21 @@ getLevel(blk_man, &w, &h, &grid);
 OutputLevel((const int**)grid, w, h);
 UpdateImmovableBlocks(blk_man);
 
+BuildSelectBar(blk_man, ed);
+
 while(!glfwWindowShouldClose(window))   // main loop
     {
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     MoveCamera(cam);
 
     CheckEditorInput(ed, blk_man, cam);
+    // ed.ui_man.checkUIInput();
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
 
     blk_man.drawBlocks(cam);
+    ed.ui_man.drawElements(cam);
     
     glfwSwapBuffers(window);
     glfwPollEvents();

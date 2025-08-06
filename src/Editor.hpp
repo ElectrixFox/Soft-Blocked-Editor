@@ -42,6 +42,7 @@ void setActiveBlock(Editor& ed, BLOCK_TYPE block);
 
 void CheckEditorInput(Editor& ed, Block_Manager& blk_man, Camera& cam);
 
+void BuildSelectBar(const Block_Manager& blk_man, Editor& ed);
 
 // #define EDITOR_UI
 #ifdef EDITOR_UI

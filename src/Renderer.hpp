@@ -38,7 +38,7 @@ struct RenderObject
         AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
         InitialiseVertexLayout(layout); // initialising the layout to be used
 
-        printf("\nCreating %d", ind++);
+        // printf("\nCreating %d", ind++);
         };
     };
 

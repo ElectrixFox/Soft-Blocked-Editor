@@ -13,7 +13,7 @@ void setActiveBlock(Editor& ed, BLOCK_TYPE block) { ed.actblk = block; }
 
 static unsigned int PlaceBlock(Block_Manager& blk_man, BLOCK_TYPE type, vec2 position)
 {
-Block blk((BLOCK_TYPE)(type), position);
+Block blk(type, position);
 if(blk.type == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK)
     {
     blk.update = [](Block& blk)
@@ -29,6 +29,7 @@ return blk.bl_id;
 void CheckEditorInput(Editor& ed, Block_Manager& blk_man, Camera& cam)
 {
 GLFWwindow* window = getWindow();
+ed.ui_man.checkUIInput();
 
 // keyboard actions
 if(isPressed(GLFW_KEY_ESCAPE))
@@ -66,15 +67,19 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 
     if(!blk_man.hasPressedBlock(cpos) && !ed.ui_man.hasPressedUI(ncpos))
         {
+        printf("\nEmpty so place (%.f, %.f)", cpos.x, cpos.y);
         PlaceBlock(blk_man, getActiveBlock(ed), cpos);  // placing the block
         UpdateImmovableBlocks(blk_man);
         }
     else if(blk_man.hasPressedBlock(cpos))    // if a block has been clicked
         {
         Block& blk = blk_man.getBlockAt(cpos);  // get the block
-        blk.clicked = 1;    // say the block has been clicked
-        blk.update(blk);    // do the click action
-        blk.clicked = 0;    // say it has no longer been clicked
+        if(blk.update != nullptr)
+            {
+            blk.clicked = 1;    // say the block has been clicked
+            blk.update(blk);    // do the click action
+            blk.clicked = 0;    // say it has no longer been clicked
+            }
         }
     }
 else if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
@@ -193,5 +198,65 @@ for (int i = 0; i < nblk; i++)
 }
 
 #endif
+
+void BuildSelectBar(const Block_Manager& blk_man, Editor& ed)
+{
+vec2 topright = {1255.0f, 695.0f};
+const unsigned int nblocks = BLOCK_TYPE::BLOCK_COUNT;
+const float padding = 10.0f;
+
+UI_Manager& ui_man = ed.ui_man;
+
+BLOCK_TYPE menuDetails[] =   // the base blocks
+    {
+    BLOCK_PLAYER,
+    BLOCK_MOVABLE_BARRIER,
+    BLOCK_MOVABLE_BLOCK,
+    BLOCK_IMMOVABLE_BLOCK,
+    BLOCK_COUNTABLE_BLOCK,
+    BLOCK_TELEPORTER_SOURCE
+    };
+const int nblk = sizeof(menuDetails) / sizeof(BLOCK_TYPE);
+
+
+for (int i = 0; i < nblk; i++)
+    {
+    vec2 position = {topright.x, topright.y - (i * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
+    SpriteSheetInfo ssi = getBlockSSI(menuDetails[i]);
+    UI_Element btn(UI_ELEMENT_TYPE::UI_BUTTON, position, ssi.spfp, ssi.nosp, ssi.spr);
+    btn.clickable = 1;
+    btn.onclick = [&ed](UI_Element& ele)
+        {
+        printf("\nChanging active block");
+        ed.actblk = getBlockTypeFromSSI(ele.ssi);
+        printf("\n%d Active", (int)ed.actblk);
+        };
+    ui_man.addNewElement(btn);
+    /*
+    ui_man.addNewElement(btn);
+    unsigned int entry = addToElementTable(ui_man, position, 25.0f, btn);
+    assignElementAction(ui_man.ui_btn_tab, entry, (GUI_ACTION_TRIGGER)0, &changeBlock);
+
+    if(ssi.nosp > 1 && getBlockFromFilePath(bi.spfp) != BLOCK_IMMOVABLE_BLOCK)   // if there is more than one sprite and the block isn't the immovable type
+        {
+        GUI_Menu menu = createMenu(position, entry);
+        unsigned int men_id = addToElementTable(ui_man, position, menu);
+        assignElementAction(ui_man.ui_men_tab, men_id, UI_TRIGGER_HOVER, &unfoldBlockOptions);
+
+        printf("\nCreating the Menu");
+        for (int j = 2; j <= bi.nosp; j++)
+            {
+            vec2 tpos = {position.x - ((j - 1) * 50.0f + padding), position.y};
+            SpriteSheetInfo tssi = SpriteSheetInfo(bi.spfp, bi.nosp, (unsigned int)j);
+            GUI_Button tbtn = createButton(tpos, 25.0f, tssi.spfp, tssi.nosp, tssi.spr);
+            unsigned int menentry = addToElementTable(ui_man, tpos, 25.0f, tbtn);
+            assignElementAction(ui_man.ui_btn_tab, menentry, UI_TRIGGER_PRESS, &changeBlock);
+            addToMenu(ui_man.ui_men_tab, men_id, menentry);
+            }
+        foldMenu(ui_man.ui_men_tab, ui_man.ui_btn_tab, ui_man.ui_rp, men_id);
+        }
+    */
+    }
+}
 
 #pragma endregion

@@ -7,7 +7,6 @@ extern RenderPacket text_rp;
 */
 
 const int datsize = 256;
-static unsigned int idtrk = 0;
 
 UI_Element createButton(vec2 pos, float scale, const char* spfp, int nosp, int spr)
 {

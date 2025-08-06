@@ -48,6 +48,28 @@ switch (btype)
     }
 }
 
+BLOCK_TYPE getBlockTypeFromSSI(SpriteSheetInfo ssi)
+{
+for (int i = 0; i < BLOCK_TYPE::BLOCK_COUNT; i++)
+    {
+    SpriteSheetInfo tssi = getBlockSSI((BLOCK_TYPE)i);
+
+    if(strcmp(tssi.spfp,ssi.spfp) != 0)
+        continue;
+    
+    if(tssi.nosp != ssi.nosp)
+        continue;
+    
+    if(tssi.spr != ssi.spr)
+        continue;
+
+    return (BLOCK_TYPE)i;
+    }
+
+printf("\nERROR: Cannot locate invalid block type");
+exit(1);
+}
+
 SpriteSheetInfo getImmovableBlock(BLOCK_IM_STATE state)
 {
 // To-Do: This could be changed to just use the state as the parameter as it counts from 1 to 6
@@ -92,6 +114,7 @@ switch (type)
     {
     case BLOCK_TYPE::BLOCK_TELEPORTER_SOURCE:
         {
+        drawRenderObject(rend_obj, pos, scale, angle);
         break;
         }
     default:
@@ -224,6 +247,20 @@ if(rend == 1)
 
 scale = {25.0f, 25.0f};
 angle = 0.0f;
+
+switch (in_type)
+    {
+    case UI_ELEMENT_TYPE::UI_BUTTON:
+        {
+        this->onclick = [](UI_Element& ele)
+            {
+            printf("\nYou've pressed me %d", ele.ui_id);
+            };
+        break;
+        }
+    default:
+        break;
+    }
 }
 
 void UI_Element::draw()
@@ -241,7 +278,7 @@ for(UI_Element ele : elements)
     if(ele.render == 0) // if shouldn't render then just continue
         continue;
 
-    ApplyCamera(cam, ele.rend_obj.prog);
+    // ApplyCamera(cam, ele.rend_obj.prog);
     ApplyProjection(cam, ele.rend_obj.prog);
     ele.draw();
     }
@@ -259,13 +296,40 @@ printf("\nERROR: Cannot find UI element %d", ui_id);
 exit(1);
 }
 
+int UI_Manager::hasPressedElement(const UI_Element& ele, vec2 cpos) const
+{
+if(cpos == ele.pos) // if the positions match
+    return 1;
+if(PointInSquare(cpos, ele.pos, ele.scale)) // if the cursor is in the square
+    return 1;
+return 0;
+}
+
 int UI_Manager::hasPressedUI(vec2 cpos) const
 {
 for (const UI_Element& ele : elements)  // for each element
     if(cpos == ele.pos) // if the positions match
         return 1;
 
+for (const UI_Element& ele : elements)  // for each element
+    if(PointInSquare(cpos, ele.pos, ele.scale)) // if the cursor is in the square
+        return 1;
+
 return 0;
+}
+
+void UI_Manager::checkUIInput()
+{
+vec2 cpos = getCursorPosition();
+if(hasPressedUI(cpos) && isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+    {
+    for (UI_Element& ele : elements)
+        {
+        if(ele.clickable && hasPressedElement(ele, cpos))
+            ele.onclick(ele);
+        }
+    }
+
 }
 
 #pragma endregion

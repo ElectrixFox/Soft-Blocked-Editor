@@ -53,6 +53,9 @@ void getLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
  */
 void DrawLevel(Block_Manager& blk_man, int w, int h, const int** grid);
 
+void outputScope(const int scale, const int** scope);
+void getBlockScopeAt(const Block_Manager& blk_man, vec2 pos, int*** scope);
+void UpdateImmovableBlock(Block_Manager& blk_man, Block& blk);
 
 /**
  * Gets the type of the immovable block

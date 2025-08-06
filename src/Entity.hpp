@@ -46,6 +46,8 @@ enum BLOCK_IM_STATE {
 
 SpriteSheetInfo getBlockSSI(BLOCK_TYPE btype);
 
+BLOCK_TYPE getBlockTypeFromSSI(SpriteSheetInfo ssi);
+
 /**
  * Gets the block information for the immovable block
  * 
@@ -71,7 +73,7 @@ struct Block
 
     // runtime stuff
     void draw();
-    std::function<void (Block& blk)> update;
+    std::function<void (Block& blk)> update = nullptr;
 
     // action stuff
     int clicked = 0;
@@ -158,7 +160,11 @@ class UI_Manager
 
         const int getElementCount() const { return elements.size(); };
 
+        int hasPressedElement(const UI_Element& ele, vec2 cpos) const;
+
         int hasPressedUI(vec2 cpos) const;
+
+        void checkUIInput();
         
         std::vector<UI_Element> elements;
     private:
