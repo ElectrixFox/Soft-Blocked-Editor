@@ -18,6 +18,28 @@ UI_Element createMenu(vec2 pos)
 return UI_Element(UI_ELEMENT_TYPE::UI_MENU, pos);
 }
 
+void addToMenu(UI_Element& menu, const UI_Element& entry) { menu.entries.push_back(entry.ui_id); }
+
+void foldMenu(UI_Manager& ui_man, UI_Element& menu)
+{
+menu.folded = 1;
+for (int i = 1; i < menu.entries.size(); i++)
+    {
+    UI_Element& ele = ui_man.getElement(menu.entries[i]);
+    ele.render = 0;
+    }
+}
+
+void unfoldMenu(UI_Manager& ui_man, UI_Element& menu)
+{
+menu.folded = 0;
+for (int i = 1; i < menu.entries.size(); i++)
+    {
+    UI_Element& ele = ui_man.getElement(menu.entries[i]);
+    ele.render = 1;
+    }
+}
+
 #ifdef OLD
 
 #pragma region Local Functions

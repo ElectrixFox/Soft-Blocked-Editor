@@ -14,6 +14,12 @@ UI_Element createButton(vec2 pos, float scale, const char* spfp, int nosp, int s
 
 UI_Element createMenu(vec2 pos);
 
+void addToMenu(UI_Element& menu, const UI_Element& entry);
+
+void foldMenu(UI_Manager& ui_man, UI_Element& menu);
+void unfoldMenu(UI_Manager& ui_man, UI_Element& menu);
+
+
 // GUI_Menu createMenu(vec2 pos, unsigned int head_id);
 
 // GUI_Text_Box createTextBox(vec2 pos, std::string cont);

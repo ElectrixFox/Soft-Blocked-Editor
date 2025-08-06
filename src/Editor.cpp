@@ -217,6 +217,20 @@ BLOCK_TYPE menuDetails[] =   // the base blocks
     };
 const int nblk = sizeof(menuDetails) / sizeof(BLOCK_TYPE);
 
+auto chblk_fun = [&ed](UI_Element& ele)
+        {
+        printf("\nChanging active block");
+        ed.actblk = getBlockTypeFromSSI(ele.ssi);
+        printf("\n%d Active", (int)ed.actblk);
+        };
+
+auto mentog_fun = [&ed](UI_Element& ele)
+    {
+    if(ele.hoveract && !ele.hovering)
+        foldMenu(ed.ui_man, ele);
+    else if(ele.hoveract && ele.hovering)
+        unfoldMenu(ed.ui_man, ele);
+    };
 
 for (int i = 0; i < nblk; i++)
     {
@@ -224,13 +238,35 @@ for (int i = 0; i < nblk; i++)
     SpriteSheetInfo ssi = getBlockSSI(menuDetails[i]);
     UI_Element btn(UI_ELEMENT_TYPE::UI_BUTTON, position, ssi.spfp, ssi.nosp, ssi.spr);
     btn.clickable = 1;
-    btn.onclick = [&ed](UI_Element& ele)
-        {
-        printf("\nChanging active block");
-        ed.actblk = getBlockTypeFromSSI(ele.ssi);
-        printf("\n%d Active", (int)ed.actblk);
-        };
+    btn.onclick = chblk_fun;
+
     ui_man.addNewElement(btn);
+
+    BLOCK_TYPE btype = getBlockTypeFromSSI(btn.ssi);
+
+    if(ssi.nosp > 1 && btype != BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK)
+        {
+        UI_Element menu(UI_ELEMENT_TYPE::UI_MENU, position);
+        addToMenu(menu, btn);
+        menu.hoveract = 1;
+        menu.lrud = 0;
+        menu.update = mentog_fun;
+        
+        for (int j = 2; j <= ssi.nosp; j++)
+            {
+            vec2 tpos = {position.x - ((j - 1) * 50.0f + padding), position.y};
+            SpriteSheetInfo tssi = (SpriteSheetInfo){ssi.spfp, ssi.nosp, (unsigned int)j};
+            UI_Element tbtn(UI_ELEMENT_TYPE::UI_BUTTON, tpos, tssi.spfp, tssi.nosp, tssi.spr);
+
+            tbtn.clickable = 1;
+            tbtn.onclick = chblk_fun;
+            
+            ed.ui_man.addNewElement(tbtn);
+            addToMenu(menu, tbtn);
+            }
+        ed.ui_man.addNewElement(menu);
+        foldMenu(ed.ui_man, menu);
+        }
     /*
     ui_man.addNewElement(btn);
     unsigned int entry = addToElementTable(ui_man, position, 25.0f, btn);

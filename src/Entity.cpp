@@ -213,7 +213,24 @@ static unsigned int id2 = 0;
 
 static int shouldRender(UI_ELEMENT_TYPE type)
 {
-return 1;
+switch (type)
+    {
+    case UI_ELEMENT_TYPE::UI_BUTTON:
+        {
+        return 1;
+        break;
+        }
+    case UI_ELEMENT_TYPE::UI_MENU:
+        {
+        return 0;
+        break;
+        }
+    default:
+        {
+        return 1;
+        break;
+        }
+    }
 }
 
 UI_Element::UI_Element(UI_ELEMENT_TYPE in_type, vec2 position)
@@ -221,6 +238,7 @@ UI_Element::UI_Element(UI_ELEMENT_TYPE in_type, vec2 position)
 {
 int rend = shouldRender(type);  // should this be rendered
 
+this->update = {};
 this->render = rend;    // setting the variable
 
 if(rend == 1)
@@ -236,6 +254,7 @@ UI_Element::UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp,
     : type(in_type), ui_id(id2++), pos(position)
 {
 this->ssi = (SpriteSheetInfo){spfp, nosp, spr};
+this->update = {};
 
 int rend = shouldRender(type);  // should this be rendered
 this->render = rend;    // setting the variable
@@ -298,21 +317,51 @@ exit(1);
 
 int UI_Manager::hasPressedElement(const UI_Element& ele, vec2 cpos) const
 {
-if(cpos == ele.pos) // if the positions match
-    return 1;
-if(PointInSquare(cpos, ele.pos, ele.scale)) // if the cursor is in the square
-    return 1;
+UI_ELEMENT_TYPE type = ele.type;
+
+switch (type)
+    {
+    case UI_ELEMENT_TYPE::UI_MENU:
+        {
+        vec2 rcent, rscle;
+        if(ele.lrud == 0 || ele.lrud == 1)  // left or right
+            {
+            int md = (ele.lrud) % 2 ? -1 : 1;
+            rcent = {ele.pos.x - md * ele.scale.x * ele.entries.size() / 2, ele.pos.y}; // the center of the rectangle
+            rscle = {ele.scale.x * ele.entries.size(), ele.scale.y};
+            }
+        else if(ele.lrud == 2 || ele.lrud == 3) // up or down
+            {
+            int md = (ele.lrud) % 2 ? -1 : 1;
+            rcent = {ele.pos.x, ele.pos.y + md * ele.scale.y * ele.entries.size() / 2}; // the center of the rectangle
+            rscle = {ele.scale.x, ele.scale.y * ele.entries.size()};
+            }
+        printf("\n");
+        OutputVec2(rcent);
+        printf(" ");
+        OutputVec2(rscle);
+
+        return PointInSquare(cpos, rcent, rscle);    // if the cursor is in the square or the positions match
+        break;
+        }
+    default:
+        {
+        return ((cpos == ele.pos) || (PointInSquare(cpos, ele.pos, ele.scale)));    // if the cursor is in the square or the positions match
+        break;
+        }
+    }
+
 return 0;
 }
 
 int UI_Manager::hasPressedUI(vec2 cpos) const
 {
 for (const UI_Element& ele : elements)  // for each element
-    if(cpos == ele.pos) // if the positions match
+    if(cpos == ele.pos && ele.render) // if the positions match
         return 1;
 
 for (const UI_Element& ele : elements)  // for each element
-    if(PointInSquare(cpos, ele.pos, ele.scale)) // if the cursor is in the square
+    if(PointInSquare(cpos, ele.pos, ele.scale) && ele.render) // if the cursor is in the square
         return 1;
 
 return 0;
@@ -321,16 +370,31 @@ return 0;
 void UI_Manager::checkUIInput()
 {
 vec2 cpos = getCursorPosition();
-if(hasPressedUI(cpos) && isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT))
+int uiprs = hasPressedUI(cpos); // has the UI been pressed
+
+for (UI_Element& ele : elements)
     {
-    for (UI_Element& ele : elements)
+    int covele = hasPressedElement(ele, cpos);  // is cursor over the element
+    if(ele.clickable && uiprs)
         {
-        if(ele.clickable && hasPressedElement(ele, cpos))
+        if(isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && covele)
             ele.onclick(ele);
         }
-    }
+    else if(ele.hoveract)
+        {
+        ele.hovering = covele;
 
+        if(ele.onhover)
+            ele.onhover(ele);
+        }
+    
+    if(ele.update)
+        {
+        ele.update(ele);
+        }
+    }
 }
+
 
 #pragma endregion
 

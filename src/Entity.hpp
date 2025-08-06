@@ -134,8 +134,9 @@ struct UI_Element
     float angle;
 
     // menu details
-    std::vector<UI_Element> entries;
+    std::vector<unsigned int> entries;
     int folded = 0;
+    int lrud = 0;   // does it unfold left, right, up or down (0, 1, 2, 3)
 
     // runtime stuff
     void draw();
@@ -146,6 +147,7 @@ struct UI_Element
     std::function<void (UI_Element& ele)> onclick = nullptr;
 
     int hoveract = 0;
+    int hovering = 0;
     std::function<void (UI_Element& ele)> onhover = nullptr;
     };
 
@@ -173,6 +175,7 @@ class UI_Manager
         std::vector<UI_Element> elements;
     private:
     };
+
 #pragma endregion
 
 #endif
