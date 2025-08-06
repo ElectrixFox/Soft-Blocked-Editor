@@ -103,7 +103,11 @@ float minx = 0, maxx = 0, miny = 0, maxy = 0;
 const int tsize = blk_man.getBlockCount();
 
 if(tsize == 0)  // stop if there are no transforms
+    {
+    *w = 0;
+    *h = 0;
     return;
+    }
 
 // initialising with the first block
 minx = blk_man.blocks[0].pos.x;

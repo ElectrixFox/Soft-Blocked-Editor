@@ -13,9 +13,10 @@
 #include "src/Camera.hpp"
 #include "src/Entity.hpp"
 #include "src/Level.hpp"
+#include "src/Editor.hpp"
 
-const int snap_to_grid = 1;
-const int grid_size = 50;
+extern const int snap_to_grid;
+extern const int grid_size;
 
 int gwid = 1280, ghig = 720;
 
@@ -66,6 +67,8 @@ blk_man.addNewBlock(blk2);
 blk_man.addNewBlock(blk3);
 */
 
+Editor ed;
+
 int w, h;
 int** grid;
 ReadLevel("res/levels/level1.txt", &w, &h, &grid);
@@ -79,6 +82,8 @@ while(!glfwWindowShouldClose(window))   // main loop
     {
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
     MoveCamera(cam);
+
+    CheckEditorInput(ed, blk_man, cam);
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer

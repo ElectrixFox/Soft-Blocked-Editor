@@ -5,6 +5,8 @@
 #include "Camera.hpp"
 #include <functional>
 
+#pragma region Entity
+
 struct Entity
     {
     Entity();
@@ -12,6 +14,8 @@ struct Entity
     void draw();
     std::function<void (Entity&)> update();
     };
+
+#pragma endregion
 
 #pragma region Block
 
@@ -53,7 +57,7 @@ struct Block
     {
     Block(BLOCK_TYPE btype, vec2 position);
 
-    const BLOCK_TYPE type;
+    BLOCK_TYPE type;
     unsigned int bl_id;
         
     // rendering stuff
@@ -68,8 +72,10 @@ struct Block
     // runtime stuff
     void draw();
     std::function<void (Block& blk)> update;
-    };
 
+    // action stuff
+    int clicked = 0;
+    };
 
 class Block_Manager
     {
@@ -79,6 +85,8 @@ class Block_Manager
             {}
         void drawBlocks(Camera cam);
         void addNewBlock(Block blk);
+        void removeBlock(unsigned int bl_id);
+
         Block& getBlock(unsigned int bl_id);
 
         Block& getBlockAt(vec2 position);
@@ -87,12 +95,74 @@ class Block_Manager
         const Block& getBlockAt(vec2 position) const;
 
         const int getBlockCount() const { return blocks.size(); };
+
+        int hasPressedBlock(vec2 pos) const;
         
         std::vector<Block> blocks;
     private:
+        int findBlockIndex(const Block& blk);
     };
 
+#pragma endregion
 
+#pragma region UI Object
+
+enum UI_ELEMENT_TYPE
+    {
+    UI_BUTTON,
+    UI_MENU
+    };
+
+struct UI_Element
+    {
+    UI_Element(UI_ELEMENT_TYPE in_type, vec2 position);
+    UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp, int nosp, int spr);
+
+    const UI_ELEMENT_TYPE type;
+    unsigned int ui_id;
+
+    // rendering stuff
+    int render = 1; // should the object be drawn
+    RenderObject rend_obj;  // the rendering stuff for it
+    SpriteSheetInfo ssi;    // the actual sprite crap
+
+    // transformation stuff
+    vec2 pos;
+    vec2 scale;
+    float angle;
+
+    // runtime stuff
+    void draw();
+    std::function<void (UI_Element& ele)> update;
+
+    // action stuff
+    int clickable = 0;
+    std::function<void (UI_Element& ele)> onclick;
+
+    int hoveract = 0;
+    std::function<void (UI_Element& ele)> onhover;
+    };
+
+class UI_Manager
+    {
+    public:
+        UI_Manager()
+            : elements()
+            {}
+
+        void drawElements(Camera cam);
+    
+        void addNewElement(UI_Element ele);
+        
+        UI_Element& getElement(unsigned int ui_id);
+
+        const int getElementCount() const { return elements.size(); };
+
+        int hasPressedUI(vec2 cpos) const;
+        
+        std::vector<UI_Element> elements;
+    private:
+    };
 #pragma endregion
 
 #endif
