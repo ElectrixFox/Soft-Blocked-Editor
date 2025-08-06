@@ -310,6 +310,58 @@ for (int i = 0; i < 4; i++) // setting the output layout
     layout[i] = lay[i];
 }
 
+void getBlockScopeAt(const Block_Manager& blk_man, vec2 pos, int*** scope)
+{
+const Block& blk = blk_man.getBlockAt(pos);
+int** tscope = (int**)malloc(3 * sizeof(int*));
+
+for (int i = 0; i < 3; i++)
+    tscope[i] = (int*)malloc(3 * sizeof(int));
+
+// vec2 ipos = {pos.x - grid_size, pos.y + grid_size};
+for (int y = -1; y <= 1; y++)
+    {
+    for (int x = -1; x <= 1; x++)
+        {
+        vec2 ipos = {pos.x - x * grid_size, pos.y - y * grid_size};
+        if(!blk_man.isBlockAt(ipos))
+            {
+            tscope[y + 1][x + 1] = 0;
+            continue;
+            }
+        tscope[y + 1][x + 1] = blk_man.getBlockAt(ipos).type + 1;
+        }
+    }
+
+*scope = tscope;
+}
+
+BLOCK_IM_STATE getImmovableTypeScope(const int** scope, vec2 pos, float* angle)
+{
+
+}
+
+void UpdateImmovableBlock(Block_Manager& blk_man, Block& blk)
+{
+float theta = 0.0f;
+int** scope;
+getBlockScopeAt(blk_man, blk.pos, &scope);
+BLOCK_IM_STATE imstate = getImmovableTypeScope(scope, blk.pos, &theta);
+vec2 posi = blk.pos;
+
+int find = blk_man.isBlockAt(posi); // check if there is a block at the position
+
+if(find == -1)
+    {
+    return;
+    }
+
+Block& blk = blk_man.getBlockAt(posi);
+blk.ssi = getImmovableBlock(imstate);
+blk.angle = theta;
+blk.update(blk);
+}
+
 BLOCK_IM_STATE getImmovableType(const int w, const int h, const int** grid, vec2 pos, float* angle)
 {
 int x = pos.x, y = pos.y;
