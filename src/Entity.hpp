@@ -133,16 +133,20 @@ struct UI_Element
     vec2 scale;
     float angle;
 
+    // menu details
+    std::vector<UI_Element> entries;
+    int folded = 0;
+
     // runtime stuff
     void draw();
-    std::function<void (UI_Element& ele)> update;
+    std::function<void (UI_Element& ele)> update = nullptr;
 
     // action stuff
     int clickable = 0;
-    std::function<void (UI_Element& ele)> onclick;
+    std::function<void (UI_Element& ele)> onclick = nullptr;
 
     int hoveract = 0;
-    std::function<void (UI_Element& ele)> onhover;
+    std::function<void (UI_Element& ele)> onhover = nullptr;
     };
 
 class UI_Manager

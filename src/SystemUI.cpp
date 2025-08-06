@@ -13,6 +13,11 @@ UI_Element createButton(vec2 pos, float scale, const char* spfp, int nosp, int s
 return UI_Element(UI_ELEMENT_TYPE::UI_BUTTON, pos, spfp, nosp, spr);
 }
 
+UI_Element createMenu(vec2 pos)
+{
+return UI_Element(UI_ELEMENT_TYPE::UI_MENU, pos);
+}
+
 #ifdef OLD
 
 #pragma region Local Functions

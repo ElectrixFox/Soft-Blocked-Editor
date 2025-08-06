@@ -67,7 +67,6 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 
     if(!blk_man.hasPressedBlock(cpos) && !ed.ui_man.hasPressedUI(ncpos))
         {
-        printf("\nEmpty so place (%.f, %.f)", cpos.x, cpos.y);
         PlaceBlock(blk_man, getActiveBlock(ed), cpos);  // placing the block
         UpdateImmovableBlocks(blk_man);
         }
