@@ -121,11 +121,11 @@ for (const Block& blk : blk_man.blocks) // getting the extreme points
 
     if(pos.x < minx)
         minx = pos.x;
-    else if(maxx < pos.x)
+    if(maxx < pos.x)
         maxx = pos.x;
-    else if(pos.y < miny)
+    if(pos.y < miny)
         miny = pos.y;
-    else if(maxy < pos.y)
+    if(maxy < pos.y)
         maxy = pos.y;
     }
 
