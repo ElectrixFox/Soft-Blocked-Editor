@@ -368,13 +368,18 @@ void UI_Manager::checkUIInput()
 vec2 cpos = getCursorPosition();
 int uiprs = hasPressedUI(cpos); // has the UI been pressed
 
+int plmb = isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT);    // if left mouse button pressed
+
 for (UI_Element& ele : elements)
     {
     int covele = hasPressedElement(ele, cpos);  // is cursor over the element
+
     if(ele.clickable && uiprs)
         {
-        if(isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT) && covele)
+        if(plmb && covele)
+            {
             ele.onclick(ele);
+            }
         }
     else if(ele.hoveract)
         {
