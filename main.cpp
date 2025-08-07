@@ -66,6 +66,18 @@ ReadLevel("res/levels/level1.txt", &w, &h, &grid);
 OutputLevel((const int**)grid, w, h);
 DrawLevel(blk_man, w, h, (const int**)grid);
 getLevel(blk_man, &w, &h, &grid);
+
+const vec2 tpos = blk_man.blocks[0].pos;
+vec2 opos = getLevelGridCoordinates(blk_man, w, h, (const int**)grid, tpos);
+printf("\nTop left: ");
+OutputVec2(opos);
+
+int** scope;
+getSmallScope(blk_man, tpos, &scope);
+outputScope(3, (const int**)scope);
+
+
+
 OutputLevel((const int**)grid, w, h);
 UpdateImmovableBlocks(blk_man);
 

@@ -44,6 +44,21 @@ void WriteLevel(const char* levelfp, const int w, const int h, const int** grid)
 void getLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
 
 /**
+ * Gets the coordinates of a position of a block in the level grid
+ * 
+ * @param blk_man The block manager
+ * @param w The width of the grid (level)
+ * @param h The height of the grid (level)
+ * @param grid The level grid
+ * @param inpos The position of block to find in the grid
+ * 
+ * @returns A vector with the integer position of the block in the grid
+ */
+vec2 getLevelGridCoordinates(const Block_Manager& blk_man, const int w, const int h, const int** grid, const vec2 inpos);
+
+void getSmallScope(const Block_Manager& blk_man, const vec2 pos, int*** scope);
+
+/**
  * Draws the level to the screen
  * 
  * @param rp A reference to the block manager
@@ -54,7 +69,9 @@ void getLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
 void DrawLevel(Block_Manager& blk_man, int w, int h, const int** grid);
 
 void outputScope(const int scale, const int** scope);
+
 void getBlockScopeAt(const Block_Manager& blk_man, vec2 pos, int*** scope);
+
 void UpdateImmovableBlock(Block_Manager& blk_man, Block& blk);
 
 /**

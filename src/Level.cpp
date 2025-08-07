@@ -160,16 +160,50 @@ for (float y = maxy; miny <= y; y -= (float)grid_size)
 *grid = tgrid;
 }
 
+static vec2 getLevelGridCoordinates(const vec2 minpos, const vec2 inpos)
+{
+vec2 fpos = inpos;
+fpos = (fpos - minpos) / grid_size;
+return fpos;
+}
+
+vec2 getLevelGridCoordinates(const Block_Manager& blk_man, const int w, const int h, const int** grid, const vec2 inpos)
+{
+float minx = 0, maxx = 0, miny = 0, maxy = 0;
+
+// initialising with the first block
+minx = blk_man.blocks[0].pos.x;
+maxx = blk_man.blocks[0].pos.x;
+miny = blk_man.blocks[0].pos.y;
+maxy = blk_man.blocks[0].pos.y;
+
+for (const Block& blk : blk_man.blocks) // getting the extreme points
+    {
+    const vec2 pos = blk.pos;
+
+    if(pos.x < minx)
+        minx = pos.x;
+    if(maxx < pos.x)
+        maxx = pos.x;
+    if(pos.y < miny)
+        miny = pos.y;
+    if(maxy < pos.y)
+        maxy = pos.y;
+    }
+
+return getLevelGridCoordinates((vec2){minx, miny}, inpos);
+}
+
 void DrawLevel(Block_Manager& blk_man, int w, int h, const int** grid)
 {
-for (int y = h; 0 < y; y--)
+for (int y = 0; y < h; y++)
     {
-    vec2 pos = {0.0f, (float)((y - 1) * grid_size)};
+    vec2 pos = {0.0f, (float)(((h - 1) - y) * grid_size)};  // -1 as this means we can have our minimum at (0, 0) as (0, h) is not the top coordinate but (0, h - 1) is
     for (int x = 0; x < w; x++)
         {
         pos.x = x * grid_size;
 
-        int btype = grid[h - y][x];
+        int btype = grid[y][x];
 
         if(btype != 0)
             {
@@ -189,6 +223,70 @@ for (int y = h; 0 < y; y--)
 
 }
 
+static void getSmallScope(vec2 minpos, const int w, const int h, const int** grid, vec2 pos, int*** scope)
+{
+int x = pos.x, y = pos.y;
+
+const int sze = sizeof(int) * pow(3, 2);
+
+*scope = new int*[sze];
+int** tscope = new int*[sze];
+
+vec2 gpos = getLevelGridCoordinates(minpos, pos);
+
+for (int i = gpos.y - 1; i <= gpos.y + 1; i++)
+    {
+    if(0 <= i && i < h)
+        {
+        for (int j = gpos.x - 1; j <= gpos.x + 1; j++)
+            {
+            if(0 <= j && j < w)
+                tscope[i - (int)(gpos.y + 1)][j - (int)(gpos.x + 1)] = grid[i][j];
+            else
+                tscope[i - (int)(gpos.y + 1)][j - (int)(gpos.x + 1)] = 0;
+            }
+        }
+    else
+        {
+        for (int j = 0; j < 3; j++)
+            tscope[i - (int)(gpos.y + 1)][j] = 0;
+        }
+    }
+
+memcpy(*scope, tscope, sizeof(int) * 3 * 3);
+}
+
+void getSmallScope(const Block_Manager& blk_man, const vec2 pos, int*** scope)
+{
+const int sze = sizeof(int) * pow(3, 2);
+*scope = (int**)malloc(sizeof(int*) * 9);
+int** tscope = (int**)malloc(sizeof(int*) * 3);
+
+int rw = 0; // row counter
+for (float y = pos.y - grid_size; y <= pos.y + grid_size; y += grid_size)
+    {
+    tscope[2 - rw] = (int*)calloc(3, sizeof(int));  // setting the row to 0
+
+    int col = 0;    // coloumn counter
+    for (float x = pos.x - grid_size; x <= pos.x + grid_size; x += grid_size)
+        {
+        vec2 tpos = {x, y};
+        printf("\nTesting position: ");
+        OutputVec2(tpos);
+        int find = blk_man.isBlockAt(tpos); // get the transform at the position to check
+        if(find != 0)   // if found then update
+            {
+            int btype = blk_man.getBlockAt(tpos).type + 1;
+            tscope[2 - rw][col] = btype;    // setting the block
+            }
+        col++;
+        }
+    rw++;   // increase the row
+    }
+
+memcpy(*scope, tscope, sizeof(int) * 3 * 3);
+}
+
 static void getScope(const int w, const int h, const int** grid, vec2 pos, const int scpesc, int*** scope)
 {
 int x = pos.x, y = pos.y;
@@ -196,9 +294,6 @@ int x = pos.x, y = pos.y;
 const int sze = sizeof(int) * pow(scpesc, 2);
 
 *scope = new int*[sze];
-
-// *scope = (int**)malloc(sizeof(int) * pow(scpesc, 2));
-// int** tscope = (int**)malloc(sizeof(int*) * scpesc);
 int** tscope = new int*[sze];
 
 if(scpesc % 2 == 1)
@@ -208,7 +303,6 @@ if(scpesc % 2 == 1)
         {
         int jind = j - (y - interv);    // the actual j from 0 to scpesc
         tscope[jind] = new int[sizeof(int) * scpesc];
-        // tscope[jind] = (int*)malloc(sizeof(scpesc));
         
         if(j < 0 || h <= j)
             {
@@ -237,7 +331,6 @@ else
         {
         int jind = j - (y - interv);    // the actual j from 0 to scpesc
         tscope[jind] = new int[sizeof(int) * scpesc];
-        // tscope[jind] = (int*)malloc(sizeof(scpesc));
         
         if(j < 0 || h <= j)
             {
@@ -427,13 +520,14 @@ int** scope;
 if(blk.type != BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK)
     return;
 
-getBlockScopeAt(blk_man, blk.pos, &scope);
+getSmallScope(blk_man, blk.pos, &scope);
 outputScope(3, (const int**)scope);
 BLOCK_IM_STATE imstate = getImmovableTypeScope((const int**)scope, blk.pos, &theta);
 
 blk.ssi = getImmovableBlock(imstate);
 blk.angle = theta;
-blk.update(blk);
+if(blk.update)
+    blk.update(blk);
 
 }
 
