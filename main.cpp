@@ -58,15 +58,6 @@ InitialiseInputManager(window);
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
 
 Block_Manager blk_man;
-/*Block blk1(BLOCK_TYPE::BLOCK_PLAYER, {400.0f, 500.0f});
-Block blk2(BLOCK_TYPE::BLOCK_MOVABLE_BLOCK, {450.0f, 500.0f});
-Block blk3(BLOCK_TYPE::BLOCK_MOVABLE_DESTINATION, {500.0f, 500.0f});
-
-blk_man.addNewBlock(blk1);
-blk_man.addNewBlock(blk2);
-blk_man.addNewBlock(blk3);
-*/
-
 Editor ed;
 
 int w, h;
@@ -79,31 +70,6 @@ OutputLevel((const int**)grid, w, h);
 UpdateImmovableBlocks(blk_man);
 
 BuildSelectBar(blk_man, ed);
-
-UI_Element btn(UI_ELEMENT_TYPE::UI_BUTTON, {500.0f, 500.0f}, "res/sprites/player_spritesheet.png", 2, 1);
-UI_Element btn2(UI_ELEMENT_TYPE::UI_BUTTON, {500.0f, 450.0f}, "res/sprites/player_spritesheet.png", 2, 2);
-
-UI_Element menu(UI_ELEMENT_TYPE::UI_MENU, {500.0f, 500.0f});
-addToMenu(menu, btn);
-addToMenu(menu, btn2);
-
-menu.hoveract = 1;
-menu.update = [&ed](UI_Element& ele)
-    {
-    if(ele.hoveract && !ele.hovering)
-        foldMenu(ed.ui_man, ele);
-    else if(ele.hoveract && ele.hovering)
-        unfoldMenu(ed.ui_man, ele);
-    };
-
-menu.lrud = 3;
-ed.ui_man.addNewElement(btn);
-ed.ui_man.addNewElement(btn2);
-ed.ui_man.addNewElement(menu);
-
-
-foldMenu(ed.ui_man, menu);
-
 
 while(!glfwWindowShouldClose(window))   // main loop
     {

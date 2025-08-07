@@ -163,9 +163,18 @@ class UI_Manager
         void addNewElement(UI_Element ele);
         
         UI_Element& getElement(unsigned int ui_id);
+        const UI_Element& getElement(unsigned int ui_id) const;
 
         const int getElementCount() const { return elements.size(); };
 
+        /**
+         * Checks if the passed element has been pressed
+         * 
+         * @param ele The element to query
+         * @param cpos The screen space position of the cursor
+         * 
+         * @return 1 if has pressed and 0 if not (2 if pressed the head of the menu)
+         */
         int hasPressedElement(const UI_Element& ele, vec2 cpos) const;
 
         int hasPressedUI(vec2 cpos) const;
