@@ -14,7 +14,6 @@ struct RenderObject
 
     RenderObject(SpriteSheetInfo ssi, int flip = 0)
         {
-        static int ind = 0;
         viBundle vbund = GetShapeVertices(SHAPE::SHAPE_SQUARE, ssi.nosp, ssi.spr);  // the bundle containing the vertices and count
         viBundle ibund = GetShapeIndices(SHAPE::SHAPE_SQUARE);  // the bundle containing the indices and count
 
@@ -37,8 +36,6 @@ struct RenderObject
         VAOLayout layout = CreateVertexLayout(ilay, 5, 1);  // setting up the layout to receive
         AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
         InitialiseVertexLayout(layout); // initialising the layout to be used
-
-        // printf("\nCreating %d", ind++);
         };
     };
 

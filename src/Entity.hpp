@@ -118,7 +118,7 @@ enum UI_ELEMENT_TYPE
 struct UI_Element
     {
     UI_Element(UI_ELEMENT_TYPE in_type, vec2 position);
-    UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp, int nosp, int spr);
+    UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp, unsigned int nosp, unsigned int spr);
 
     const UI_ELEMENT_TYPE type;
     unsigned int ui_id;

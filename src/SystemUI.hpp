@@ -14,7 +14,7 @@ UI_Element createMenu(vec2 pos);
 
 UI_Element createMenu(UI_Manager& ui_man, vec2 pos);
 
-void addToMenu(UI_Element& menu, const UI_Element& entry);
+void addToMenu(UI_Element& menu, UI_Element& entry);
 
 void foldMenu(UI_Manager& ui_man, UI_Element& menu);
 void unfoldMenu(UI_Manager& ui_man, UI_Element& menu);

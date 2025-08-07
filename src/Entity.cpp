@@ -250,7 +250,7 @@ scale = {25.0f, 25.0f};
 angle = 0.0f;
 }
 
-UI_Element::UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp, int nosp, int spr)
+UI_Element::UI_Element(UI_ELEMENT_TYPE in_type, vec2 position, const char* spfp, unsigned int nosp, unsigned int spr)
     : type(in_type), ui_id(id2++), pos(position)
 {
 this->ssi = (SpriteSheetInfo){spfp, nosp, spr};

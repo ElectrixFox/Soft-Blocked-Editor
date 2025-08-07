@@ -201,7 +201,6 @@ for (int i = 0; i < nblk; i++)
 void BuildSelectBar(const Block_Manager& blk_man, Editor& ed)
 {
 vec2 topright = {1255.0f, 695.0f};
-const unsigned int nblocks = BLOCK_TYPE::BLOCK_COUNT;
 const float padding = 10.0f;
 
 UI_Manager& ui_man = ed.ui_man;
@@ -236,7 +235,7 @@ for (int i = 0; i < nblk; i++)
     {
     vec2 position = {topright.x, topright.y - (i * 50.0f + padding)}; // placing the items in a vertical line on the right side of the screen
     SpriteSheetInfo ssi = getBlockSSI(menuDetails[i]);
-    UI_Element btn(UI_ELEMENT_TYPE::UI_BUTTON, position, ssi.spfp, ssi.nosp, ssi.spr);
+    UI_Element btn = createButton(position, 25.0f, ssi.spfp, ssi.nosp, ssi.spr);
     btn.clickable = 1;
     btn.onclick = chblk_fun;
 
@@ -246,7 +245,7 @@ for (int i = 0; i < nblk; i++)
 
     if(ssi.nosp > 1 && btype != BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK)
         {
-        UI_Element menu(UI_ELEMENT_TYPE::UI_MENU, position);
+        UI_Element menu = createMenu(position);
         addToMenu(menu, btn);
         menu.hoveract = 1;
         menu.lrud = 0;
@@ -256,7 +255,7 @@ for (int i = 0; i < nblk; i++)
             {
             vec2 tpos = {position.x - ((j - 1) * 50.0f + padding), position.y};
             SpriteSheetInfo tssi = (SpriteSheetInfo){ssi.spfp, ssi.nosp, (unsigned int)j};
-            UI_Element tbtn(UI_ELEMENT_TYPE::UI_BUTTON, tpos, tssi.spfp, tssi.nosp, tssi.spr);
+            UI_Element tbtn = createButton(tpos, 25.0f, tssi.spfp, tssi.nosp, tssi.spr);
 
             tbtn.clickable = 1;
             tbtn.onclick = chblk_fun;

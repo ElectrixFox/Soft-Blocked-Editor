@@ -18,7 +18,38 @@ UI_Element createMenu(vec2 pos)
 return UI_Element(UI_ELEMENT_TYPE::UI_MENU, pos);
 }
 
-void addToMenu(UI_Element& menu, const UI_Element& entry) { menu.entries.push_back(entry.ui_id); }
+void addToMenu(UI_Element& menu, UI_Element& entry)
+{
+switch (menu.lrud)
+    {
+    case 0:
+        {
+        entry.pos = menu.pos - (vec2){2 * entry.scale.x, 0.0f} * (float)menu.entries.size();
+        break;
+        }
+    case 1:
+        {
+        entry.pos = menu.pos + (vec2){2 * entry.scale.x, 0.0f} * (float)menu.entries.size();
+        break;
+        }
+    case 2:
+        {
+        entry.pos = menu.pos + (vec2){0.0f, 2 * entry.scale.y} * (float)menu.entries.size();
+        }
+    case 3:
+        {
+        entry.pos = menu.pos - (vec2){0.0f, 2 * entry.scale.y} * (float)menu.entries.size();
+        }
+    default:
+        {
+        printf("\nERROR: Invalid menu alignment");
+        exit(1);
+        break;
+        }
+    }
+
+menu.entries.push_back(entry.ui_id);
+}
 
 void foldMenu(UI_Manager& ui_man, UI_Element& menu)
 {
