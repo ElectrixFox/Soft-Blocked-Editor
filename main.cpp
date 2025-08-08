@@ -85,21 +85,25 @@ UpdateImmovableBlocks(blk_man);
 BuildSelectBar(blk_man, ed);
 
 initfont();
-
 unsigned int textst = getChar('A');
 
-unsigned int prog, vao, ibo, vbo;
+unsigned int prog, vao, ibo, vbo, tex;
 {
-viBundle vbund = GetShapeVertices(SHAPE::SHAPE_SQUARE, 1, 1);  // the bundle containing the vertices and count
+SpriteSheetInfo ssi = getBlockSSI(BLOCK_TYPE::BLOCK_PLAYER);
+viBundle vbund = GetShapeVertices(SHAPE::SHAPE_SQUARE, ssi.nosp, ssi.spr);  // the bundle containing the vertices and count
 viBundle ibund = GetShapeIndices(SHAPE::SHAPE_SQUARE);  // the bundle containing the indices and count
 
+tex = CreateTexture(ssi.spfp, 0, 0);
+
 // creating the shader
-prog = CreateShader("res/textvert.shader", "res/textfrag.shader");    // creates the shader object
+prog = CreateShader("res/textblockvert.shader", "res/textblockfrag.shader");    // creates the shader object
 SetUniformM4(prog, "projection", getProjection(1280, 720, 1));  // setting up the projection
 SetUniformM4(prog, "view", getM4ID());  // setting up the view
 
 // creating the texture
-SetUniform1i(prog, "intexture", 0); // set the texture to be used (the 0th active texture)
+
+SetUniform1i(prog, "inblk", 0); // set the texture to be used (the 0th active texture)
+SetUniform1i(prog, "intexture", 1); // set the texture to be used (the 1st active texture)
 
 vao = CreateVAO();  // creating the vao
 ibo = CreateIBO(ibund.vi, ibund.n); // creating the ibo
@@ -126,7 +130,7 @@ while(!glfwWindowShouldClose(window))   // main loop
 
     blk_man.drawBlocks(cam);
     ed.ui_man.drawElements(cam);
-    
+
     m4 model = GetModelMatrix((vec2){500.0f, 500.0f}, (vec2){25.0f, 25.0f}, 0.0f);
     ApplyCamera(cam, prog);
     ApplyProjection(cam, prog);
@@ -134,6 +138,7 @@ while(!glfwWindowShouldClose(window))   // main loop
     SetUniformM4(prog, "model", model); // setting the model matrix
 
     BindTexture(textst);
+    BindTexture(tex);
 
     BindShader(prog);
     BindVAO(vao);

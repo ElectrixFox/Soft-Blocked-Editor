@@ -12,7 +12,7 @@
 #include <map>
 
 void initfont();
-void Test(float x, float y, char* text);
+
 unsigned int getChar(char ch);
 
 #endif
