@@ -8,8 +8,11 @@
 #include "Rendering/Shader.h"
 #include "Rendering/SpriteShapes.h"
 #include "FileHandling.h"
+#include <iostream>
+#include <map>
 
-unsigned int initfont();
+void initfont();
 void Test(float x, float y, char* text);
+unsigned int getChar(char ch);
 
 #endif
