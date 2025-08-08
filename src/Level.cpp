@@ -531,6 +531,31 @@ if(blk.update)
 
 }
 
+void UpdateImmovableBlockRadius(Block_Manager& blk_man, Block& blk)
+{
+int** scope;
+
+if(blk.type != BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK)
+    return;
+
+getSmallScope(blk_man, blk.pos, &scope);
+outputScope(3, (const int**)scope);
+
+const vec2 blk_pos = blk.pos;
+
+UpdateImmovableBlock(blk_man, blk);
+
+// updating the up, down, left and right blocks if they need to be
+if(scope[0][1] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // up
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){0.0f, grid_size}));
+if(scope[2][1] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // down
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){0.0f, grid_size}));
+if(scope[1][0] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // left
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){grid_size, 0.0f}));
+if(scope[1][2] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // right
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){grid_size, 0.0f}));
+}
+
 BLOCK_IM_STATE getImmovableType(const int w, const int h, const int** grid, vec2 pos, float* angle)
 {
 int x = pos.x, y = pos.y;

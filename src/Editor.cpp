@@ -69,8 +69,7 @@ if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
         {
         unsigned int bl_id = PlaceBlock(blk_man, getActiveBlock(ed), cpos);  // placing the block
         Block& blk = blk_man.getBlock(bl_id);
-        UpdateImmovableBlock(blk_man, blk);
-        // UpdateImmovableBlocks(blk_man);
+        UpdateImmovableBlockRadius(blk_man, blk);
         }
     else if(blk_man.hasPressedBlock(cpos))    // if a block has been clicked
         {

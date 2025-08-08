@@ -14,6 +14,7 @@
 #include "src/Entity.hpp"
 #include "src/Level.hpp"
 #include "src/Editor.hpp"
+#include "src/Text.hpp"
 
 extern const int snap_to_grid;
 extern const int grid_size;
@@ -62,7 +63,7 @@ Editor ed;
 
 int w, h;
 int** grid;
-ReadLevel("res/levels/level1.txt", &w, &h, &grid);
+ReadLevel("res/levels/level3.txt", &w, &h, &grid);
 OutputLevel((const int**)grid, w, h);
 DrawLevel(blk_man, w, h, (const int**)grid);
 getLevel(blk_man, &w, &h, &grid);
@@ -83,6 +84,33 @@ UpdateImmovableBlocks(blk_man);
 
 BuildSelectBar(blk_man, ed);
 
+unsigned int textst = initfont();
+
+unsigned int prog, vao, ibo, vbo;
+{
+viBundle vbund = GetShapeVertices(SHAPE::SHAPE_SQUARE, 1, 1);  // the bundle containing the vertices and count
+viBundle ibund = GetShapeIndices(SHAPE::SHAPE_SQUARE);  // the bundle containing the indices and count
+
+// creating the shader
+prog = CreateShader("res/textvert.shader", "res/textfrag.shader");    // creates the shader object
+SetUniformM4(prog, "projection", getProjection(1280, 720, 1));  // setting up the projection
+SetUniformM4(prog, "view", getM4ID());  // setting up the view
+
+// creating the texture
+SetUniform1i(prog, "intexture", 0); // set the texture to be used (the 0th active texture)
+
+vao = CreateVAO();  // creating the vao
+ibo = CreateIBO(ibund.vi, ibund.n); // creating the ibo
+BindIBO(ibo);  // binding the ibo to the vao
+vbo = CreateVBO(vbund.vi, vbund.n); // creating the vbo
+BindVBO(vbo);  // binding the vbo to the vao
+
+unsigned int ilay[1] = {3};
+VAOLayout layout = CreateVertexLayout(ilay, 5, 1);  // setting up the layout to receive
+AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
+InitialiseVertexLayout(layout); // initialising the layout to be used
+}
+
 while(!glfwWindowShouldClose(window))   // main loop
     {
     glfwWaitEventsTimeout(0.1); // wait for a short time to prevent multiple placements
@@ -97,6 +125,19 @@ while(!glfwWindowShouldClose(window))   // main loop
     blk_man.drawBlocks(cam);
     ed.ui_man.drawElements(cam);
     
+    m4 model = GetModelMatrix((vec2){500.0f, 500.0f}, (vec2){25.0f, 25.0f}, 0.0f);
+    ApplyCamera(cam, prog);
+    ApplyProjection(cam, prog);
+
+    SetUniformM4(prog, "model", model); // setting the model matrix
+
+    BindTexture(textst);
+
+    BindShader(prog);
+    BindVAO(vao);
+
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
     glfwSwapBuffers(window);
     glfwPollEvents();
 

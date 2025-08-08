@@ -75,6 +75,14 @@ void getBlockScopeAt(const Block_Manager& blk_man, vec2 pos, int*** scope);
 void UpdateImmovableBlock(Block_Manager& blk_man, Block& blk);
 
 /**
+ * Updates the radius (i.e. the effected blocks) of an immovable
+ * 
+ * @param blk_man The block manager
+ * @param blk The block to update
+ */
+void UpdateImmovableBlockRadius(Block_Manager& blk_man, Block& blk);
+
+/**
  * Gets the type of the immovable block
  * 
  * @param w The width of the grid

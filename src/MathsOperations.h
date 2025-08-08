@@ -23,6 +23,11 @@ struct vec2
         return {this->x + v.x, this->y + v.y};
         }
     
+    vec2 operator+(vec2 v) const
+        {
+        return {this->x + v.x, this->y + v.y};
+        }
+    
     void operator+=(const vec2 v)
         {
         x += v.x;
@@ -30,6 +35,11 @@ struct vec2
         }
     
     vec2 operator-(vec2 v)
+        {
+        return {this->x - v.x, this->y - v.y};
+        }
+    
+    vec2 operator-(vec2 v) const
         {
         return {this->x - v.x, this->y - v.y};
         }
