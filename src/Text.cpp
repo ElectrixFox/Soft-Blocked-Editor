@@ -14,11 +14,13 @@ std::vector<unsigned int> ids;
 
 std::map<char, unsigned int> chtxpair;
 
+const char* fontfp = "res/font/fnt.ttf";
+
 unsigned int getCharaTex(char ch)
 {
 printf("\n%c", ch);
 unsigned char dat[1 << 20];
-FILE* file = fopen("C:/Windows/Fonts/COLONNA.TTF", "rb");
+FILE* file = fopen(fontfp, "rb");
 fread(dat, 1, 1 << 20, file);
 fclose(file);
 stbtt_fontinfo font;
@@ -61,7 +63,7 @@ void initfont()
 {
 // const char* dat = readFile("C:/Windows/Fonts/COLONNA.TTF");
 unsigned char dat[1 << 20];
-FILE* file = fopen("C:/Windows/Fonts/COLONNA.TTF", "rb");
+FILE* file = fopen(fontfp, "rb");
 fread(dat, 1, 1 << 20, file);
 fclose(file);
 stbtt_fontinfo font;

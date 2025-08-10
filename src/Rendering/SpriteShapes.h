@@ -9,6 +9,7 @@
 typedef enum SHAPE
     {
     SHAPE_SQUARE = 0,
+    SHAPE_TEXTSQUARE,
     SHAPE_TEXT,
     } SHAPE;
 

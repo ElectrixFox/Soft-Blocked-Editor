@@ -90,8 +90,8 @@ unsigned int textst = getChar('A');
 unsigned int prog, vao, ibo, vbo, tex;
 {
 SpriteSheetInfo ssi = getBlockSSI(BLOCK_TYPE::BLOCK_PLAYER);
-viBundle vbund = GetShapeVertices(SHAPE::SHAPE_SQUARE, ssi.nosp, ssi.spr);  // the bundle containing the vertices and count
-viBundle ibund = GetShapeIndices(SHAPE::SHAPE_SQUARE);  // the bundle containing the indices and count
+viBundle vbund = GetShapeVertices(SHAPE::SHAPE_TEXTSQUARE, ssi.nosp, ssi.spr);  // the bundle containing the vertices and count
+viBundle ibund = GetShapeIndices(SHAPE::SHAPE_TEXTSQUARE);  // the bundle containing the indices and count
 
 tex = CreateTexture(ssi.spfp, 0, 0);
 
@@ -112,7 +112,8 @@ vbo = CreateVBO(vbund.vi, vbund.n); // creating the vbo
 BindVBO(vbo);  // binding the vbo to the vao
 
 unsigned int ilay[1] = {3};
-VAOLayout layout = CreateVertexLayout(ilay, 5, 1);  // setting up the layout to receive
+VAOLayout layout = CreateVertexLayout(ilay, 7, 1);  // setting up the layout to receive
+AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
 AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
 InitialiseVertexLayout(layout); // initialising the layout to be used
 }
