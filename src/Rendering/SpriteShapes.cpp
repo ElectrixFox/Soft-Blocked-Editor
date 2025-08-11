@@ -75,9 +75,9 @@ switch (GetActiveShape(shape))  // gets the shape by masking
         {
         const float vertices[] = {
             1.0f,  1.0f, 1.0f,      1.0f, (float)sprite / (float)sprites,       1.0f, 1.0f,
-            1.0f, -1.0f, 1.0f,      1.0f, (float)(sprite - 1) / (float)sprites, 1.0f, -1.0f,
-            -1.0f, -1.0f, 1.0f,     0.0f, (float)(sprite - 1) / (float)sprites, -1.0f, -1.0f,
-            -1.0f,  1.0f, 1.0f,     0.0f, (float)sprite / (float)sprites,       -1.0f, 1.0f
+            1.0f, -1.0f, 1.0f,      1.0f, (float)(sprite - 1) / (float)sprites, 1.0f, 0.0f,
+            -1.0f, -1.0f, 1.0f,     0.0f, (float)(sprite - 1) / (float)sprites, 0.0f, 0.0f,
+            -1.0f,  1.0f, 1.0f,     0.0f, (float)sprite / (float)sprites,       0.0f, 1.0f
         };
         unsigned int n = sizeof(vertices) / sizeof(vertices[0]);
         float* fl = (float*)calloc(n, sizeof(float));
