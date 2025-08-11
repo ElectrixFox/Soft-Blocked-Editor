@@ -14,7 +14,8 @@ std::vector<unsigned int> ids;
 
 std::map<char, unsigned int> chtxpair;
 
-const char* fontfp = "res/font/fnt.ttf";
+const char* fontfp = "C:/Windows/Fonts/COLONNA.TTF";
+//"res/font/fnt.ttf";
 
 unsigned int getCharaTex(char ch)
 {
@@ -57,6 +58,37 @@ glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 stbtt_FreeBitmap(bitmap, 0);
 
 return texture;
+
+
+}void flip_bitmap(uint8_t* bitmap, int width, int height, int channels,
+                 bool vertical, bool horizontal)
+{
+    int rowBytes = width * channels;
+
+    // 1) Vertical flip
+    if (vertical) {
+        for (int y = 0; y < height / 2; ++y) {
+            uint8_t* rowA = bitmap + y * rowBytes;
+            uint8_t* rowB = bitmap + (height - 1 - y) * rowBytes;
+            for (int x = 0; x < rowBytes; ++x)
+                std::swap(rowA[x], rowB[x]);
+        }
+    }
+
+    // 2) Horizontal flip
+    if (horizontal) {
+        for (int y = 0; y < height; ++y) {
+            uint8_t* row = bitmap + y * rowBytes;
+            for (int x = 0; x < width / 2; ++x) {
+                for (int c = 0; c < channels; ++c) {
+                    std::swap(
+                        row[x * channels + c],
+                        row[(width - 1 - x) * channels + c]
+                    );
+                }
+            }
+        }
+    }
 }
 
 void initfont()
@@ -77,6 +109,8 @@ for (int i = strt; i < end; i++)
     int w, h, xoff, yoff;
     unsigned char* bitmap = stbtt_GetCodepointBitmap(&font, 0, hscale,
         (char)i, &w, &h, &xoff, &yoff);
+
+    flip_bitmap(bitmap, w, h, 1, true, false);
 
     // creating a texture
     unsigned int texture;
