@@ -10,11 +10,8 @@ uniform mat4 model;
 out vec2 TexCoord;
 out vec2 TxtCoord;
 
-void main()
+vec2 modCoord(vec2 inc)
 {
-gl_Position = transpose(model * view * projection) * vec4(pos.x, pos.y, 0.0, 1.0);
-TexCoord = texcoord;
-
 mat3 flp = {
     vec3(-1.0, 0.0, 0.0),
     vec3(0.0, -1.0, 0.0),
@@ -25,6 +22,13 @@ mat3 trns = {
     vec3(0.0, 1.0, -0.5),
     vec3(0.0, 0.0, 1.0)
 };
+
+return (transpose(trns * flp) * vec3(inc, 1.0)).xy;
+}
+
+void main()
+{
+gl_Position = transpose(model * view * projection) * vec4(pos.x, pos.y, 1.0, 1.0);
+TexCoord = texcoord;
 TxtCoord = txtcoord;
-// (transpose(trns * flp) * vec3(txtcoord, 1.0)).xy;
 }

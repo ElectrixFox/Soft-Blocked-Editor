@@ -78,12 +78,19 @@ for (int i = strt; i < end; i++)
     unsigned char* bitmap = stbtt_GetCodepointBitmap(&font, 0, hscale,
         (char)i, &w, &h, &xoff, &yoff);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
     // creating a texture
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // set texture options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
     glTexImage2D(
         GL_TEXTURE_2D,
         0,
@@ -95,11 +102,7 @@ for (int i = strt; i < end; i++)
         GL_UNSIGNED_BYTE,
         bitmap
     );
-    // set texture options
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     stbtt_FreeBitmap(bitmap, 0);
 
@@ -109,6 +112,7 @@ for (int i = strt; i < end; i++)
     chtxpair.insert(std::pair<char, unsigned int>((char)i, texture));
     }
 
+#pragma region Numbers
 strt = (int)'0', end = (int)'9' + 1;
 for (int i = strt; i < end; i++)
     {
@@ -116,12 +120,19 @@ for (int i = strt; i < end; i++)
     unsigned char* bitmap = stbtt_GetCodepointBitmap(&font, 0, hscale,
         (char)i, &w, &h, &xoff, &yoff);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
     // creating a texture
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
+    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+    // set texture options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
     glTexImage2D(
         GL_TEXTURE_2D,
         0,
@@ -133,17 +144,13 @@ for (int i = strt; i < end; i++)
         GL_UNSIGNED_BYTE,
         bitmap
     );
-    // set texture options
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     stbtt_FreeBitmap(bitmap, 0);
 
     // unsigned int tex = getCharaTex((char)i);
     chtxpair.insert(std::pair<char, unsigned int>((char)i, texture));
     }
+#pragma endregion
 }
 
 unsigned int getChar(char ch)
