@@ -87,7 +87,7 @@ UpdateImmovableBlocks(blk_man);
 // BuildSelectBar(blk_man, ed);
 
 initfont();
-unsigned int textst = getChar('A');
+unsigned int textst = getChar('P');
 
 unsigned int prog, vao, ibo, vbo, tex;
 {

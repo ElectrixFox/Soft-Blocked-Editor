@@ -18,17 +18,24 @@ mat3 flp = {
     vec3(0.0, 0.0, 1.0)
 };
 mat3 trns = {
-    vec3(1.0, 0.0, -0.5),
-    vec3(0.0, 1.0, -0.5),
+    vec3(2.0, 0.0, 0.0),
+    vec3(0.0, 2.0, 0.0),
     vec3(0.0, 0.0, 1.0)
 };
 
-return (transpose(trns * flp) * vec3(inc, 1.0)).xy;
+return (vec3(inc, 1.0) * trns).xy;
 }
 
 void main()
 {
 gl_Position = transpose(model * view * projection) * vec4(pos.x, pos.y, 1.0, 1.0);
 TexCoord = texcoord;
-TxtCoord = txtcoord;
+
+vec2 vcs[] = {
+    vec2(1.0, 1.0),
+    vec2(1.0, 0.0),
+    vec2(0.0, 0.0),
+    vec2(0.0, 1.0)
+};
+TxtCoord = modCoord(vcs[gl_VertexID]);
 }

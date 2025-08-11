@@ -14,8 +14,8 @@ std::vector<unsigned int> ids;
 
 std::map<char, unsigned int> chtxpair;
 
-const char* fontfp = "C:/Windows/Fonts/COLONNA.TTF";
-//"res/font/fnt.ttf";
+const char* fontfp = "res/font/fnt.ttf";
+// "C:/Windows/Fonts/COLONNA.TTF";
 
 unsigned int getCharaTex(char ch)
 {
@@ -60,8 +60,9 @@ stbtt_FreeBitmap(bitmap, 0);
 return texture;
 
 
-}void flip_bitmap(uint8_t* bitmap, int width, int height, int channels,
-                 bool vertical, bool horizontal)
+}
+
+void flip_bitmap(uint8_t* bitmap, int width, int height, int channels, bool vertical, bool horizontal)
 {
     int rowBytes = width * channels;
 
