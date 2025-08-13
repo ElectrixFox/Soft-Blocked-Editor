@@ -104,6 +104,7 @@ int action = glfwGetMouseButton(inpman.window, button);
 
 if(pbtn != button && action == GLFW_PRESS)
     {
+    printf("\nPressing");
     pbtn = button;
     return 1;
     }

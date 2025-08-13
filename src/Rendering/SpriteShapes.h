@@ -9,6 +9,7 @@
 typedef enum SHAPE
     {
     SHAPE_SQUARE = 0,
+    SHAPE_TEXTSQUARE,
     SHAPE_TEXT,
     } SHAPE;
 
@@ -51,4 +52,7 @@ unsigned int GetActiveSprite(unsigned long int shape);
 unsigned int GetActiveShape(unsigned long int shape);
 
 viBundle<float> GetShapeVertices(unsigned long int shape);
+viBundle<float> GetShapeVertices(SHAPE shape, unsigned int nosp, unsigned int spr);
+
 viBundle<unsigned int> GetShapeIndices(unsigned long int shape);
+viBundle<unsigned int> GetShapeIndices(SHAPE shape);

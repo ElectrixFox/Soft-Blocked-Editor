@@ -7,6 +7,11 @@
 struct vec2
     {
     float x, y;
+ 
+    int operator==(const vec2 v)
+        {
+        return (this->x == v.x && this->y == v.y);
+        }
 
     int operator!=(vec2 v)
         {
@@ -18,6 +23,11 @@ struct vec2
         return {this->x + v.x, this->y + v.y};
         }
     
+    vec2 operator+(vec2 v) const
+        {
+        return {this->x + v.x, this->y + v.y};
+        }
+    
     void operator+=(const vec2 v)
         {
         x += v.x;
@@ -25,6 +35,11 @@ struct vec2
         }
     
     vec2 operator-(vec2 v)
+        {
+        return {this->x - v.x, this->y - v.y};
+        }
+    
+    vec2 operator-(vec2 v) const
         {
         return {this->x - v.x, this->y - v.y};
         }
@@ -55,7 +70,10 @@ struct vec4
         case 1: return y;
         case 2: return z;
         case 3: return w;
-        default: break;
+        default:
+            printf("\nERROR: Index out of bounds of vector");
+            exit(1);
+            break;
         }
         }
     };
@@ -100,13 +118,18 @@ void OutputMatn(int n, int m, const float** A);
 void OutputMatrix(m4 matrix);
 
 /**
- * Outputs a matn
+ * Outputs a mat3
  * 
- * @param n The number of rows
- * @param m The number of columns
  * @param A The matrix to output
  */
 void OutputMat3(mat3 A);
+
+/**
+ * Outputs a mat4
+ * 
+ * @param A The matrix to output
+ */
+void OutputMat4(m4 A);
 
 /**
  * Increases the size of the passed array to the new size

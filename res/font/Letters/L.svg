@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #0f0f0f;
+        stroke: #000;
+        stroke-width: 1px;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="L_1" data-name="L 1" class="cls-1" d="M294.118,250h58.823v14.706h29.412v29.412h14.706V588.235h11.765c1.78,4.718,2.592,6.985,2.941,14.706H705.882v14.706h29.412v29.412H750v55.882c-4.718,1.78-6.984,2.593-14.706,2.941v29.412H705.882v11.765h-2.941V750H294.118V735.294H264.706V705.882H250V294.118h14.706V264.706h29.412V250Z"/>
+</svg>

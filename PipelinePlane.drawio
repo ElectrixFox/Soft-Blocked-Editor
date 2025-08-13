@@ -1,6 +1,10 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" version="28.0.7">
   <diagram name="Page-1" id="aY_sdIh2yJ9CgO5uwZNW">
+<<<<<<< HEAD
     <mxGraphModel dx="2958" dy="372" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
+=======
+    <mxGraphModel dx="3026" dy="411" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0" adaptiveColors="simple">
+>>>>>>> OOP-Block-Shift
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1673,6 +1677,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="v-i_0X_5qZOFKAeXzBby-256" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="v-i_0X_5qZOFKAeXzBby-221" source="v-i_0X_5qZOFKAeXzBby-230" target="v-i_0X_5qZOFKAeXzBby-223" edge="1">
+<<<<<<< HEAD
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="PQH53cvd-PrtzZoG4xY--45" value="UI Element" style="shape=table;startSize=30;container=1;collapsible=1;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;html=1;" vertex="1" parent="1">
@@ -2541,6 +2546,8 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="PQH53cvd-PrtzZoG4xY--291" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="PQH53cvd-PrtzZoG4xY--270" source="PQH53cvd-PrtzZoG4xY--272" target="PQH53cvd-PrtzZoG4xY--285">
+=======
+>>>>>>> OOP-Block-Shift
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

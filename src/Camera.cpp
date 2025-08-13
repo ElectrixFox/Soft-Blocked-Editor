@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "Camera.hpp"
 
 Camera CreateCamera(vec2 pos, vec2 scale, int* scrwid, int* srchig)
 {
@@ -56,40 +56,16 @@ else
 return 1;
 }
 
-void _ApplyProjection(Camera cam, std::vector<unsigned int> progs)
+void ApplyCamera(Camera cam, unsigned int prog) 
+{
+m4 view = getCameraMatrix(cam);
+SetUniformM4(prog, "view", view);
+}
+
+void ClearCamera(unsigned int prog) { SetUniformM4(prog, "view", getM4ID()); }
+
+void ApplyProjection(Camera cam, unsigned int prog)
 {
 const m4 proj = getProjectionMatrix(cam);
-
-for(unsigned int prog : progs)
-    SetUniformM4(prog, "projection", proj); // setting the projection matrix
+SetUniformM4(prog, "projection", proj); // setting the projection matrix
 }
-
-void _ApplyCamera(Camera cam, std::vector<unsigned int> progs)
-{
-m4 view = getCameraMatrix(cam);
-
-for(unsigned int prog : progs)
-    SetUniformM4(prog, "view", view);
-}
-
-void _ApplyStaticCamera(Camera cam, std::vector<unsigned int> progs)
-{
-m4 view = getCameraMatrix(cam);
-
-for (int i = 0; i < progs.size(); i++)
-    {
-    SetUniformM4(progs[i], "view", view);
-    }
-}
-
-void ApplyCamera(Camera cam, RenderDetails rds) { _ApplyCamera(cam, rds.shader); }
-
-void ClearCamera(RenderDetails rds)
-{
-for (int i = 0; i < rds.rid.size(); i++)
-    {
-    SetUniformM4(rds.shader[i], "view", getM4ID());
-    }
-}
-
-void ApplyProjection(Camera cam, RenderDetails rds) { _ApplyProjection(cam, rds.shader); }

@@ -71,6 +71,23 @@ switch (GetActiveShape(shape))  // gets the shape by masking
         return {fl, n};
         break;
         }
+    case SHAPE_TEXTSQUARE:
+        {
+        const float vertices[] = {
+            1.0f,  1.0f, 1.0f,      1.0f, (float)sprite / (float)sprites,       1.0f, 1.0f,
+            1.0f, -1.0f, 1.0f,      1.0f, (float)(sprite - 1) / (float)sprites, 1.0f, 0.0f,
+            -1.0f, -1.0f, 1.0f,     0.0f, (float)(sprite - 1) / (float)sprites, 0.0f, 0.0f,
+            -1.0f,  1.0f, 1.0f,     0.0f, (float)sprite / (float)sprites,       0.0f, 1.0f
+        };
+        unsigned int n = sizeof(vertices) / sizeof(vertices[0]);
+        float* fl = (float*)calloc(n, sizeof(float));
+        for (int i = 0; i < n; i++)
+            {
+            fl[i] = vertices[i];
+            }
+        return {fl, n};
+        break;
+        }
     case SHAPE_TEXT:
         {
         const float vertices[] = {
@@ -95,11 +112,33 @@ switch (GetActiveShape(shape))  // gets the shape by masking
 return {NULL}; // return an empty bundle if no shape matches
 }
 
+viBundle<float> GetShapeVertices(SHAPE shape, unsigned int nosp, unsigned int spr)
+{
+unsigned long int shpe = 0;
+GeneralInitialise(&shpe, nosp, spr, shape);
+return GetShapeVertices(shpe);
+}
+
 viBundle<unsigned int> GetShapeIndices(unsigned long int shape)
 {
 switch (GetActiveShape(shape))  // gets the shape by masking
     {
     case SHAPE_SQUARE:
+        {
+        const unsigned int indices[] = {
+            0, 1, 3,
+            1, 2, 3
+        };
+        unsigned int n = sizeof(indices) / sizeof(indices[0]);
+        unsigned int* ui = (unsigned int*)calloc(n, sizeof(unsigned int));
+        for (int i = 0; i < n; i++)
+            {
+            ui[i] = indices[i];
+            }
+        return {ui, n};
+        break;
+        }
+    case SHAPE_TEXTSQUARE:
         {
         const unsigned int indices[] = {
             0, 1, 3,
@@ -136,4 +175,11 @@ switch (GetActiveShape(shape))  // gets the shape by masking
     }
 
 return {NULL}; // return an empty bundle if no shape matches
+}
+
+viBundle<unsigned int> GetShapeIndices(SHAPE shape)
+{
+unsigned long int shpe = 0;
+GeneralInitialise(&shpe, 0, 0, shape);
+return GetShapeIndices(shpe);
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include "Drawable.h"
 #include "Block.h"
+#include "Text.h"
 
 #ifndef BLOCK_MANAGER_H
 #define BLOCK_MANAGER_H

@@ -16,6 +16,34 @@ strcpy(*lineptr, line); // copies the line back into the pointer
 return (len);
 }
 
+const char* readFile(const char* filePath)
+{
+FILE* file = fopen(filePath, "r");  // open the file to read
+if (file == NULL)   // error handling
+    {
+    printf("ERROR: File %s is not found\n", filePath);
+    return NULL;
+    }
+
+const int size = sizeof(char) * (1024);    // num of chars expected
+char* output = (char*)malloc(size);  // setting allocating some memory
+output[0] = '\0'; // setting the start as the end
+
+char* line = NULL;
+int i = 0;
+unsigned int bufsize = 0;
+while(getlne(&line, &bufsize, file) != -1)  // while not at the end of the file
+   {
+   strcat(output, line);  // add the line to the pointer
+   i++;
+   }
+const char* res = output;
+
+fclose(file);
+
+return res;
+}
+
 const char* ParseShaderSource(const char* filePath)
 {
 FILE* file = fopen(filePath, "r");  // open the file to read
@@ -44,32 +72,38 @@ fclose(file);
 return res;
 }
 
-const char* readFile(const char* filePath)
+void ParseShader(const char* filePath, char** outVss, int* vLen, char** outFss, int* fLen)
 {
-FILE* file = fopen(filePath, "r");  // open the file to read
-if (file == NULL)   // error handling
-    {
-    printf("ERROR: File %s is not found\n", filePath);
-    return NULL;
-    }
+char* cont = (char*)readFile(filePath);
+char shsrcs[2][1024];  // the shader sources
 
-const int size = sizeof(char) * (1024);    // num of chars expected
-char* output = (char*)malloc(size);  // setting allocating some memory
-output[0] = '\0'; // setting the start as the end
+int type = -1; // start with -1 for none, vertex shader is 0, fragment shader is 1
+char* line = strtok(cont, "\n"); // starting the tokenisation
 
-char* line = NULL;
-int i = 0;
-unsigned int bufsize = 0;
-while(getlne(&line, &bufsize, file) != -1)  // while not at the end of the file
+while(line != NULL)  // until there are no more tokens
    {
-   strcat(output, line);  // add the line to the pointer
-   i++;
+   if(strstr(line, "#shader"))   // if the shader part is there
+      {
+      if(strstr(line, "Vertex"))
+         type = 0;
+      else if(strstr(line, "Fragment"))
+         type = 1;
+      shsrcs[type][0] = '\0';   // adding a new line in
+      }
+   else if(type != -1)
+      {
+      strcat(shsrcs[type], line);   // appending the line
+      strcat(shsrcs[type], "\n");   // adding a new line in
+      }
+   
+   line = strtok(NULL, "\n");
    }
-const char* res = output;
 
-fclose(file);
+*outVss = (char*)malloc(sizeof(char) * strlen(shsrcs[0]));  // allocating the source some memory
+strcpy(*outVss, shsrcs[0]);   // copying the source into the output
 
-return res;
+*outFss = (char*)malloc(sizeof(char) * strlen(shsrcs[1]));  // allocating the source some memory
+strcpy(*outFss, shsrcs[1]);   // copying the source into the output
 }
 
 void writeFile(const char* filePath, const char* data)
