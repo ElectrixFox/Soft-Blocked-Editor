@@ -108,7 +108,8 @@ if(btype == BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK)
     {
     this->lnked = this->rend_obj;
     lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
-    RenderObject ro("0");
+    this->counter = 1;
+    RenderObject ro("1");
     *lnked.next = ro;
     }
 scale = {25.0f, 25.0f};

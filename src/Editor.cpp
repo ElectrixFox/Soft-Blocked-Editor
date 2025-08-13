@@ -48,6 +48,10 @@ else if(isHeldDown(GLFW_KEY_LEFT_CONTROL) && isPressedSingle(GLFW_KEY_S))
     }
 else if(isPressedSingle(GLFW_KEY_TAB))
     {
+    int** grid;
+    int w, h;
+    getLevel(blk_man, &w, &h, &grid);
+    OutputLevel((const int**)grid, w, h);
     /*
     OutputRenderPacketDetails(block_rp);
     OutputRenderPacketDetails(ui_rp);

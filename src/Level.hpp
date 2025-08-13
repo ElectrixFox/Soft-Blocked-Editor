@@ -34,7 +34,7 @@ void ReadLevel(const char* levelfp, int* w, int* h, int*** grid);
 void WriteLevel(const char* levelfp, const int w, const int h, const int** grid);
 
 /**
- * Gets the information of where the blocks are
+ * Gets the information of where the blocks are and their details such as teleporter links
  * 
  * @param blk_man A constant block manager
  * @param w A pointer to the width (this will be set)
@@ -42,6 +42,16 @@ void WriteLevel(const char* levelfp, const int w, const int h, const int** grid)
  * @param grid A pointer to a 2D array of integers (again this will be set)
  */
 void getLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
+
+/**
+ * Gets the information of where the blocks are and their types
+ * 
+ * @param blk_man A constant block manager
+ * @param w A pointer to the width (this will be set)
+ * @param h A pointer to the height (this will be set)
+ * @param grid A pointer to a 2D array of integers (again this will be set)
+ */
+void getTypeLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid);
 
 /**
  * Gets the coordinates of a position of a block in the level grid

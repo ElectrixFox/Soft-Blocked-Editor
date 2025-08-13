@@ -76,6 +76,9 @@ struct Block
     void draw();
     std::function<void (Block& blk)> update = nullptr;
 
+    int counter = 0;    // the counter for the countable blocks
+    int telenum = 0;    // the number for teleporters to link together
+
     // action stuff
     int clicked = 0;
     };

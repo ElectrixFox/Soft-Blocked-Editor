@@ -1,5 +1,38 @@
 #include "Level.hpp"
 
+static int getGridSquareType(int square)
+{
+int mask = 0b0000000000001111; // mask for the type
+return (square & mask);
+}
+
+static void setGridSquareType(int* square, int type)
+{
+int mask = 0b0000000000001111; // mask for the type
+*square = ((*square & ~mask) | type);   // clears the current type then adds in the new one
+}
+
+static int getGridSquareCount(int square)
+{
+int mask = 0b1111111111110000; // mask for the count
+return (square & mask) >> 4;
+}
+
+static void setGridSquareCount(int* square, int count)
+{
+int mask = 0b1111111111110000; // mask for the count
+*square = ((*square & ~mask) | (count << 4));  // clears the current count then adds in the new one
+}
+
+static int setGridSquare(int type, int count = 0)
+{
+int sq = 0;
+setGridSquareType(&sq, type);
+setGridSquareCount(&sq, count);
+
+return sq;
+}
+
 int getOccurences(const char* string, const char* substr)
 {
 int count = 0;
@@ -19,7 +52,7 @@ for (int y = 0; y < h; y++)
     {
     for (int x = 0; x < w; x++)
         {
-        printf("%-2d ", grid[y][x]);
+        printf("%-3d ", grid[y][x]);
         }
     printf("\n");
     }
@@ -152,12 +185,35 @@ for (float y = maxy; miny <= y; y -= (float)grid_size)
         int find = blk_man.isBlockAt(tpos); // get the transform at the position to check
         if(find == 0)   // if nothing is found then go to the next grid coordinate to check
             continue;
-        int btype = blk_man.getBlockAt(tpos).type + 1;
-        tgrid[ygrid][xgrid] = btype;    // setting the block
+        const Block& tblk = blk_man.getBlockAt(tpos);
+        int sq = 0;
+
+        switch (tblk.type)
+            {
+            case BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK:
+                {
+                sq = setGridSquare(tblk.type + 1, tblk.counter);
+                break;
+                }
+            default:
+                {
+                sq = setGridSquare(tblk.type + 1, 0);
+                break;
+                }
+            }
+        tgrid[ygrid][xgrid] = sq;    // setting the block
         }
     }
 
 *grid = tgrid;
+}
+
+void getTypeLevel(const Block_Manager& blk_man, int* w, int* h, int*** grid)
+{
+getLevel(blk_man, w, h, grid);
+for (int y = 0; y < *h; y++)
+    for (int x = 0; x < *w; x++)
+        (*grid)[y][x] = getGridSquareType((*grid)[y][x]);
 }
 
 static vec2 getLevelGridCoordinates(const vec2 minpos, const vec2 inpos)
@@ -653,7 +709,7 @@ vec2 minpos = getMinimumPosition(blk_man);
 
 int w, h;
 int** grid;
-getLevel(blk_man, &w, &h, &grid);
+getTypeLevel(blk_man, &w, &h, &grid);
 OutputLevel((const int**)grid, w, h);
 
 for (int i = 0; i < h; i++)
