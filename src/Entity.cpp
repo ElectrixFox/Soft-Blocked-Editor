@@ -104,14 +104,77 @@ Block::Block(BLOCK_TYPE btype, vec2 position)
 {
 this->ssi = getBlockSSI(type);
 this->rend_obj = RenderObject(this->ssi, 0);
-if(btype == BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK)
+switch (btype)
     {
-    this->lnked = this->rend_obj;
-    lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
-    this->counter = 1;
-    RenderObject ro("1");
-    *lnked.next = ro;
+    case BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK:
+        {
+        this->lnked = this->rend_obj;
+        lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
+        this->counter = 1;
+        RenderObject ro("1");
+        *lnked.next = ro;
+
+        this->update = [](Block& blk)
+            {
+            if(blk.clicked)
+                {
+                blk.counter = (blk.counter < 10) ? blk.counter + 1 : 1; // if the counter is less than 10 then increment else reset to 1
+                char* tmp;
+                sprintf(tmp, "%d", blk.counter);    // convert the counter into a string
+                RenderObject tro(tmp);
+                *blk.lnked.next = tro;
+                }
+            };
+        break;
+        }
+    case BLOCK_TYPE::BLOCK_TELEPORTER_SOURCE:
+        {
+        this->lnked = this->rend_obj;
+        lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
+        this->telenum = 1;
+        RenderObject ro("1");
+        *lnked.next = ro;
+
+        this->update = [](Block& blk)
+            {
+            if(blk.clicked)
+                {
+                blk.telenum = (blk.telenum < 10) ? blk.telenum + 1 : 1; // if the link number is less than 10 then increment else reset to 1
+                char* tmp;
+                sprintf(tmp, "%d", blk.telenum);    // convert the link numbwe into a string
+                RenderObject tro(tmp);
+                *blk.lnked.next = tro;
+                }
+            };
+        break;
+        }
+    case BLOCK_TYPE::BLOCK_TELEPORTER_DESTINATION:
+        {
+        this->lnked = this->rend_obj;
+        lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
+        this->telenum = 1;
+        RenderObject ro("1");
+        *lnked.next = ro;
+
+        this->update = [](Block& blk)
+            {
+            if(blk.clicked)
+                {
+                blk.telenum = (blk.telenum < 10) ? blk.telenum + 1 : 1; // if the link number is less than 10 then increment else reset to 1
+                char* tmp;
+                sprintf(tmp, "%d", blk.telenum);    // convert the link numbwe into a string
+                RenderObject tro(tmp);
+                *blk.lnked.next = tro;
+                }
+            };
+        break;
+        }
+    default:
+        {
+        break;
+        }
     }
+
 scale = {25.0f, 25.0f};
 angle = 0.0f;
 }
@@ -123,6 +186,13 @@ switch (type)
     case BLOCK_TYPE::BLOCK_TELEPORTER_SOURCE:
         {
         drawRenderObject(rend_obj, pos, scale, angle);
+        drawRenderObject(lnked.next->get(), pos, scale / 2, angle);
+        break;
+        }
+    case BLOCK_TYPE::BLOCK_TELEPORTER_DESTINATION:
+        {
+        drawRenderObject(rend_obj, pos, scale, angle);
+        drawRenderObject(lnked.next->get(), pos, scale / 2, angle);
         break;
         }
     case BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK:

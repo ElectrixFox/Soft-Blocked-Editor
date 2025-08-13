@@ -155,6 +155,8 @@ for (int i = strt; i < end; i++)
     unsigned char* bitmap = stbtt_GetCodepointBitmap(&font, 0, hscale,
         (char)i, &w, &h, &xoff, &yoff);
 
+    flip_bitmap(bitmap, w, h, 1, true, false);
+    
     // creating a texture
     unsigned int texture;
     glGenTextures(1, &texture);
