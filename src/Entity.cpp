@@ -224,6 +224,12 @@ for(Block block : blocks)
     {
     ApplyCamera(cam, block.rend_obj.prog);
     ApplyProjection(cam, block.rend_obj.prog);
+
+    if(block.lnked.next != nullptr)
+        {
+        ApplyCamera(cam, block.lnked.next->prog);
+        ApplyProjection(cam, block.lnked.next->prog);
+        }
     block.draw();
     }
 }
