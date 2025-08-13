@@ -112,6 +112,17 @@ glDeleteShader(fragshad);
 return program;
 }
 
+unsigned int CreateShader(const char* shfp)
+{
+int vlen, flen;
+char* vsrc;
+char* fsrc;
+
+ParseShader(shfp, &vsrc, &vlen, &fsrc, &flen);  // parsing the shader
+
+return createShader((const char*)vsrc, (const char*)fsrc);  // creating the actual shader
+}
+
 void BindShader(unsigned int program)
 {
 glUseProgram(program);  // binds the shader program

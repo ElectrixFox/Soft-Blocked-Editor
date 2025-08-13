@@ -11,6 +11,9 @@ unsigned int createShader(const char* vertsrc, const char* fragsrc);
 
 unsigned int CreateShader(const char* vertfp, const char* fragfp);
 
+
+unsigned int CreateShader(const char* shfp);
+
 void BindShader(unsigned int program);
 
 void SetUniform1f(unsigned int program, const char* varname, float value);

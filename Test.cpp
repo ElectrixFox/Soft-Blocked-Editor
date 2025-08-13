@@ -1,4 +1,6 @@
-#include "FileHandling.h"
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int getlne(char** lineptr, unsigned int* size, FILE* stream)
 {
@@ -44,33 +46,6 @@ fclose(file);
 return res;
 }
 
-const char* ParseShaderSource(const char* filePath)
-{
-FILE* file = fopen(filePath, "r");  // open the file to read
-if (file == NULL)   // error handling
-    {
-    printf("ERROR: File %s is not found\n", filePath);
-    return NULL;
-    }
-
-const int size = sizeof(char) * (1024);    // num of chars expected
-char* output = (char*)malloc(size);  // setting allocating some memory
-output[0] = '\0'; // setting the start as the end
-
-char* line = NULL;
-int i = 0;
-unsigned int bufsize = 0;
-while(getlne(&line, &bufsize, file) != -1)  // while not at the end of the file
-   {
-   strcat(output, line);  // add the line to the pointer
-   i++;
-   }
-const char* res = output;
-
-fclose(file);
-
-return res;
-}
 
 void ParseShader(const char* filePath, char** outVss, int* vLen, char** outFss, int* fLen)
 {
@@ -102,22 +77,25 @@ while(line != NULL)  // until there are no more tokens
 *outVss = (char*)malloc(sizeof(char) * strlen(shsrcs[0]));  // allocating the source some memory
 strcpy(*outVss, shsrcs[0]);   // copying the source into the output
 
+printf("\nTesting: \n%s", shsrcs[1]);
 *outFss = (char*)malloc(sizeof(char) * strlen(shsrcs[1]));  // allocating the source some memory
 strcpy(*outFss, shsrcs[1]);   // copying the source into the output
 }
 
-void writeFile(const char* filePath, const char* data)
+int main(int argc, char const *argv[])
 {
-FILE* fptr;
+int vlen, flen;
+char* vsrc;
+char* fsrc;
 
-fptr = fopen(filePath, "w");
 
-if(fptr == NULL)
-   {
-   printf("\nNULL FILE");
-   exit(1);
-   }
+printf("\nStart");
 
-fprintf(fptr, "%s", data);
-fclose(fptr);
+ParseShader("res/shader.glsl", &vsrc, &vlen, &fsrc, &flen);  // parsing the shader
+
+printf("\nVertex Shader: %s\n\nFragment Shader: %s", vsrc, fsrc);
+
+printf("\nEnd");
+
+return 0;
 }

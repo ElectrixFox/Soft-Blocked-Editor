@@ -59,7 +59,7 @@ struct Block
         viBundle ibund = GetShapeIndices(shape);    // the bundle containing the indices and count
 
         // creating the shader
-        prog = CreateShader("res/blockvert.shader", "res/blockfrag.shader");    // creates the shader object
+        prog = CreateShader("res/block.shader");    // creates the shader object
         SetUniformM4(prog, "projection", getProjection(1020, 960, 1));  // setting up the projection
 
         // creating the texture

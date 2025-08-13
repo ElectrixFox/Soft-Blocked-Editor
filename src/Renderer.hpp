@@ -19,7 +19,7 @@ struct RenderObject
         viBundle ibund = GetShapeIndices(SHAPE::SHAPE_SQUARE);  // the bundle containing the indices and count
 
         // creating the shader
-        prog = CreateShader("res/blockvert.shader", "res/blockfrag.shader");    // creates the shader object
+        prog = CreateShader("res/block.shader");    // creates the shader object
         SetUniformM4(prog, "projection", getProjection(1280, 720, 1));  // setting up the projection
         SetUniformM4(prog, "view", getM4ID());  // setting up the view
 
@@ -47,7 +47,7 @@ struct RenderObject
         tex = getChar(text[0]);
 
         // creating the shader
-        prog = CreateShader("res/textvert.shader", "res/textfrag.shader");    // creates the shader object
+        prog = CreateShader("res/text.shader"); // creates the shader object
         SetUniformM4(prog, "projection", getProjection(1280, 720, 1));  // setting up the projection
         SetUniformM4(prog, "view", getM4ID());  // setting up the view
 
