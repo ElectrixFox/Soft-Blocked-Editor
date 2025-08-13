@@ -223,44 +223,10 @@ for (int y = 0; y < h; y++)
 
 }
 
-static void getSmallScope(vec2 minpos, const int w, const int h, const int** grid, vec2 pos, int*** scope)
-{
-int x = pos.x, y = pos.y;
-
-const int sze = sizeof(int) * pow(3, 2);
-
-*scope = new int*[sze];
-int** tscope = new int*[sze];
-
-vec2 gpos = getLevelGridCoordinates(minpos, pos);
-
-for (int i = gpos.y - 1; i <= gpos.y + 1; i++)
-    {
-    if(0 <= i && i < h)
-        {
-        for (int j = gpos.x - 1; j <= gpos.x + 1; j++)
-            {
-            if(0 <= j && j < w)
-                tscope[i - (int)(gpos.y + 1)][j - (int)(gpos.x + 1)] = grid[i][j];
-            else
-                tscope[i - (int)(gpos.y + 1)][j - (int)(gpos.x + 1)] = 0;
-            }
-        }
-    else
-        {
-        for (int j = 0; j < 3; j++)
-            tscope[i - (int)(gpos.y + 1)][j] = 0;
-        }
-    }
-
-memcpy(*scope, tscope, sizeof(int) * 3 * 3);
-}
-
 void getSmallScope(const Block_Manager& blk_man, const vec2 pos, int*** scope)
 {
-const int sze = sizeof(int) * pow(3, 2);
 *scope = (int**)malloc(sizeof(int*) * 9);
-int** tscope = (int**)malloc(sizeof(int*) * 3);
+int** tscope = (int**)malloc(sizeof(int) * 3 * 3);
 
 int rw = 0; // row counter
 for (float y = pos.y - grid_size; y <= pos.y + grid_size; y += grid_size)
@@ -271,8 +237,6 @@ for (float y = pos.y - grid_size; y <= pos.y + grid_size; y += grid_size)
     for (float x = pos.x - grid_size; x <= pos.x + grid_size; x += grid_size)
         {
         vec2 tpos = {x, y};
-        printf("\nTesting position: ");
-        OutputVec2(tpos);
         int find = blk_man.isBlockAt(tpos); // get the transform at the position to check
         if(find != 0)   // if found then update
             {
@@ -547,13 +511,13 @@ UpdateImmovableBlock(blk_man, blk);
 
 // updating the up, down, left and right blocks if they need to be
 if(scope[0][1] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // up
-    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){0.0f, grid_size}));
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){0.0f, (float)grid_size}));
 if(scope[2][1] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // down
-    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){0.0f, grid_size}));
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){0.0f, (float)grid_size}));
 if(scope[1][0] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // left
-    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){grid_size, 0.0f}));
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos - (vec2){(float)grid_size, 0.0f}));
 if(scope[1][2] == BLOCK_TYPE::BLOCK_IMMOVABLE_BLOCK + 1)    // right
-    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){grid_size, 0.0f}));
+    UpdateImmovableBlock(blk_man, blk_man.getBlockAt(blk_pos + (vec2){(float)grid_size, 0.0f}));
 }
 
 BLOCK_IM_STATE getImmovableType(const int w, const int h, const int** grid, vec2 pos, float* angle)

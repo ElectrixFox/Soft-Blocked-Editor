@@ -127,7 +127,6 @@ switch (type)
     case BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK:
         {
         drawRenderObject(rend_obj, pos, scale, angle);
-        RenderObject rl = lnked.next->get();
         drawRenderObject(lnked.next->get(), pos, scale / 2, angle);
         break;
         }
