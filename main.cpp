@@ -56,6 +56,8 @@ glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 InitialiseInputManager(window);
 
+initfont();
+
 Camera cam = CreateCamera({0, 0}, {(float)gwid, (float)ghig}, &gwid, &ghig);
 
 Block_Manager blk_man;
@@ -65,10 +67,9 @@ int w, h;
 int** grid;
 ReadLevel("res/levels/level3.txt", &w, &h, &grid);
 OutputLevel((const int**)grid, w, h);
-// DrawLevel(blk_man, w, h, (const int**)grid);
+DrawLevel(blk_man, w, h, (const int**)grid);
 getLevel(blk_man, &w, &h, &grid);
 
-/*
 const vec2 tpos = blk_man.blocks[0].pos;
 vec2 opos = getLevelGridCoordinates(blk_man, w, h, (const int**)grid, tpos);
 printf("\nTop left: ");
@@ -77,48 +78,11 @@ OutputVec2(opos);
 int** scope;
 getSmallScope(blk_man, tpos, &scope);
 outputScope(3, (const int**)scope);
-*/
-
-
 
 OutputLevel((const int**)grid, w, h);
 UpdateImmovableBlocks(blk_man);
 
-// BuildSelectBar(blk_man, ed);
-
-initfont();
-unsigned int textst = getChar('P');
-
-unsigned int prog, vao, ibo, vbo, tex;
-{
-SpriteSheetInfo ssi = getBlockSSI(BLOCK_TYPE::BLOCK_PLAYER);
-viBundle vbund = GetShapeVertices(SHAPE::SHAPE_TEXTSQUARE, ssi.nosp, ssi.spr);  // the bundle containing the vertices and count
-viBundle ibund = GetShapeIndices(SHAPE::SHAPE_TEXTSQUARE);  // the bundle containing the indices and count
-
-tex = CreateTexture(ssi.spfp, 0, 0);
-
-// creating the shader
-prog = CreateShader("res/textblockvert.shader", "res/textblockfrag.shader");    // creates the shader object
-SetUniformM4(prog, "projection", getProjection(1280, 720, 1));  // setting up the projection
-SetUniformM4(prog, "view", getM4ID());  // setting up the view
-
-// creating the texture
-
-SetUniform1i(prog, "inblk", 0); // set the texture to be used (the 0th active texture)
-SetUniform1i(prog, "intexture", 1); // set the texture to be used (the 1st active texture)
-
-vao = CreateVAO();  // creating the vao
-ibo = CreateIBO(ibund.vi, ibund.n); // creating the ibo
-BindIBO(ibo);  // binding the ibo to the vao
-vbo = CreateVBO(vbund.vi, vbund.n); // creating the vbo
-BindVBO(vbo);  // binding the vbo to the vao
-
-unsigned int ilay[1] = {3};
-VAOLayout layout = CreateVertexLayout(ilay, 7, 1);  // setting up the layout to receive
-AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
-AddToVertexLayout(layout, 2);  // adding the texture coords to the layout
-InitialiseVertexLayout(layout); // initialising the layout to be used
-}
+BuildSelectBar(blk_man, ed);
 
 while(!glfwWindowShouldClose(window))   // main loop
     {
@@ -126,7 +90,7 @@ while(!glfwWindowShouldClose(window))   // main loop
     MoveCamera(cam);
 
     CheckEditorInput(ed, blk_man, cam);
-    // ed.ui_man.checkUIInput();
+    ed.ui_man.checkUIInput();
 
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);   // setting the background colour
     glClear(GL_COLOR_BUFFER_BIT);   // clears colour buffer
@@ -135,18 +99,6 @@ while(!glfwWindowShouldClose(window))   // main loop
     ed.ui_man.drawElements(cam);
 
     m4 model = GetModelMatrix((vec2){500.0f, 500.0f}, (vec2){25.0f, 25.0f}, 0.0f);
-    ApplyCamera(cam, prog);
-    ApplyProjection(cam, prog);
-
-    SetUniformM4(prog, "model", model); // setting the model matrix
-
-    BindTexture(textst);
-    BindTexture(tex);
-
-    BindShader(prog);
-    BindVAO(vao);
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
     glfwSwapBuffers(window);
     glfwPollEvents();

@@ -104,6 +104,13 @@ Block::Block(BLOCK_TYPE btype, vec2 position)
 {
 this->ssi = getBlockSSI(type);
 this->rend_obj = RenderObject(this->ssi, 0);
+if(btype == BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK)
+    {
+    this->lnked = this->rend_obj;
+    lnked.next = (RenderObjectNode*)malloc(sizeof(RenderObjectNode));
+    RenderObject ro("0");
+    *lnked.next = ro;
+    }
 scale = {25.0f, 25.0f};
 angle = 0.0f;
 }
@@ -115,6 +122,13 @@ switch (type)
     case BLOCK_TYPE::BLOCK_TELEPORTER_SOURCE:
         {
         drawRenderObject(rend_obj, pos, scale, angle);
+        break;
+        }
+    case BLOCK_TYPE::BLOCK_COUNTABLE_BLOCK:
+        {
+        drawRenderObject(rend_obj, pos, scale, angle);
+        RenderObject rl = lnked.next->get();
+        drawRenderObject(lnked.next->get(), pos, scale / 2, angle);
         break;
         }
     default:

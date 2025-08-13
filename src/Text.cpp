@@ -190,5 +190,11 @@ for (int i = strt; i < end; i++)
 
 unsigned int getChar(char ch)
 {
+if(chtxpair.count(ch) == 0)
+    {
+    printf("\nERROR: Character not found (has the font been initialised?).");
+    exit(1);
+    }
+
 return chtxpair.find(ch)->second;
 }

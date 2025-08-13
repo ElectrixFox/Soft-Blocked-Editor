@@ -65,6 +65,7 @@ struct Block
     // rendering stuff
     RenderObject rend_obj;
     SpriteSheetInfo ssi;
+    RenderObjectNode lnked;
 
     // transformation stuff
     vec2 pos;
